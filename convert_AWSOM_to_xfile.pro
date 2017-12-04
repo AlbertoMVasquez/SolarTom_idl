@@ -22,9 +22,9 @@ pro convert_AWSOM_to_xfile,Nrad=Nrad,Nlat=Nlat,Nlon=Nlon,input_file=input_file,o
 ; Read data from TECPLOT's SWMF tools:
   openr,1,input_dir+input_file
   for i=1,10 do readf,1,x
-  for ip=0,Nlon-1 do begin
-     for it=0,Nlat-1 do begin
-        for ir=0,Nrad-1 do begin
+  for ilon=0,Nlon-1 do begin
+     for ilat=0,Nlat-1 do begin
+        for irad=0,Nrad-1 do begin
            readf,1,x1,y1,z1,Ne1
            N_e(irad,ilat,ilon) = Ne1
         endfor
@@ -33,7 +33,7 @@ pro convert_AWSOM_to_xfile,Nrad=Nrad,Nlat=Nlat,Nlon=Nlon,input_file=input_file,o
   close,1
 
   openw,1,output_dir+output_file
-  writeu,1,map
+  writeu,1,N_e
   close,1
 
   print,'Your output is in: '+output_dir+output_file
