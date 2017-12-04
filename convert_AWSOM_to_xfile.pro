@@ -8,7 +8,7 @@ pro convert_AWSOM_to_xfile,Nrad=Nrad,Nlat=Nlat,Nlon=Nlon,input_file=input_file,o
   endif
   
   if not keyword_set( input_dir) then  input_dir='/data1/DATA/MHD_SWMF/'
-  if not keyword_set(output_dir) then output_dir='/data1/tomography_dev/SolarTom/'
+  if not keyword_set(output_dir) then output_dir='/data1/tomography_dev/bindata/'
 
   if not keyword_set(output_file) then output_file='x_'+input_file
 
