@@ -1,5 +1,7 @@
 
-; compare_orig_comp,orig_file='orig_WISPR_I_2025-06-14T22:00:00_Blank.dat',comp_file='comp_x_AWSOM_CR2081run5_WISPR_sphere.dat_WISPR_I_2025-06-14T22:00:00_Blank.dat'
+; compare_orig_comp,orig_file='orig_WISPR_I_2025-06-14T22:00:00_Blank.dat',comp_file='comp_x_AWSOM_CR2081run5_WISPR_sphere.dat_WISPR_I_2025-06-14T22:00:00_Blank.dat',Nx=2048,Ny=2048
+
+; compare_orig_comp,orig_file='orig_WISPR_I_2025-06-14T22:00:00_Blank.dat',comp_file='comp_x_AWSOM_CR2081run5_WISPR_sphere_2.dat_WISPR_I_2025-06-14T22:00:00_Blank.dat',Nx=2048,Ny=2048
 
 pro compare_orig_comp,tomroot=tomroot,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny
 
