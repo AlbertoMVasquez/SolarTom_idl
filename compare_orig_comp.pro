@@ -56,7 +56,8 @@ pro compare_orig_comp,tomroot=tomroot,data_dir=data_dir,orig_image=orig_image,or
   stop
 end
 
-pro crop,img2,Io2,Ic2,Nx,Ny,Delta
+pro crop,img2,Io2,Ic2,Nx,Ny,Delta,factor
+  Delta=Delta/factor
   Nx   = (size(Io2))(1)
   Ny   = (size(Io2))(2)
   img2 = reform(img2(*,Delta/2:Ny-Delta/2-1))  
