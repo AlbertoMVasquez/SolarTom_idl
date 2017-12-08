@@ -43,6 +43,9 @@ pro compare_orig_comp,tomroot=tomroot,data_dir=data_dir,orig_image=orig_image,or
 
   Io2([0,1],0) = [min(img2),max(img2)]
   Io2 = Io2 > min(img2) < max(img2)
+
+  Delta = 128 ; px
+  crop,img2,Io2,Ic2,Nx,Ny,Delta,factor
   
   loadct,39
   window,xs=3*Nx/factor,ys=Ny/factor
@@ -51,4 +54,14 @@ pro compare_orig_comp,tomroot=tomroot,data_dir=data_dir,orig_image=orig_image,or
   tvscl,Ic2 ,2
   
   stop
+end
+
+pro crop,img2,Io2,Ic2,Nx,Ny,Delta
+  Nx   = (size(Io2))(1)
+  Ny   = (size(Io2))(2)
+  img2 = reform(img2(*,Delta/2:Ny-Delta/2-1))  
+  Io2  = reform( Io2(*,Delta/2:Ny-Delta/2-1))  
+  Ic2  = reform( Ic2(*,Delta/2:Ny-Delta/2-1))  
+  Ny   = (size(Io2))(2)
+  factor = 1.
 end
