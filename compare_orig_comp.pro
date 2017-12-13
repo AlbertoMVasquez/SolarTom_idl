@@ -31,27 +31,42 @@ pro compare_lascoc2,orig_image=orig_image,orig_file=orig_file,comp_file=comp_fil
   compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,data_dir=data_dir,factor_image=factor_image,factor_unit=factor_unit,winn=winn
 end
 
-pro compare_wispr
+; compare_wispr,orig_image='WISPR_I_2025-06-13T22:00:00_squareFOV_binfac4_Blank.fts'
+; compare_wispr,orig_image='WISPR_I_2025-06-14T22:00:00_squareFOV_binfac4_Blank.fts'
+; compare_wispr,orig_image='WISPR_I_2025-06-15T22:00:00_squareFOV_binfac4_Blank.fts'
 
-  orig_image='WISPR_I_2025-06-14T22:00:00_Blank.fts'
-  orig_file ='orig_WISPR_I_2025-06-14T22:00:00_Blank.dat'
-  comp_file ='comp_x_AWSOM_CR2081run5_WISPR_sphere_2.dat_WISPR_I_2025-06-14T22:00:00_Blank.dat'
-  Nx=2048
-  Ny=2048
+; movie,input_file='list.wisprI.512.Orbit01.txt'
+; movie,input_file='list.wisprI.512.Orbit12.txt'
+; movie,input_file='list.wisprI.512.Orbit24.txt'
 
-  orig_image='WISPR_I_2025-06-14T22:00:00_squareFOV_binfac4_Blank.fts'
-  orig_file ='orig_WISPR_I_2025-06-14T22:00:00_squareFOV_binfac4_Blank.dat'
-  comp_file ='comp_x_AWSOM_CR2081run5_WISPR_sphere_2.dat_WISPR_I_2025-06-14T22:00:00_squareFOV_binfac4_Blank.dat'
-  Nx=512
-  Ny=512
+pro movie,input_file=input_file
+  if not keyword_set(data_dir) then data_dir='/data1/tomography_dev/DATA/wisprI/'
+  N=0
+  orig_image=''
+  openr,2,data_dir+input_file
+  readf,2,N
+  for i=0,N-1 do begin
+     readf,2,orig_image
+     compare_wispr,orig_image=orig_image
+  endfor
+  close,2
+end
 
-  factor_image = 0.5
-  
-  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,/crop_image;,/compare3
+pro compare_wispr,orig_image=orig_image
+
+  model     = 'x_AWSOM_CR2081run5_WISPR_sphere_2.dat'  
+  orig_file = 'orig_'          +strmid(orig_image,0,strlen(orig_image)-4)+'.dat'
+  comp_file = 'comp_'+model+'_'+strmid(orig_image,0,strlen(orig_image)-4)+'.dat'
+  comp_gif  = 'comp_'+model+'_'+strmid(orig_image,0,strlen(orig_image)-4)+'.gif'
+
+  Nx= 512 & Ny= 512 & Delta= 32 & factor_image = .5
+ ;Nx=2048 & Ny=2048 & Delta=128 & factor_image = 2.
+
+  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,Delta=Delta,/record,/crop,comp_gif=comp_gif
   
 end
 
-pro compare_orig_comp,tomroot=tomroot,data_dir=data_dir,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,factor_unit=factor_unit,crop_image=crop_image,compare3=compare3,winn=winn
+pro compare_orig_comp,tomroot=tomroot,data_dir=data_dir,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,factor_unit=factor_unit,crop_image=crop_image,compare3=compare3,winn=winn,Delta=Delta,record=record,comp_gif=comp_gif
 
   if not keyword_set(factor_unit) then factor_unit = 1.
   
@@ -76,6 +91,9 @@ pro compare_orig_comp,tomroot=tomroot,data_dir=data_dir,orig_image=orig_image,or
 
   mreadfits,input_data_dir+orig_image,hdr,img
   img=img*factor_unit
+
+  p = where(Ic gt 0.)
+  mini = min(Ic(p))
   
   if not keyword_set(factor_image) then factor_image=1.
 
@@ -88,7 +106,6 @@ pro compare_orig_comp,tomroot=tomroot,data_dir=data_dir,orig_image=orig_image,or
   if keyword_set(compare3) then begin
 
   maxi = max([max(img),max(Io),max(Ic)])
-  mini = .01
 
   Img2([0,1],0) = [mini,maxi]
    Io2([0,1],0) = [mini,maxi]
@@ -98,10 +115,7 @@ pro compare_orig_comp,tomroot=tomroot,data_dir=data_dir,orig_image=orig_image,or
    Io2 =  Io2 > mini < maxi
    Ic2 =  Ic2 > mini < maxi
 
-  if keyword_set(crop_image) then begin
-     Delta = 128                ; px
-     crop,img2,Io2,Ic2,Nx,Ny,Delta,factor_image
-  endif
+  if keyword_set(crop_image) then crop,img2,Io2,Ic2,Nx,Ny,Delta,factor_image
 
   loadct,39
   window,xs=3*Nx/factor_image,ys=Ny/factor_image
@@ -112,12 +126,15 @@ pro compare_orig_comp,tomroot=tomroot,data_dir=data_dir,orig_image=orig_image,or
 
   if NOT keyword_set(compare3) then begin
   if NOT keyword_set(winn) then winn=0
-  mini = .01
+  if keyword_set(crop_image) then crop,img2,Io2,Ic2,Nx,Ny,Delta,factor_image   
   Ic2  = Ic2 > mini
   loadct,39
   window,winn,xs=Nx/factor_image,ys=Ny/factor_image
   tvscl,alog10( Ic2)
+  if keyword_set(record) then record_gif,input_dir,comp_gif,'X'
   endif
+
+; stop
 end
 
 pro crop,img2,Io2,Ic2,Nx,Ny,Delta,factor_image
