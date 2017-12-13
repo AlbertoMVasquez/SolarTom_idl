@@ -35,15 +35,15 @@ end
 ; compare_wispr,orig_image='WISPR_I_2025-06-14T22:00:00_squareFOV_binfac4_Blank.fts'
 ; compare_wispr,orig_image='WISPR_I_2025-06-15T22:00:00_squareFOV_binfac4_Blank.fts'
 
-; movie,input_file='list.wisprI.512.Orbit01.txt'
-; movie,input_file='list.wisprI.512.Orbit12.txt'
-; movie,input_file='list.wisprI.512.Orbit24.txt'
+; movie,input_file='list.wisprI.512.Orbit01.txt',data_dir='wisprI/'
+; movie,input_file='list.wisprI.512.Orbit12.txt',data_dir='wisprI/'
+; movie,input_file='list.wisprI.512.Orbit24.txt',data_dir='wisprI/'
 
-pro movie,input_file=input_file
-  if not keyword_set(data_dir) then data_dir='/data1/tomography_dev/DATA/wisprI/'
+pro movie,input_file=input_file,data_dir=data_dir
+
   N=0
   orig_image=''
-  openr,2,data_dir+input_file
+  openr,2,'/data1/tomography_dev/DATA/'+data_dir+input_file
   readf,2,N
   for i=0,N-1 do begin
      readf,2,orig_image
@@ -62,7 +62,7 @@ pro compare_wispr,orig_image=orig_image,data_dir=data_dir
   Nx= 512 & Ny= 512 & Delta= 32 & factor_image = .5
  ;Nx=2048 & Ny=2048 & Delta=128 & factor_image = 2.
 
-  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,Delta=Delta,/record,/crop,comp_gif=comp_gif,/create_FITS_for_tom
+  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,Delta=Delta,/record,/crop,comp_gif=comp_gif,/create_FITS_for_tom,data_dir=data_dir
   
 end
 
@@ -73,7 +73,7 @@ pro compare_orig_comp,tomroot=tomroot,data_dir=data_dir,orig_image=orig_image,or
   if not keyword_set(tomroot) then tomroot = '/data1/'
   input_dir = tomroot+'tomography/bindata/Compare/'
 
-  if not keyword_set(data_dir) then data_dir='wisprI/'
+ ;if not keyword_set(data_dir) then data_dir='wisprI/'
   input_data_dir = tomroot+'tomography/DATA/'+data_dir
   
   Io = fltarr(Nx,Ny)
