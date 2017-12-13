@@ -35,11 +35,11 @@ end
 ; compare_wispr,orig_image='WISPR_I_2025-06-14T22:00:00_squareFOV_binfac4_Blank.fts'
 ; compare_wispr,orig_image='WISPR_I_2025-06-15T22:00:00_squareFOV_binfac4_Blank.fts'
 
-; movie,input_file='list.wisprI.512.Orbit01.txt',data_dir='wisprI/',table_file='table.Orbit01.short.txt'
-; movie,input_file='list.wisprI.512.Orbit12.txt',data_dir='wisprI/',table_file='table.Orbit12.short.txt'
-; movie,input_file='list.wisprI.512.Orbit24.txt',data_dir='wisprI/',table_file='table.Orbit24.short.txt'
+; movie,input_file='list.wisprI.512.Orbit01.txt',data_dir='wisprI/',table_file='table.Orbit01.short.txt',/BK
+; movie,input_file='list.wisprI.512.Orbit12.txt',data_dir='wisprI/',table_file='table.Orbit12.short.txt',/BK
+; movie,input_file='list.wisprI.512.Orbit24.txt',data_dir='wisprI/',table_file='table.Orbit24.short.txt'./BK
 
-pro movie,input_file=input_file,data_dir=data_dir,table_file=table_file
+pro movie,input_file=input_file,data_dir=data_dir,table_file=table_file,pB=pB,BK=BK
 common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOWHH,data_string
   openr,3,'/data1/work/SPP/SORBET_VIZZER_WISPR_RevA/'+table_file
   x=''
@@ -64,7 +64,8 @@ common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOW
 ;    readf,3,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOWHH
      readf,3,data_string
      readf,2,orig_image
-     compare_wispr,orig_image=orig_image,data_dir=data_dir
+     if keyword_set(BK) then compare_wispr,orig_image=orig_image,data_dir=data_dir,/BK
+     if keyword_set(pB) then compare_wispr,orig_image=orig_image,data_dir=data_dir,/pB
   endfor
   close,/all
 end
