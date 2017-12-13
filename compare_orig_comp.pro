@@ -47,12 +47,12 @@ pro movie,input_file=input_file
   readf,2,N
   for i=0,N-1 do begin
      readf,2,orig_image
-     compare_wispr,orig_image=orig_image
+     compare_wispr,orig_image=orig_image,data_dir=data_dir
   endfor
   close,2
 end
 
-pro compare_wispr,orig_image=orig_image
+pro compare_wispr,orig_image=orig_image,data_dir=data_dir
 
   model     = 'x_AWSOM_CR2081run5_WISPR_sphere_2.dat'  
   orig_file = 'orig_'          +strmid(orig_image,0,strlen(orig_image)-4)+'.dat'
@@ -62,11 +62,11 @@ pro compare_wispr,orig_image=orig_image
   Nx= 512 & Ny= 512 & Delta= 32 & factor_image = .5
  ;Nx=2048 & Ny=2048 & Delta=128 & factor_image = 2.
 
-  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,Delta=Delta,/record,/crop,comp_gif=comp_gif
+  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,Delta=Delta,/record,/crop,comp_gif=comp_gif,/create_FITS_for_tom
   
 end
 
-pro compare_orig_comp,tomroot=tomroot,data_dir=data_dir,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,factor_unit=factor_unit,crop_image=crop_image,compare3=compare3,winn=winn,Delta=Delta,record=record,comp_gif=comp_gif
+pro compare_orig_comp,tomroot=tomroot,data_dir=data_dir,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,factor_unit=factor_unit,crop_image=crop_image,compare3=compare3,winn=winn,Delta=Delta,record=record,comp_gif=comp_gif,create_FITS_for_tom=create_FITS_for_tom
 
   if not keyword_set(factor_unit) then factor_unit = 1.
   
@@ -92,6 +92,11 @@ pro compare_orig_comp,tomroot=tomroot,data_dir=data_dir,orig_image=orig_image,or
   mreadfits,input_data_dir+orig_image,hdr,img
   img=img*factor_unit
 
+  if keyword_set(create_FITS_for_tom) then begin
+     newfilename = strmid(orig_image,0,strlen(orig_image)-9)+'Synth.fts'
+     mwritefits,hdr,Ic,outfile=input_data_dir+newfilename
+  endif
+  
   p = where(Ic gt 0.)
   mini = min(Ic(p))
   
