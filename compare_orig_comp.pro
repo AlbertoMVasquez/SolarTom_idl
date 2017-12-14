@@ -74,9 +74,9 @@ pro compare_wispr,orig_image=orig_image,data_dir=data_dir,pB=pB,BK=BK
 
   model     = 'x_AWSOM_CR2081run5_WISPR_sphere_2.dat'  
                           orig_file = 'orig_'          +strmid(orig_image,0,strlen(orig_image)-4)+'.dat'
-  if keyword_set(BK) then comp_file = 'comp_'+model+'_'+strmid(orig_image,0,strlen(orig_image)-4)+'_BK.dat'
   if keyword_set(pB) then comp_file = 'comp_'+model+'_'+strmid(orig_image,0,strlen(orig_image)-4)+'.dat'
-                          comp_gif  = 'comp_'+model+'_'+strmid(orig_image,0,strlen(orig_image)-4)+'.gif'
+  if keyword_set(BK) then comp_file = 'comp_'+model+'_'+strmid(orig_image,0,strlen(orig_image)-4)+'_BK.dat'
+                          comp_gif  = 'comp_'+model+'_'+strmid(orig_image,0,strlen(orig_image)-4)+'_BK.gif'
 
   Nx= 512 & Ny= 512 & Delta= 32 & factor_image = .5
  ;Nx=2048 & Ny=2048 & Delta=128 & factor_image = 2.
