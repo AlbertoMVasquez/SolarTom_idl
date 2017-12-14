@@ -37,7 +37,11 @@ end
 
 ; movie,input_file='list.wisprI.512.Orbit01.txt',data_dir='wisprI/',table_file='table.Orbit01.short.txt',/BK
 ; movie,input_file='list.wisprI.512.Orbit12.txt',data_dir='wisprI/',table_file='table.Orbit12.short.txt',/BK
-; movie,input_file='list.wisprI.512.Orbit24.txt',data_dir='wisprI/',table_file='table.Orbit24.short.txt'./BK
+; movie,input_file='list.wisprI.512.Orbit24.txt',data_dir='wisprI/',table_file='table.Orbit24.short.txt',/BK
+
+; movie,input_file='list.wisprI.512.Orbit01.txt',data_dir='wisprI/',table_file='table.Orbit01.short.txt',/pB
+; movie,input_file='list.wisprI.512.Orbit12.txt',data_dir='wisprI/',table_file='table.Orbit12.short.txt',/pB
+; movie,input_file='list.wisprI.512.Orbit24.txt',data_dir='wisprI/',table_file='table.Orbit24.short.txt',/pB
 
 pro movie,input_file=input_file,data_dir=data_dir,table_file=table_file,pB=pB,BK=BK
 common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOWHH,data_string
@@ -72,26 +76,37 @@ end
 
 pro compare_wispr,orig_image=orig_image,data_dir=data_dir,pB=pB,BK=BK
 
-  model     = 'x_AWSOM_CR2081run5_WISPR_sphere_2.dat'  
-                          orig_file = 'orig_'          +strmid(orig_image,0,strlen(orig_image)-4)+'.dat'
-  if keyword_set(pB) then comp_file = 'comp_'+model+'_'+strmid(orig_image,0,strlen(orig_image)-4)+'.dat'
-  if keyword_set(BK) then comp_file = 'comp_'+model+'_'+strmid(orig_image,0,strlen(orig_image)-4)+'_BK.dat'
-                          comp_gif  = 'comp_'+model+'_'+strmid(orig_image,0,strlen(orig_image)-4)+'_BK.gif'
+     model     = 'x_AWSOM_CR2081run5_WISPR_sphere_2.dat'  
+     orig_file = 'orig_'          +strmid(orig_image,0,strlen(orig_image)-4)+'.dat'
+  if keyword_set(pB) then begin
+     comp_file = 'comp_'+model+'_'+strmid(orig_image,0,strlen(orig_image)-4)+'.dat'
+     comp_gif  = 'comp_'+model+'_'+strmid(orig_image,0,strlen(orig_image)-4)+'_pB.gif'
+  endif
+  if keyword_set(BK) then begin
+     comp_file = 'comp_'+model+'_'+strmid(orig_image,0,strlen(orig_image)-4)+'_BK.dat'
+     comp_gif  = 'comp_'+model+'_'+strmid(orig_image,0,strlen(orig_image)-4)+'_BK.gif'
+  endif
 
+     
   Nx= 512 & Ny= 512 & Delta= 32 & factor_image = .5
  ;Nx=2048 & Ny=2048 & Delta=128 & factor_image = 2.
 
-  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,Delta=Delta,/record,/crop,comp_gif=comp_gif,/create_FITS_for_tom,data_dir=data_dir
+  if keyword_set(BK) then $
+  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,Delta=Delta,/record,/crop,comp_gif=comp_gif,/create_FITS_for_tom,data_dir=data_dir,/BK
+
+  if keyword_set(pB) then $
+  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,Delta=Delta,/record,/crop,comp_gif=comp_gif,/create_FITS_for_tom,data_dir=data_dir,/pB
   
 end
 
-pro compare_orig_comp,tomroot=tomroot,data_dir=data_dir,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,factor_unit=factor_unit,crop_image=crop_image,compare3=compare3,winn=winn,Delta=Delta,record=record,comp_gif=comp_gif,create_FITS_for_tom=create_FITS_for_tom
+pro compare_orig_comp,tomroot=tomroot,data_dir=data_dir,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,factor_unit=factor_unit,crop_image=crop_image,compare3=compare3,winn=winn,Delta=Delta,record=record,comp_gif=comp_gif,create_FITS_for_tom=create_FITS_for_tom,BK=BK,pB=pB
+
 common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOWHH,data_string
   
   if not keyword_set(factor_unit) then factor_unit = 1.
   
   if not keyword_set(tomroot) then tomroot = '/data1/'
-  input_dir = tomroot+'tomography/bindata/Compare/'
+  input_dir = tomroot+'tomography/bindata/Compare/pB/'
 
  ;if not keyword_set(data_dir) then data_dir='wisprI/'
   input_data_dir = tomroot+'tomography/DATA/'+data_dir
@@ -113,7 +128,10 @@ common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOW
   img=img*factor_unit
 
   if keyword_set(create_FITS_for_tom) then begin
-     newfilename = strmid(orig_image,0,strlen(orig_image)-9)+'Synth.fts'
+     if keyword_set(BK) then $
+     newfilename = strmid(orig_image,0,strlen(orig_image)-9)+'Synth.BK.fts'
+     if keyword_set(pB) then $
+     newfilename = strmid(orig_image,0,strlen(orig_image)-9)+'Synth.pB.fts'
      mwritefits,hdr,Ic,outfile=input_data_dir+newfilename
   endif
   
@@ -220,7 +238,12 @@ common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOW
          ['East: '+East_rs+' R!DS!N            UT: '+UT+'             West: '+West_rs+'R!DS!N'],$
          color=0,charsize=4,charthick=4,font=1,/device
 
-  xyouts,[xs0-Dx/10],[ys0+ysimage+DY/10],['Log!d10!N(I)'],$
+  if keyword_set(BK) then $
+  xyouts,[xs0-Dx/10],[ys0+ysimage+DY/10],['Log!d10!N(B!DK!N)'],$
+         color=0,charsize=4,charthick=4,font=1,/device
+  
+  if keyword_set(pB) then $
+  xyouts,[xs0-Dx/10],[ys0+ysimage+DY/10],['Log!d10!N(p!DB!N)'],$
          color=0,charsize=4,charthick=4,font=1,/device
   
 ;  xyouts,[X0-0.45*DX],[Y0+ysimage/2],[East_rs+' R!DS!N'],$
@@ -232,8 +255,8 @@ common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOW
   if keyword_set(record) then record_gif,input_dir,comp_gif,'X'
 endif
 
-close,/all
-stop
+;close,/all
+;stop
 
 end
 
