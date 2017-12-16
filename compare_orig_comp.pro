@@ -43,9 +43,9 @@ end
 ; movie,input_file='list.wisprI.512.Orbit12.txt',data_dir='wisprI/',table_file='table.Orbit12.short.txt',/BK
 ; movie,input_file='list.wisprI.512.Orbit24.txt',data_dir='wisprI/',table_file='table.Orbit24.short.txt',/BK
 
-; movie,input_file='list.wisprI.512.Orbit01.txt',data_dir='wisprO/',table_file='table.Orbit01.short.txt',/BK
-; movie,input_file='list.wisprI.512.Orbit12.txt',data_dir='wisprO/',table_file='table.Orbit12.short.txt',/BK
-; movie,input_file='list.wisprI.512.Orbit24.txt',data_dir='wisprO/',table_file='table.Orbit24.short.txt',/BK
+; movie,input_file='list.wisprO.512.Orbit01.txt',data_dir='wisprO/',table_file='table.Orbit01.short.txt',/BK
+; movie,input_file='list.wisprO.512.Orbit12.txt',data_dir='wisprO/',table_file='table.Orbit12.short.txt',/BK
+; movie,input_file='list.wisprO.512.Orbit24.txt',data_dir='wisprO/',table_file='table.Orbit24.short.txt',/BK
 
 pro movie,input_file=input_file,data_dir=data_dir,table_file=table_file,pB=pB,BK=BK
 common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOWHH,data_string
@@ -110,8 +110,10 @@ common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOW
   if not keyword_set(factor_unit) then factor_unit = 1.
   
   if not keyword_set(tomroot) then tomroot = '/data1/'
-  input_dir = tomroot+'tomography/bindata/Compare/pB/'
+  input_dir = tomroot+'tomography/bindata/Compare/'
 
+  if keyword_set(pB) then input_dir = input_dir + 'pB/'
+  
  ;if not keyword_set(data_dir) then data_dir='wisprI/'
   input_data_dir = tomroot+'tomography/DATA/'+data_dir
   
