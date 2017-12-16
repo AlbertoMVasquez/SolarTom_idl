@@ -35,13 +35,17 @@ end
 ; compare_wispr,orig_image='WISPR_I_2025-06-14T22:00:00_squareFOV_binfac4_Blank.fts'
 ; compare_wispr,orig_image='WISPR_I_2025-06-15T22:00:00_squareFOV_binfac4_Blank.fts'
 
+; movie,input_file='list.wisprI.512.Orbit01.txt',data_dir='wisprI/',table_file='table.Orbit01.short.txt',/pB
+; movie,input_file='list.wisprI.512.Orbit12.txt',data_dir='wisprI/',table_file='table.Orbit12.short.txt',/pB
+; movie,input_file='list.wisprI.512.Orbit24.txt',data_dir='wisprI/',table_file='table.Orbit24.short.txt',/pB
+
 ; movie,input_file='list.wisprI.512.Orbit01.txt',data_dir='wisprI/',table_file='table.Orbit01.short.txt',/BK
 ; movie,input_file='list.wisprI.512.Orbit12.txt',data_dir='wisprI/',table_file='table.Orbit12.short.txt',/BK
 ; movie,input_file='list.wisprI.512.Orbit24.txt',data_dir='wisprI/',table_file='table.Orbit24.short.txt',/BK
 
-; movie,input_file='list.wisprI.512.Orbit01.txt',data_dir='wisprI/',table_file='table.Orbit01.short.txt',/pB
-; movie,input_file='list.wisprI.512.Orbit12.txt',data_dir='wisprI/',table_file='table.Orbit12.short.txt',/pB
-; movie,input_file='list.wisprI.512.Orbit24.txt',data_dir='wisprI/',table_file='table.Orbit24.short.txt',/pB
+; movie,input_file='list.wisprI.512.Orbit01.txt',data_dir='wisprO/',table_file='table.Orbit01.short.txt',/BK
+; movie,input_file='list.wisprI.512.Orbit12.txt',data_dir='wisprO/',table_file='table.Orbit12.short.txt',/BK
+; movie,input_file='list.wisprI.512.Orbit24.txt',data_dir='wisprO/',table_file='table.Orbit24.short.txt',/BK
 
 pro movie,input_file=input_file,data_dir=data_dir,table_file=table_file,pB=pB,BK=BK
 common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOWHH,data_string
@@ -215,7 +219,6 @@ common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOW
               yticklen=.2,/nodata,ythick=2,xthick=2,charthick=4,$
               xstyle=5,ystyle=1,charsize=4,font=1
 
-
 ;print data on top of image
   loadct,0
   lens    = strlen(data_string)
@@ -225,15 +228,29 @@ common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOW
   dsun_au = strmid(data_string,40, 6)
   lon     = strmid(data_string,50, 6)
   lat     = strmid(data_string,61, 5)
-  East_rs = strmid(data_string,69, 5)
-  West_rs = strmid(data_string,79, 5)
+  
+  instrument_string = strmid(data_dir,5,1)
+
+  if instrument_string eq 'I' then begin
+    East_rs = strmid(data_string,69, 5)
+    West_rs = strmid(data_string,79, 5)
+  endif
+  
+  if instrument_string eq 'O' then begin
+    East_rs = strmid(data_string,89, 5)
+    West_rs = strmid(data_string,98, 6)
+  endif
+
   device, set_font = 'Helvetica',/TT_FONT
-  xyouts,[x0],[y0+ysimage+DY/3],['WISPR-I, Orbit #'+Orb+'.  AWSoM Model for CR-2081.'],$
+  
+  xyouts,[x0],[y0+ysimage+DY/3],['WISPR-'+instrument_string+', Orbit #'+Orb+'.  AWSoM Model for CR-2081.'],$
          color=0,charsize=4,charthick=4,font=1,/device
+  
   xyouts,[x0],[y0+ysimage+DY/10],$
          ['D!DPSP-SUN!N = '+dsun_au+' AU = '+dsun_rs+' R!DS!N'+$
           '        Lon / Lat [deg]: '+lon+' / '+lat],$
          color=0,charsize=4,charthick=4,font=1,/device
+  
   xyouts,[x0],[y0-DY/4],$
          ['East: '+East_rs+' R!DS!N            UT: '+UT+'             West: '+West_rs+'R!DS!N'],$
          color=0,charsize=4,charthick=4,font=1,/device
@@ -245,12 +262,7 @@ common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOW
   if keyword_set(pB) then $
   xyouts,[xs0-Dx/10],[ys0+ysimage+DY/10],['Log!d10!N(p!DB!N)'],$
          color=0,charsize=4,charthick=4,font=1,/device
-  
-;  xyouts,[X0-0.45*DX],[Y0+ysimage/2],[East_rs+' R!DS!N'],$
-;         color=0,charsize=4,charthick=4,font=1,/device
-;  xyouts,[X0+xsimage+DX/20],[Y0+ysimage/2],[West_rs+' R!DS!N'],$
-;         color=0,charsize=4,charthick=4,font=1,/device
-  
+    
   ; Record image
   if keyword_set(record) then record_gif,input_dir,comp_gif,'X'
 endif
