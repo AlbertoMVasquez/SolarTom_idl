@@ -6,7 +6,7 @@ function lindex3d,row,col,block,nrows,ncols
 ;   see also vecdex3D.m
 
 ; index = (block - 1)*nrows*ncols + (col - 1)*nrows + row   MATLAB
-
+ 
   index = block*nrows*ncols + col*nrows + row             ; IDL
   return,index
 end
