@@ -1,4 +1,5 @@
 ; derivs_hollowsph,nrad=100,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='100_90_180'
+; derivs_hollowsph,nrad= 26,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext= '26_90_180'
 pro derivs_hollowsph,nrad=nrad,ntheta=ntheta,nphi=nphi,directory=directory,fname_ext=fname_ext
 
   nrad        = long(nrad)
@@ -27,9 +28,9 @@ pro derivs_hollowsph,nrad=nrad,ntheta=ntheta,nphi=nphi,directory=directory,fname
 ; calculate d2r
 count       = -1L;
 r_row_count = -1L;
-for k = 0L,nphi-1 do begin ; block
-   for i = 0L,ntheta-1 do begin ;col
-      for j = 1L,nrad-2 do begin ; row
+for k = 0L,nphi-1 do begin;
+   for i = 0L,ntheta-1 do begin;
+      for j = 1L,nrad-2 do begin;
 
             r_row_count = r_row_count + 1 ;            
 
@@ -153,7 +154,7 @@ k = nphi-1;
             val_d2phi(count) = -2.0;
 
             count = count + 1;
-            n = lindex3D(j,i,1,nrad,ntheta);
+            n = lindex3D(j,i,0,nrad,ntheta);
 	    row_d2phi(count) = m;
             col_d2phi(count) = n;
             val_d2phi(count) = 1.0;      
@@ -170,7 +171,7 @@ k = 0;
 
             count = count + 1;
             m = p_row_count;
-            n = lindex3D(j,i,nphi,nrad,ntheta);
+            n = lindex3D(j,i,nphi-1,nrad,ntheta);
 	    row_d2phi(count) = m;
             col_d2phi(count) = n;
             val_d2phi(count) = 1.0;
