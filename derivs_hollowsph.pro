@@ -69,7 +69,7 @@ for k = 0L,nphi-1 do begin
      for j = 0L,nrad-1 do begin
 
         t_row_count = t_row_count + 1;
-
+; RICH, shouldn't we swap the order of the next two blocks?
         count = count + 1;
         n = lindex3D(j,i,k,nrad,ntheta); 
         row_d2theta(count) = t_row_count; 
