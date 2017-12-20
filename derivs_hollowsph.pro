@@ -3,6 +3,13 @@
 ; Regularization Matrix Generator in IDL.
 ; by Alberto M. Vásquez. CLaSP, Fall-2017.
 ;
+; IMPORTANT NOTE: Note that while in this IDL version all indeces values are
+; "1" less than in the MATLAB code, the VALUES contained in the arrays:
+; n2d* and col_d2* are the SAME than in the MATLAB version, as it should.
+; The ONLY acceptable test to evaluate the correctness is to obtain EQUAL
+; md5sum of the outputs of the IDL and MATLAB versions, which had been
+; succesfully achieved by Albert on Dec-19-2017 at 22:30 Ann Arbor time :).
+;
 ; /hlaplac:  Angular derivatives. Output in one matrix.
 ; /laplac3:  3D derivatives. Output in three matrices.
 ;
