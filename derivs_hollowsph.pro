@@ -11,8 +11,8 @@
 ;
 ; Examples of calling sequence:
 ;
-; derivs_hollowsph,nrad=100,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='100_90_180',/hlaplac
-;
+; derivs_hollowsph,nrad=100,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='100_90_180_Idl',/hlaplac
+; derivs_hollowsph,nrad=100,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='100_90_180_Idl',/laplac3
 ; derivs_hollowsph,nrad= 26,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext= '26_90_180',/hlaplac
 ;
 ;;
@@ -69,7 +69,8 @@ for k = 0L,nphi-1 do begin;
             col_d2r(count) = n                ; store col of element
             val_d2r(count) = 1.0              ; store val of element
             
-            nd2r(r_row_count+1) = count       ; store starting index of next row 
+            nd2r(r_row_count+1) = count+1 ; store starting index of each row.
+                                        ; First element is 0, second is 3.
 
       endfor
    endfor
@@ -109,14 +110,14 @@ for k = 0L,nphi-1 do begin
         col_d2theta(count) = n;
         val_d2theta(count) = 1.0;
 
-        nd2theta(t_row_count+1) = count;
+        nd2theta(t_row_count+1) = count+1;
 
       endfor
    endfor
 endfor
 
-val_hlaplac = val_d2theta(0:count-1);
-col_hlaplac = col_d2theta(0:count-1);
+val_hlaplac = val_d2theta(0:count);
+col_hlaplac = col_d2theta(0:count);
 
 print,'Done with d2theta.';
 
@@ -149,7 +150,7 @@ for k = 1L,nphi-2 do begin
             col_d2phi(count) = n;
             val_d2phi(count) = 1.0;      
 
-            nd2phi(p_row_count+1) = count;    
+            nd2phi(p_row_count+1) = count+1;    
       endfor
    endfor
 endfor
@@ -179,7 +180,7 @@ k = nphi-1; Matlab said "k=nphi"
             col_d2phi(count) = n;
             val_d2phi(count) = 1.0;      
 
-            nd2phi(p_row_count+1) = count;
+            nd2phi(p_row_count+1) = count+1;
       endfor
    endfor
 
@@ -208,37 +209,45 @@ k = 0; Matlab said "k=1"
             col_d2phi(count) = n;
             val_d2phi(count) = 1.0;      
 
-            nd2phi(p_row_count+1) = count;
+            nd2phi(p_row_count+1) = count+1;
       endfor
    endfor
 
 print,'Done with d2phi.'
 
-val_hlaplac = [val_hlaplac, val_d2phi(0:count-1)];
-col_hlaplac = [col_hlaplac, col_d2phi(0:count-1)];
-  n_hlaplac = [nd2theta(0:t_row_count), nd2theta(t_row_count) + nd2phi(1:p_row_count)]; 
+val_hlaplac = [val_hlaplac, val_d2phi(0:count)];
+col_hlaplac = [col_hlaplac, col_d2phi(0:count)];
+  n_hlaplac = [nd2theta(0:t_row_count+1), nd2theta(t_row_count+1) + nd2phi(1:p_row_count+1)]; 
 
 if keyword_set(hlaplac) then begin
 
    fname_hlaplac = 'hlaplac_'+fname_ext;
    print,'The filename extension is '+ fname_hlaplac
 
-   y = fltarr(t_row_count + p_row_count);
-
+   y = fltarr(t_row_count+1 + p_row_count+1) ;
+   
+   print,'t_row_count+1, p_row_count+1:',t_row_count+1, p_row_count+1
+   
    filename_n = directory+'n'     +fname_hlaplac
    filename_i = directory+'i'     +fname_hlaplac
    filename_v = directory+'v'     +fname_hlaplac
    filename_y = directory+'y'     +fname_hlaplac
    filename_d = directory+'delta_'+fname_hlaplac
 
+   print,filename_n
+   print,filename_i
+   print,filename_v
+   print,filename_y
+   print,filename_d
+   
    openw,1,filename_n
    openw,2,filename_i
    openw,3,filename_v
    openw,4,filename_y
    openw,5,filename_d
 
-   writeu,1,  n_hlaplac
-   writeu,2,col_hlaplac ; Matlab said "col_hlaplac-1"
+   writeu,1,  n_hlaplac   ; Matlab writes   "n_hlaplac"
+   writeu,2,col_hlaplac-1 ; Matlab writes "col_hlaplac-1"
    writeu,3,val_hlaplac
    writeu,4,y
    writeu,5,y
@@ -252,7 +261,7 @@ if keyword_set(laplac3) then begin
    fname_d2r = 'd2r_'+fname_ext
    print,'The filename extension is '+ fname_d2r
    
-   y = fltarr(r_row_count) 
+   y = fltarr(r_row_count+1) 
 
    filename_n = directory+'n'     +fname_d2r
    filename_i = directory+'i'     +fname_d2r
@@ -260,14 +269,20 @@ if keyword_set(laplac3) then begin
    filename_y = directory+'y'     +fname_d2r
    filename_d = directory+'delta_'+fname_d2r
 
+   print,filename_n
+   print,filename_i
+   print,filename_v
+   print,filename_y
+   print,filename_d
+
    openw,1,filename_n
    openw,2,filename_i
    openw,3,filename_v
    openw,4,filename_y
    openw,5,filename_d
 
-   writeu,1,   nd2r
-   writeu,2,col_d2r ; Matlab said "col_d2r-1"
+   writeu,1,   nd2r   ; Matlab writes    "nd2r
+   writeu,2,col_d2r-1 ; Matlab writes "col_d2r-1"
    writeu,3,val_d2r
    writeu,4,y
    writeu,5,y
@@ -276,7 +291,7 @@ if keyword_set(laplac3) then begin
 
    fname_d2theta = 'd2theta_'+fname_ext
 
-   y = fltarr(t_row_count)
+   y = fltarr(t_row_count+1)
 
    filename_n = directory+'n'     +fname_d2theta
    filename_i = directory+'i'     +fname_d2theta
@@ -284,14 +299,20 @@ if keyword_set(laplac3) then begin
    filename_y = directory+'y'     +fname_d2theta
    filename_d = directory+'delta_'+fname_d2theta
 
+   print,filename_n
+   print,filename_i
+   print,filename_v
+   print,filename_y
+   print,filename_d
+
    openw,1,filename_n
    openw,2,filename_i
    openw,3,filename_v
    openw,4,filename_y
    openw,5,filename_d
 
-   writeu,1,   nd2theta
-   writeu,2,col_d2theta-1 ; Matlab said "col_d2theta-1"
+   writeu,1,   nd2theta   ; Matlab writes    "nd2theta" 
+   writeu,2,col_d2theta-1 ; Matlab writes "col_d2theta-1"
    writeu,3,val_d2theta
    writeu,4,y
    writeu,5,y
@@ -300,7 +321,7 @@ if keyword_set(laplac3) then begin
 
    fname_d2phi = 'd2phi_'+fname_ext
 
-   y = fltarr(p_row_count)
+   y = fltarr(p_row_count+1)
 
    filename_n = directory+'n'     +fname_d2phi
    filename_i = directory+'i'     +fname_d2phi
@@ -308,14 +329,20 @@ if keyword_set(laplac3) then begin
    filename_y = directory+'y'     +fname_d2phi
    filename_d = directory+'delta_'+fname_d2phi
 
+   print,filename_n
+   print,filename_i
+   print,filename_v
+   print,filename_y
+   print,filename_d
+
    openw,1,filename_n
    openw,2,filename_i
    openw,3,filename_v
    openw,4,filename_y
    openw,5,filename_d
 
-   writeu,1,   nd2phi
-   writeu,2,col_d2phi-1 ; Matlab said "col_d2phi-1"
+   writeu,1,   nd2phi   ; Matlab writes     "nd2phi"
+   writeu,2,col_d2phi-1 ; Matlab writes "col_d2phi-1"
    writeu,3,val_d2phi
    writeu,4,y
    writeu,5,y
