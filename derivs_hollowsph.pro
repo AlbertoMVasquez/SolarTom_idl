@@ -233,7 +233,7 @@ if keyword_set(hlaplac) then begin
 
    y = fltarr(t_row_count+1 + p_row_count+1) ;
    
-   print,'t_row_count+1, p_row_count+1:',t_row_count+1, p_row_count+1
+ ; print,'t_row_count+1, p_row_count+1:',t_row_count+1, p_row_count+1
    
    filename_n = directory+'n'     +fname_hlaplac
    filename_i = directory+'i'     +fname_hlaplac
@@ -258,7 +258,9 @@ if keyword_set(hlaplac) then begin
    writeu,3,val_hlaplac
    writeu,4,y
    writeu,5,y
-
+   
+   print,'h_laplac has',string(n_elements(VAL_HLAPLAC)/3)+' rows and '+string(nbins)+' columns'
+   
    close,/all
    
 endif
@@ -294,6 +296,8 @@ if keyword_set(laplac3) then begin
    writeu,4,y
    writeu,5,y
 
+   print,'D2r has',string(n_elements(VAL_d2r)/3)+' rows and '+string(nbins)+' columns'
+   
    close,/all
 
    fname_d2theta = 'd2theta_'+fname_ext
@@ -324,6 +328,8 @@ if keyword_set(laplac3) then begin
    writeu,4,y
    writeu,5,y
 
+   print,'D2r has',string(n_elements(VAL_d2theta)/3)+' rows and '+string(nbins)+' columns'
+   
    close,/all
 
    fname_d2phi = 'd2phi_'+fname_ext
@@ -354,6 +360,8 @@ if keyword_set(laplac3) then begin
    writeu,4,y
    writeu,5,y
 
+   print,'D2phi has',string(n_elements(VAL_d2phi)/3)+' rows and '+string(nbins)+' columns'
+   
    close,/all
 
 endif ; laplac3
