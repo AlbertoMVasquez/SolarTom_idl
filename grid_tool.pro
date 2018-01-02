@@ -4,7 +4,7 @@
 
 pro grid_tool,WISPR=WISPR,DEMT=DEMT,output_dir=output_dir
 
-if NOT keyword_set (output_dir) then output_dir = '/data1/tomography/idl/DATA/'
+if NOT keyword_set (output_dir) then output_dir = '/data1/tomography_dev/idl/DATA/'
   
 ; Set grid density key parameters:
 if keyword_set(WISPR) then begin
