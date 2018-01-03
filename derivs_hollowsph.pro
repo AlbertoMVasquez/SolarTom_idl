@@ -83,7 +83,7 @@ for k = 0L,nphi-1 do begin;
    endfor
 endfor
 
-print,'Done with d2r.'
+print,'Done with d2r.     Its number of rows is: r_row_count + 1 =',r_row_count + 1
 
 ;calculate d2theta
 
@@ -126,7 +126,7 @@ endfor
 val_hlaplac = val_d2theta(0:count);
 col_hlaplac = col_d2theta(0:count);
 
-print,'Done with d2theta.';
+print,'Done with d2theta. Its number of rows is: t_row_count + 1 =',t_row_count + 1
 
 ; calculate d2phi
 
@@ -220,7 +220,7 @@ k = 0; Matlab said "k=1"
       endfor
    endfor
 
-print,'Done with d2phi.'
+print,'Done with d2phi.   Its number of rows is: p_row_count + 1 =',p_row_count + 1
 
 val_hlaplac = [val_hlaplac, val_d2phi(0:count)];
 col_hlaplac = [col_hlaplac, col_d2phi(0:count)];
@@ -232,8 +232,6 @@ if keyword_set(hlaplac) then begin
    print,'The filename extension is '+ fname_hlaplac
 
    y = fltarr(t_row_count+1 + p_row_count+1) ;
-   
- ; print,'t_row_count+1, p_row_count+1:',t_row_count+1, p_row_count+1
    
    filename_n = directory+'n'     +fname_hlaplac
    filename_i = directory+'i'     +fname_hlaplac
@@ -259,7 +257,8 @@ if keyword_set(hlaplac) then begin
    writeu,4,y
    writeu,5,y
    
-   print,'h_laplac has',string(n_elements(VAL_HLAPLAC)/3)+' rows and '+string(nbins)+' columns'
+;  print,'h_laplac has',string(n_elements(VAL_HLAPLAC)/3)+' rows and '+string(nbins)+' columns'
+   print,'h_laplac has'+string(t_row_count+1 + p_row_count+1)+' rows and '+string(nbins)+' columns'
    
    close,/all
    
@@ -296,8 +295,6 @@ if keyword_set(laplac3) then begin
    writeu,4,y
    writeu,5,y
 
-   print,'D2r has',string(n_elements(VAL_d2r)/3)+' rows and '+string(nbins)+' columns'
-   
    close,/all
 
    fname_d2theta = 'd2theta_'+fname_ext
@@ -328,8 +325,6 @@ if keyword_set(laplac3) then begin
    writeu,4,y
    writeu,5,y
 
-   print,'D2r has',string(n_elements(VAL_d2theta)/3)+' rows and '+string(nbins)+' columns'
-   
    close,/all
 
    fname_d2phi = 'd2phi_'+fname_ext
@@ -360,10 +355,12 @@ if keyword_set(laplac3) then begin
    writeu,4,y
    writeu,5,y
 
-   print,'D2phi has',string(n_elements(VAL_d2phi)/3)+' rows and '+string(nbins)+' columns'
-   
    close,/all
 
+   print,'D2r     has'+string(r_row_count+1)+' rows and '+string(nbins)+' columns'
+   print,'D2theta has'+string(t_row_count+1)+' rows and '+string(nbins)+' columns'
+   print,'D2phi   has'+string(p_row_count+1)+' rows and '+string(nbins)+' columns'
+   
 endif ; laplac3
 
 print,'Done'
