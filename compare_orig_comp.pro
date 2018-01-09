@@ -47,6 +47,10 @@ end
 ; movie,input_file='list.wisprO.512.Orbit12.txt',data_dir='wisprO/',table_file='table.Orbit12.short.txt',/BK
 ; movie,input_file='list.wisprO.512.Orbit24.txt',data_dir='wisprO/',table_file='table.Orbit24.short.txt',/BK
 
+
+; movie,input_file='list.wisprI.512.CircularOrbit01.txt',data_dir='wisprI/',table_file='table.CircularOrbit01.short.txt',/BK
+; movie,input_file='list.wisprO.512.CircularOrbit01.txt',data_dir='wisprO/',table_file='table.CircularOrbit01.short.txt',/BK
+
 pro movie,input_file=input_file,data_dir=data_dir,table_file=table_file,pB=pB,BK=BK
 common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOWHH,data_string
   openr,3,'/data1/work/SPP/SORBET_VIZZER_WISPR_RevA/'+table_file
@@ -90,7 +94,6 @@ pro compare_wispr,orig_image=orig_image,data_dir=data_dir,pB=pB,BK=BK
      comp_file = 'comp_'+model+'_'+strmid(orig_image,0,strlen(orig_image)-4)+'_BK.dat'
      comp_gif  = 'comp_'+model+'_'+strmid(orig_image,0,strlen(orig_image)-4)+'_BK.gif'
   endif
-
      
   Nx= 512 & Ny= 512 & Delta= 32 & factor_image = .5
  ;Nx=2048 & Ny=2048 & Delta=128 & factor_image = 2.
