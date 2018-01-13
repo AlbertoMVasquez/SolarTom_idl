@@ -1,10 +1,16 @@
 pro wrapper_compare
 
-compare_reconstruction_model,orbit= 1,ir=00,filename='Orbit_Circular_2.1Rs.gif',/circular
-compare_reconstruction_model,orbit= 1,ir=03,filename='Orbit_Circular_3.0Rs.gif',/circular
-compare_reconstruction_model,orbit= 1,ir=07,filename='Orbit_Circular_4.8Rs.gif',/circular
-compare_reconstruction_model,orbit= 1,ir=10,filename='Orbit_Circular_6.5Rs.gif',/circular
-compare_reconstruction_model,orbit= 1,ir=13,filename='Orbit_Circular_8.6Rs.gif',/circular
+compare_reconstruction_model,orbit= 1,ir=00,filename='Orbit_CircularOffEq_2.1Rs.gif',/circular_offeq
+compare_reconstruction_model,orbit= 1,ir=03,filename='Orbit_CircularOffEq_3.0Rs.gif',/circular_offeq
+compare_reconstruction_model,orbit= 1,ir=07,filename='Orbit_CircularOffEq_4.8Rs.gif',/circular_offeq
+compare_reconstruction_model,orbit= 1,ir=10,filename='Orbit_CircularOffEq_6.5Rs.gif',/circular_offeq
+compare_reconstruction_model,orbit= 1,ir=13,filename='Orbit_CircularOffEq_8.6Rs.gif',/circular_offeq
+
+compare_reconstruction_model,orbit= 1,ir=00,filename='Orbit_CircularEquat_2.1Rs.gif',/circular_eq
+compare_reconstruction_model,orbit= 1,ir=03,filename='Orbit_CircularEquat_3.0Rs.gif',/circular_eq
+compare_reconstruction_model,orbit= 1,ir=07,filename='Orbit_CircularEquat_4.8Rs.gif',/circular_eq
+compare_reconstruction_model,orbit= 1,ir=10,filename='Orbit_CircularEquat_6.5Rs.gif',/circular_eq
+compare_reconstruction_model,orbit= 1,ir=13,filename='Orbit_CircularEquat_8.6Rs.gif',/circular_eq
 
 compare_reconstruction_model,orbit= 1,ir=15,filename='Orbit_01_10Rs.gif'
 compare_reconstruction_model,orbit= 1,ir=25,filename='Orbit_01_20Rs.gif'
@@ -38,7 +44,7 @@ compare_reconstruction_model,orbit=12,ir=58,filename='Orbit_12_80Rs.gif'
 
 end
 
-pro compare_reconstruction_model,ir=ir,filename=filename,orbit=orbit,circular=circular
+pro compare_reconstruction_model,ir=ir,filename=filename,orbit=orbit,circular_eq=circular_eq,circular_offeq=circular_offeq
 
 input_dir = '/data1/tomography/bindata/'
   
@@ -72,6 +78,10 @@ files3=[$
 'x_wisprO.512.CircularOrbit01.60images_3regmat_l1e-5',$
 'x_wisprIO.512.CircularOrbit01.60images_3regmat_l1e-5']
 
+files4=[$
+'x_wisprIO.512.CircularOrbitOffEquator01.60images_hlaplac_l1e-5',$
+'x_wisprIO.512.CircularOrbitOffEquator01.60images_3regmat_l1e-5']
+
  nr = 100
  nt =  90
  np = 180
@@ -104,6 +114,9 @@ files3=[$
  readtom_sph,input_dir,files3[1],nr,nt,rmin,rmax,Ne_wO_CO01_3regmat
  readtom_sph,input_dir,files3[2],nr,nt,rmin,rmax,Ne_wIO_CO01_3regmat
 
+ readtom_sph,input_dir,files4[0],nr,nt,rmin,rmax,Ne_wIO_COOE01_hlaplac
+ readtom_sph,input_dir,files4[1],nr,nt,rmin,rmax,Ne_wIO_COOE01_3regmat
+
  map1 = reform(Ne_model  (ir,*,*)) ;1
  if orbit eq 1 then begin
  map2 = reform(Ne_wI_O01 (ir,*,*))
@@ -118,6 +131,8 @@ files3=[$
  map11= reform(Ne_wI_CO01_3regmat(ir,*,*))
  map12= reform(Ne_wO_CO01_3regmat(ir,*,*))
  map13= reform(Ne_wIO_CO01_3regmat(ir,*,*)) ;13
+ map14= reform(Ne_wIO_COOE01_hlaplac(ir,*,*))
+ map15= reform(Ne_wIO_COOE01_3regmat(ir,*,*))
  endif
  if orbit eq 12 then begin
  map2 = reform(Ne_wI_O12 (ir,*,*))
@@ -150,6 +165,8 @@ files3=[$
  map11= saturate(map11,mini,maxi)
  map12= saturate(map12,mini,maxi)
  map13= saturate(map13,mini,maxi)
+ map14= saturate(map14,mini,maxi)
+ map15= saturate(map15,mini,maxi)
  endif
  
  device, retain     = 2
@@ -160,25 +177,31 @@ files3=[$
  rot=4
  loadct,39
 
- if not keyword_set(circular) then begin
+ if not keyword_set(circular_eq) AND not keyword_set(circular_offeq)  then begin
  window,0,xs=np*scalefactor, ys=nt*scalefactor*3
  tvscl,alog10(rotate(congrid(map1,nt*scalefactor,np*scalefactor),rot)),0
 ;I
- tvscl,alog10(rotate(congrid(map2,nt*scalefactor,np*scalefactor),rot)),1
- tvscl,alog10(rotate(congrid(map5,nt*scalefactor,np*scalefactor),rot)),2
+;tvscl,alog10(rotate(congrid(map2,nt*scalefactor,np*scalefactor),rot)),1
+;tvscl,alog10(rotate(congrid(map5,nt*scalefactor,np*scalefactor),rot)),2
 ;I+O
-;tvscl,alog10(rotate(congrid(map4,nt*scalefactor,np*scalefactor),rot)),1
-;tvscl,alog10(rotate(congrid(map7,nt*scalefactor,np*scalefactor),rot)),2
+ tvscl,alog10(rotate(congrid(map4,nt*scalefactor,np*scalefactor),rot)),1
+ tvscl,alog10(rotate(congrid(map7,nt*scalefactor,np*scalefactor),rot)),2
  endif
- if keyword_set(circular) then begin
+ if keyword_set(circular_eq) then begin
  window,0,xs=np*scalefactor, ys=nt*scalefactor*3
  tvscl,alog10(rotate(congrid(map1 ,nt*scalefactor,np*scalefactor),rot)),0
 ;I 
- tvscl,alog10(rotate(congrid(map8 ,nt*scalefactor,np*scalefactor),rot)),1
- tvscl,alog10(rotate(congrid(map11,nt*scalefactor,np*scalefactor),rot)),2
+;tvscl,alog10(rotate(congrid(map8 ,nt*scalefactor,np*scalefactor),rot)),1
+;tvscl,alog10(rotate(congrid(map11,nt*scalefactor,np*scalefactor),rot)),2
 ;I+O
-;tvscl,alog10(rotate(congrid(map10,nt*scalefactor,np*scalefactor),rot)),1
-;tvscl,alog10(rotate(congrid(map13,nt*scalefactor,np*scalefactor),rot)),2
+ tvscl,alog10(rotate(congrid(map10,nt*scalefactor,np*scalefactor),rot)),1
+ tvscl,alog10(rotate(congrid(map13,nt*scalefactor,np*scalefactor),rot)),2
+ endif
+ if keyword_set(circular_offeq) then begin
+ window,0,xs=np*scalefactor, ys=nt*scalefactor*3
+ tvscl,alog10(rotate(congrid(map1 ,nt*scalefactor,np*scalefactor),rot)),0
+ tvscl,alog10(rotate(congrid(map14,nt*scalefactor,np*scalefactor),rot)),1
+ tvscl,alog10(rotate(congrid(map15,nt*scalefactor,np*scalefactor),rot)),2
  endif
  
  record_gif,'~/Pictures/',filename,'X'
