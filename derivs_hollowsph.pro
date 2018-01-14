@@ -3,7 +3,7 @@
 ; Regularization Matrix Generator in IDL.
 ; by Alberto M. Vásquez. CLaSP, Fall-2017.
 ;
-; IMPORTANT NOTE: Note that while in this IDL version all indeces values are
+; IMPORTANT NOTE: Note that while in this IDL version all indices values are
 ; "1" less than in the MATLAB code, the VALUES contained in the arrays:
 ; n2d* and col_d2* are the SAME than in the MATLAB version, as it should.
 ; The ONLY acceptable test to evaluate the correctness is to obtain EQUAL
@@ -12,25 +12,28 @@
 ;
 ; /hlaplac:  Angular derivatives. Output in one matrix.
 ; /laplac3:  3D derivatives. Output in three matrices.
-;
-; /Identity: Identity Matrix as regularization operator. Output in one matrix.
-;            Not yet implemented.
+; /identity: Identity NBINS^2 as regularization matrix.
 ;
 ; Examples of calling sequence:
 ;
 ; derivs_hollowsph,nrad=100,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='100_90_180_Idl',/hlaplac
 ; derivs_hollowsph,nrad=100,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='100_90_180_Idl',/laplac3
 ; derivs_hollowsph,nrad= 26,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext= '26_90_180',/hlaplac
+; derivs_hollowsph,nrad=100,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='100_90_190',/identity
 ;
 ;;
 
-pro derivs_hollowsph,nrad=nrad,ntheta=ntheta,nphi=nphi,directory=directory,fname_ext=fname_ext,hlaplac=hlaplac,laplac3=laplac3,indentity=identity
+pro derivs_hollowsph,nrad=nrad,ntheta=ntheta,nphi=nphi,directory=directory,fname_ext=fname_ext,hlaplac=hlaplac,laplac3=laplac3,identity=identity
 
   nrad        = long(nrad)
   ntheta      = long(ntheta)
   nphi        = long(nphi)
 
   nbins       = nrad*ntheta*nphi
+
+  row_identity = lonarr(nbins)
+  col_identity = lonarr(nbins)
+  val_identity = fltarr(nbins)
 
   row_d2r     = lonarr(3*nbins)
   col_d2r     = lonarr(3*nbins)
@@ -45,9 +48,77 @@ pro derivs_hollowsph,nrad=nrad,ntheta=ntheta,nphi=nphi,directory=directory,fname
   val_d2theta = fltarr(3*nbins)
 
 ; vectors of starting indices for each row
-  nd2r     = lonarr(nbins+1)
-  nd2phi   = nd2r
-  nd2theta = nd2r               
+  nd2r      = lonarr(nbins+1)
+  nd2phi    = nd2r
+  nd2theta  = nd2r               
+  nidentity = nd2r
+
+
+if keyword_set(identity) then begin
+; calculate and store indentity, then return
+count       = -1L;
+i_row_count = -1L;
+for k = 0L,nphi-1 do begin;
+   for i = 0L,ntheta-1 do begin;
+      for j = 0L,nrad-1 do begin;
+
+            i_row_count = i_row_count + 1 ;            
+
+            count = count + 1
+            n = lindex3D(j,i,k,nrad,ntheta)        ; get column of element
+            row_identity(count) = i_row_count      ; store row of element
+            col_identity(count) = n                ; store col of element
+            val_identity(count) = +1.0             ; store val of element
+
+            nidentity(i_row_count+1) = count+1     ; store starting index of each row.
+                                                   ; First element is 0, second is 1.
+      endfor
+   endfor
+endfor
+stop
+print,'Done with Identity. Its number of rows   is: r_row_count + 1 =',i_row_count + 1
+print,'                    Its number of values is:       count + 1 =',      count + 1
+
+   fname_identity = 'identity_'+fname_ext
+   print,'The filename extension is '+ fname_identity
+   
+   y = fltarr(i_row_count+1) 
+
+   filename_n = directory+'n'     +fname_identity
+   filename_i = directory+'i'     +fname_identity
+   filename_v = directory+'v'     +fname_identity
+   filename_y = directory+'y'     +fname_identity
+   filename_d = directory+'delta_'+fname_identity
+
+   print,filename_n
+   print,filename_i
+   print,filename_v
+   print,filename_y
+   print,filename_d
+
+   openw,1,filename_n
+   openw,2,filename_i
+   openw,3,filename_v
+   openw,4,filename_y
+   openw,5,filename_d
+
+   writeu,1,   nidentity
+   writeu,2,col_identity-1
+   writeu,3,val_identity
+   writeu,4,y
+   writeu,5,y
+
+   close,/all
+   print,'Identity has'+string(i_row_count+1)+' rows and '+string(nbins)+' columns'
+   print,'Done'
+   print,''
+   print,'RUN row_to_col.c !!!!!'
+   print,''
+   
+
+   return
+   
+endif
 
 ; calculate d2r
 count       = -1L;
@@ -77,13 +148,14 @@ for k = 0L,nphi-1 do begin;
             val_d2r(count) = 1.0              ; store val of element
             
             nd2r(r_row_count+1) = count+1 ; store starting index of each row.
-                                        ; First element is 0, second is 3.
-
+                                          ; First element is 0, second is 3.
+ 
       endfor
    endfor
 endfor
 
-print,'Done with d2r.     Its number of rows is: r_row_count + 1 =',r_row_count + 1
+print,'Done with d2r.     Its number of rows   is: r_row_count + 1 =',r_row_count + 1
+print,'                   Its number of values is:       count + 1 =',      count + 1
 
 ;calculate d2theta
 
@@ -126,7 +198,8 @@ endfor
 val_hlaplac = val_d2theta(0:count);
 col_hlaplac = col_d2theta(0:count);
 
-print,'Done with d2theta. Its number of rows is: t_row_count + 1 =',t_row_count + 1
+print,'Done with d2theta. Its number of rows   is: t_row_count + 1 =',t_row_count + 1
+print,'                   Its number of values is:       count + 1 =',      count + 1
 
 ; calculate d2phi
 
@@ -220,7 +293,8 @@ k = 0; Matlab said "k=1"
       endfor
    endfor
 
-print,'Done with d2phi.   Its number of rows is: p_row_count + 1 =',p_row_count + 1
+print,'Done with d2phi.   Its number of rows   is: p_row_count + 1 =',p_row_count + 1
+print,'                   Its number of values is:       count + 1 =',      count + 1
 
 val_hlaplac = [val_hlaplac, val_d2phi(0:count)];
 col_hlaplac = [col_hlaplac, col_d2phi(0:count)];
