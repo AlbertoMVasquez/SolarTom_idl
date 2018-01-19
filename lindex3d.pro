@@ -7,7 +7,7 @@ function lindex3d,row,col,block,nrows,ncols
 ; index = (block - 1)*nrows*ncols + (col - 1)*nrows + row   MATLAB
 
     row_matlab =   row + 1
-    col_matlab =   col +1
+    col_matlab =   col + 1
   block_matlab = block + 1
 
   index_matlab = (block_matlab - 1)*nrows*ncols + (col_matlab - 1)*nrows + row_matlab ;  MATLAB

@@ -19,7 +19,7 @@
 ; derivs_hollowsph,nrad=100,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='100_90_180_Idl',/hlaplac
 ; derivs_hollowsph,nrad=100,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='100_90_180_Idl',/laplac3
 ; derivs_hollowsph,nrad= 26,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext= '26_90_180',/hlaplac
-; derivs_hollowsph,nrad=100,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='100_90_180',/identity
+; derivs_hollowsph,nrad=100,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='100_90_180_test',/identity
 ;
 ;;
 
@@ -53,7 +53,6 @@ pro derivs_hollowsph,nrad=nrad,ntheta=ntheta,nphi=nphi,directory=directory,fname
   nd2theta  = nd2r               
   nidentity = nd2r
 
-
 if keyword_set(identity) then begin
 ; calculate and store indentity, then return
 count       = -1L;
@@ -61,24 +60,22 @@ i_row_count = -1L;
 for k = 0L,nphi-1 do begin;
    for i = 0L,ntheta-1 do begin;
       for j = 0L,nrad-1 do begin;
-
             i_row_count = i_row_count + 1 ;            
-
             count = count + 1
             n = lindex3D(j,i,k,nrad,ntheta)        ; get column of element
             row_identity(count) = i_row_count      ; store row of element
             col_identity(count) = n                ; store col of element
             val_identity(count) = +1.0             ; store val of element
-
             nidentity(i_row_count+1) = count+1     ; store starting index of each row.
                                                    ; First element is 0, second is 1.
       endfor
    endfor
 endfor
-stop
+
 print,'Done with Identity. Its number of rows   is: r_row_count + 1 =',i_row_count + 1
 print,'                    Its number of values is:       count + 1 =',      count + 1
 
+stop
    fname_identity = 'identity_'+fname_ext
    print,'The filename extension is '+ fname_identity
    
