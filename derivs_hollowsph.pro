@@ -62,10 +62,10 @@ for k = 0L,nphi-1 do begin;
       for j = 0L,nrad-1 do begin;
             i_row_count = i_row_count + 1 ;            
             count = count + 1
-            n = lindex3D(j,i,k,nrad,ntheta)        ; get column of element
-            row_identity(count) = i_row_count      ; store row of element
-            col_identity(count) = n                ; store col of element
-            val_identity(count) = +1.0             ; store val of element
+            n = lindex3D(j,i,k,nrad,ntheta)        ; get column of element.
+            row_identity(count) = i_row_count      ; store row of element.
+            col_identity(count) = n                ; store col of element.
+            val_identity(count) = +1.0             ; store val of element.
             nidentity(i_row_count+1) = count+1     ; store starting index of each row.
                                                    ; First element is 0, second is 1.
       endfor
