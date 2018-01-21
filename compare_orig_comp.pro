@@ -1,3 +1,30 @@
+pro comp_lam
+           model = 'x_AWSOM_CR2081run5_WISPR_sphere_2.dat'
+        data_dir = '/data1/tomography/DATA/c2/CR2081/'
+     compare_dir = '/data1/tomography_dev/bindata/Compare/'
+       data_file = 'list.txt'
+               N = 0
+               x = ''
+  openr, 2, data_dir + data_file
+  readf, 2, N
+  orig_image_a = strarr(N)
+  orig_file_a  = strarr(N)
+  comp_file_a  = strarr(N)
+  factor_unit  = 0.79
+  for i=0,N-1 do begin
+     readf, 2, x
+     orig_image_a[i] = x
+     orig_file_a [i] = 'orig_'               + strmid(x,0,strlen(x)-4) + '.dat' 
+     comp_file_a [i] = 'comp_' + model + '_' + strmid(x,0,strlen(x)-4) + '_pB.dat'
+     compare_lascoc2, $
+        orig_image = orig_image_a[i],$
+        orig_file  =  orig_file_a[i],$
+        comp_file  =  comp_file_a[i],$
+        data_dir   = 'c2/CR2081/', winn = i, factor_unit = factor_unit, /compare3
+  endfor
+  close,2
+end
+
 pro comp4
 
   compare_lascoc2,  orig_image='C2-PB-20020707_1644.fts',$
@@ -19,16 +46,18 @@ pro comp4
                     orig_file ='orig_C2-PB-20020726_1644.dat',$
                     comp_file ='comp_x_AWSOM_CR2081run5_WISPR_sphere_2.dat_C2-PB-20020726_1644.dat',$
                     data_dir  ='c2/pB_2002_highFreq/', winn=3
-
 end
 
 ; compare_lascoc2,  orig_image='C2-PB-20070416_2100.fts',  orig_file ='orig_C2-PB-20070416_2100.dat',  comp_file ='comp_x_AWSOM_CR2081run5_WISPR_sphere_2.dat_C2-PB-20070416_2100.dat',  data_dir  ='c2/2007.04/'
-pro compare_lascoc2,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,data_dir=data_dir,winn=winn
+pro compare_lascoc2,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,data_dir=data_dir,winn=winn,compare3=compare3,factor_unit=factor_unit
   Nx=512
   Ny=512
   factor_image=0.5
-  factor_unit = 1.e10*0.79  
+ ;factor_unit = 1.e10*0.79
+  if NOT keyword_set(compare3)  then $
   compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,data_dir=data_dir,factor_image=factor_image,factor_unit=factor_unit,winn=winn
+  if     keyword_set(compare3) then $
+  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,data_dir=data_dir,factor_image=factor_image,factor_unit=factor_unit,winn=winn,/compare3,/record,/pB
 end
 
 ; compare_wispr,orig_image='WISPR_I_2025-06-13T22:00:00_squareFOV_binfac4_Blank.fts'
@@ -126,7 +155,7 @@ common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOW
   if not keyword_set(tomroot) then tomroot = '/data1/'
   input_dir = tomroot+'tomography/bindata/Compare/'
 
-  if keyword_set(pB) then input_dir = input_dir + 'pB/'
+ ;if keyword_set(pB) then input_dir = input_dir + 'pB/'
   
  ;if not keyword_set(data_dir) then data_dir='wisprI/'
   input_data_dir = tomroot+'tomography/DATA/'+data_dir
@@ -145,8 +174,11 @@ common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOW
   Ic = rotate(Ic,4)
 
   mreadfits,input_data_dir+orig_image,hdr,img
-  img=img*factor_unit
+ ;img=img*factor_unit
 
+  Io = Io / factor_unit
+  Ic = Ic / factor_unit
+  
   if keyword_set(create_FITS_for_tom) then begin
      if keyword_set(BK) then $
      newfilename = strmid(orig_image,0,strlen(orig_image)-9)+'Synth.BK.fts'
@@ -169,9 +201,9 @@ common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOW
 
 ; Io2(Nx/factor_image-1,*) = max(Io2)
 
-  if keyword_set(compare3) then begin
+ if keyword_set(compare3) then begin
 
-  maxi = max([max(img),max(Io),max(Ic)])
+  maxi = max([max(Io),max(Ic)])
 
   Img2([0,1],0) = [mini,maxi]
    Io2([0,1],0) = [mini,maxi]
@@ -184,11 +216,74 @@ common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOW
   if keyword_set(crop_image) then crop,img2,Io2,Ic2,Nx,Ny,Delta,factor_image
 
   loadct,39
-  window,xs=3*Nx/factor_image,ys=Ny/factor_image
+  window,winn,xs=3*Nx/factor_image,ys=Ny/factor_image
   tvscl,alog10(img2),0
   tvscl,alog10( Io2),1
   tvscl,alog10( Ic2),2
-  endif
+
+;---create over-sized window with white background----------------
+  xsimage = Nx/factor_image
+  ysimage = Ny/factor_image
+  DX      = xsimage/2
+  DY      = ysimage/4
+  x0      = DX/4
+  y0      = DY/2
+  window,xs=2*xsimage+DX,ys=ysimage+DY
+  loadct,27
+  tvscl,fltarr(2*xsimage+DX,ysimage+DY)
+;-------------------------------------------------------
+;Display images
+  loadct,39
+  frame=10
+  black = fltarr(Nx/factor_image+frame,Ny/factor_image+frame)
+  tvscl,black,x0-frame/2,y0-frame/2  
+  tvscl,alog10( Io2),x0,y0
+  deltaX = Nx/factor_image+Dx/10
+  tvscl,black,x0+deltaX-frame/2,y0-frame/2  
+  tvscl,alog10( Ic2),x0+deltaX,y0
+
+;---PUT COLOR SCALE BAR---------------------------------------------------------
+  logmini = alog10(mini)
+  logmaxi = alog10(maxi)
+  nsy= Ny/factor_image
+  nsx= Dx/5
+
+  black = fltarr(Nsx+frame,Nsy+frame)
+  scale = fltarr(nsx,nsy)
+
+  for ix=0,nsx-1 do scale(ix,*)=logmini+(logmaxi-logmini)*findgen(nsy)/float(nsy-1)
+
+  xs0 = x0 + 2*xsimage + DX/3
+  ys0 = y0
+  tvscl,black,xs0-frame/2,ys0-frame/2    
+  tvscl,scale,xs0,ys0
+
+  loadct,0
+  contour,scale,findgen(nsx),reform(scale(0,*)),$
+              pos=[xs0,ys0,xs0+nsx,ys0+nsy],/device,color=0,/noerase,$
+              yticklen=.2,/nodata,ythick=2,xthick=2,charthick=4,$
+              xstyle=5,ystyle=1,charsize=5,font=1
+
+ if keyword_set(pB) then $
+  xyouts,[xs0-Dx/10],[ys0+ysimage+DY/10],['Log!d10!N(p!DB!N)'],$
+         color=0,charsize=5,charthick=4,font=1,/device
+
+ ; Place information around images:
+  xyouts,x0+[0,deltaX],(y0+ysimage+DY/5)*[1,1],$
+         ['LASCO-C2 LAM Image: '+hdr.filename,'AWSoM Model'],$
+         color=0,charsize=5,charthick=4,font=1,/device
+
+  xyouts,[x0],[y0-DY/3],['DATE_OBS: '+hdr.DATE_OBS+'      '+$
+                         'TIME_OBS: '+hdr.TIME_OBS],$
+         color=0,charsize=5,charthick=4,font=1,/device
+
+ ; Record image
+  filename = 'comparison_'+hdr.filename+'_AWSoM.gif'
+  outdir   = '/data1/tomography/DATA/'+data_dir
+  if keyword_set(record) then record_gif,outdir,filename,'X'
+stop
+endif
+ 
 
   if NOT keyword_set(compare3) then begin
   if NOT keyword_set(winn) then winn=0
