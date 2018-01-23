@@ -2,9 +2,9 @@
 ; for TECPLOT's SWMF tools.
 ; A.M.Vásquez, CLASP, Fall-2017.
 
-pro grid_tool,WISPR=WISPR,DEMT=DEMT,output_dir=output_dir
+pro grid_tool,WISPR=WISPR,DEMT=DEMT,UNIFCUSTOM=UNIFCUSTOM,output_dir=output_dir
 
-if NOT keyword_set (output_dir) then output_dir = '/data1/tomography_dev/idl/DATA/'
+if NOT keyword_set (output_dir) then output_dir = '/data1/tomography_dev/SolarTom_idl/DATA/'
   
 ; Set grid density key parameters:
 if keyword_set(WISPR) then begin
@@ -15,9 +15,19 @@ if keyword_set(WISPR) then begin
 endif
 if keyword_set(DEMT) then begin
   file = 'sphere_wedge_DEMT.dat'
+  Rmin = 1.00 ; Rsun
+  Rmax = 1.26 ; Rsun
   drad = 0.01;Rsun
   dlon = 2.  ; deg
   dlat = 2.  ; deg
+endif
+if keyword_set(UNIFCUSTOM) then begin
+  file = 'sphere_wedge_custom_test.dat'
+  Rmin =  2.0 ; Rsun
+  Rmax = 12.0 ; Rsun
+  drad = 0.05  ;Rsun
+  dlon = 1.   ; deg
+  dlat = 1.   ; deg
 endif
 
 if keyword_set(WISPR) then begin
@@ -34,10 +44,8 @@ r[0] = rmin+dr[0]/2.
 for i = 1,Nr-1 do r[i] = r[i-1] + dr[i-1]/2. + dr[i]/2.
 endif
 
-if keyword_set(DEMT) then begin
+if keyword_set(DEMT) OR keyword_set(UNIFCUSTOM) then begin
 ; Array of Nr radial voxels' width
-Rmin = 1.00 ; Rsun
-Rmax = 1.26 ; Rsun
 Nr   = (Rmax-Rmin)/drad
 r    = Rmin + drad/2. + drad * findgen(Nr)
 dr   = fltarr(Nr)
@@ -57,6 +65,8 @@ Phi    =      Lon  * !dtor ; rad
 Theta  = (90.-Lat) * !dtor ; rad
 Nphi   = Nlon
 Ntheta = Nlat
+
+STOP
 
 ; Create Table for TECPLOT's SWMF tools:
 openw,1,output_dir+file
