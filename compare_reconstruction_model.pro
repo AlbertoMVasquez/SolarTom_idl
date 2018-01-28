@@ -1,30 +1,13 @@
 pro wrapper_compare
 
-compare_reconstruction_model,orbit= 1,ir=00,filename='Orbit_CircularEquat_2.1Rs.gif',/circular_eq
-compare_reconstruction_model,orbit= 1,ir=03,filename='Orbit_CircularEquat_3.0Rs.gif',/circular_eq
-compare_reconstruction_model,orbit= 1,ir=07,filename='Orbit_CircularEquat_4.8Rs.gif',/circular_eq
-compare_reconstruction_model,orbit= 1,ir=10,filename='Orbit_CircularEquat_6.5Rs.gif',/circular_eq
-compare_reconstruction_model,orbit= 1,ir=13,filename='Orbit_CircularEquat_8.6Rs.gif',/circular_eq
-return
-
-compare_reconstruction_model,orbit= 1,ir=15,filename='Orbit_01_10Rs.gif'
-compare_reconstruction_model,orbit= 1,ir=25,filename='Orbit_01_20Rs.gif'
-compare_reconstruction_model,orbit= 1,ir=32,filename='Orbit_01_30Rs.gif'
-compare_reconstruction_model,orbit= 1,ir=39,filename='Orbit_01_40Rs.gif'
-compare_reconstruction_model,orbit= 1,ir=44,filename='Orbit_01_50Rs.gif'
-compare_reconstruction_model,orbit= 1,ir=49,filename='Orbit_01_60Rs.gif'
-compare_reconstruction_model,orbit= 1,ir=54,filename='Orbit_01_70Rs.gif'
-compare_reconstruction_model,orbit= 1,ir=58,filename='Orbit_01_80Rs.gif'
-return
-
-
-compare_reconstruction_model,orbit= 1,ir=00,filename='Orbit_CircularOffEq_2.1Rs.gif',/circular_offeq
-compare_reconstruction_model,orbit= 1,ir=03,filename='Orbit_CircularOffEq_3.0Rs.gif',/circular_offeq
-compare_reconstruction_model,orbit= 1,ir=07,filename='Orbit_CircularOffEq_4.8Rs.gif',/circular_offeq
-compare_reconstruction_model,orbit= 1,ir=10,filename='Orbit_CircularOffEq_6.5Rs.gif',/circular_offeq
-compare_reconstruction_model,orbit= 1,ir=13,filename='Orbit_CircularOffEq_8.6Rs.gif',/circular_offeq
-
-return
+compare_reconstruction_model,orbit=12,ir=15,filename='Orbit_12_10Rs.gif'
+compare_reconstruction_model,orbit=12,ir=25,filename='Orbit_12_20Rs.gif'
+compare_reconstruction_model,orbit=12,ir=32,filename='Orbit_12_30Rs.gif'
+compare_reconstruction_model,orbit=12,ir=39,filename='Orbit_12_40Rs.gif'
+compare_reconstruction_model,orbit=12,ir=44,filename='Orbit_12_50Rs.gif'
+compare_reconstruction_model,orbit=12,ir=49,filename='Orbit_12_60Rs.gif'
+compare_reconstruction_model,orbit=12,ir=54,filename='Orbit_12_70Rs.gif'
+compare_reconstruction_model,orbit=12,ir=58,filename='Orbit_12_80Rs.gif'
 
 compare_reconstruction_model,orbit=24,ir=15,filename='Orbit_24_10Rs.gif'
 compare_reconstruction_model,orbit=24,ir=25,filename='Orbit_24_20Rs.gif'
@@ -37,15 +20,32 @@ compare_reconstruction_model,orbit=24,ir=58,filename='Orbit_24_80Rs.gif'
 
 return
 
-compare_reconstruction_model,orbit=12,ir=15,filename='Orbit_12_10Rs.gif'
-compare_reconstruction_model,orbit=12,ir=25,filename='Orbit_12_20Rs.gif'
-compare_reconstruction_model,orbit=12,ir=32,filename='Orbit_12_30Rs.gif'
-compare_reconstruction_model,orbit=12,ir=39,filename='Orbit_12_40Rs.gif'
-compare_reconstruction_model,orbit=12,ir=44,filename='Orbit_12_50Rs.gif'
-compare_reconstruction_model,orbit=12,ir=49,filename='Orbit_12_60Rs.gif'
-compare_reconstruction_model,orbit=12,ir=54,filename='Orbit_12_70Rs.gif'
-compare_reconstruction_model,orbit=12,ir=58,filename='Orbit_12_80Rs.gif'
+compare_reconstruction_model,orbit= 1,ir=15,filename='Orbit_01_10Rs.gif'
+compare_reconstruction_model,orbit= 1,ir=25,filename='Orbit_01_20Rs.gif'
+compare_reconstruction_model,orbit= 1,ir=32,filename='Orbit_01_30Rs.gif'
+compare_reconstruction_model,orbit= 1,ir=39,filename='Orbit_01_40Rs.gif'
+compare_reconstruction_model,orbit= 1,ir=44,filename='Orbit_01_50Rs.gif'
+compare_reconstruction_model,orbit= 1,ir=49,filename='Orbit_01_60Rs.gif'
+compare_reconstruction_model,orbit= 1,ir=54,filename='Orbit_01_70Rs.gif'
+compare_reconstruction_model,orbit= 1,ir=58,filename='Orbit_01_80Rs.gif'
 
+return
+
+compare_reconstruction_model,orbit= 1,ir=00,filename='Orbit_CircularEquat_2.1Rs.gif',/circular_eq
+compare_reconstruction_model,orbit= 1,ir=03,filename='Orbit_CircularEquat_3.0Rs.gif',/circular_eq
+compare_reconstruction_model,orbit= 1,ir=07,filename='Orbit_CircularEquat_4.8Rs.gif',/circular_eq
+compare_reconstruction_model,orbit= 1,ir=10,filename='Orbit_CircularEquat_6.5Rs.gif',/circular_eq
+compare_reconstruction_model,orbit= 1,ir=13,filename='Orbit_CircularEquat_8.6Rs.gif',/circular_eq
+
+
+
+compare_reconstruction_model,orbit= 1,ir=00,filename='Orbit_CircularOffEq_2.1Rs.gif',/circular_offeq
+compare_reconstruction_model,orbit= 1,ir=03,filename='Orbit_CircularOffEq_3.0Rs.gif',/circular_offeq
+compare_reconstruction_model,orbit= 1,ir=07,filename='Orbit_CircularOffEq_4.8Rs.gif',/circular_offeq
+compare_reconstruction_model,orbit= 1,ir=10,filename='Orbit_CircularOffEq_6.5Rs.gif',/circular_offeq
+compare_reconstruction_model,orbit= 1,ir=13,filename='Orbit_CircularOffEq_8.6Rs.gif',/circular_offeq
+
+return
 
 end
 
@@ -151,12 +151,9 @@ files8=[$
 'x_wisprIO.512.CircularOrbit01.60images_identit_l1e-6',$
 'x_wisprIO.512.Orbit01.60images_3regmat_l1e-6',$
 'x_wisprIO.512.Orbit01.60images_hlaplac_l1e-6',$
-'x_wisprIO.512.Orbit01.60images_identit_l1e-6']
-
-files9=[$
-'x_wisprIO.512.CircularOrbit01.60images_3regmat_l1e0',$
-'x_wisprIO.512.CircularOrbit01.60images_hlaplac_l1e0',$
-'x_wisprIO.512.CircularOrbit01.60images_identit_l1e0']
+'x_wisprIO.512.Orbit01.60images_identit_l1e-6',$
+'x_wisprIO.512.Orbit12.60images_hlaplac_l1e-6',$
+'x_wisprIO.512.Orbit24.60images_hlaplac_l1e-6']
 
 readtom_sph,input_dir,files8[0],nr,nt,rmin,rmax,Ne_wIO_CO01_3regmat_1e6
 readtom_sph,input_dir,files8[1],nr,nt,rmin,rmax,Ne_wIO_CO01_hlaplac_1e6
@@ -164,6 +161,13 @@ readtom_sph,input_dir,files8[2],nr,nt,rmin,rmax,Ne_wIO_CO01_identit_1e6
 readtom_sph,input_dir,files8[3],nr,nt,rmin,rmax,Ne_wIO_O01_3regmat_1e6
 readtom_sph,input_dir,files8[4],nr,nt,rmin,rmax,Ne_wIO_O01_hlaplac_1e6
 readtom_sph,input_dir,files8[5],nr,nt,rmin,rmax,Ne_wIO_O01_identit_1e6
+readtom_sph,input_dir,files8[6],nr,nt,rmin,rmax,Ne_wIO_O12_hlaplac_1e6
+readtom_sph,input_dir,files8[7],nr,nt,rmin,rmax,Ne_wIO_O24_hlaplac_1e6
+
+files9=[$
+'x_wisprIO.512.CircularOrbit01.60images_3regmat_l1e0',$
+'x_wisprIO.512.CircularOrbit01.60images_hlaplac_l1e0',$
+'x_wisprIO.512.CircularOrbit01.60images_identit_l1e0']
 
 readtom_sph,input_dir,files9[0],nr,nt,rmin,rmax,Ne_wIO_CO01_3regmat_1e0
 readtom_sph,input_dir,files9[1],nr,nt,rmin,rmax,Ne_wIO_CO01_hlaplac_1e0
@@ -212,6 +216,7 @@ endif
  map2 = reform(Ne_wI_O12 (ir,*,*))
  map3 = reform(Ne_wO_O12 (ir,*,*))
  map4 = reform(Ne_wIO_O12(ir,*,*))
+ map34= reform(Ne_wIO_O12_hlaplac_1e6(ir,*,*)) 
  endif
  if orbit eq 24 then begin
  map2 = reform(Ne_wI_O24 (ir,*,*))
@@ -219,7 +224,8 @@ endif
  map4 = reform(Ne_wIO_O24(ir,*,*)) ;4
  map5 = reform(Ne_wI_O24_3regmat(ir,*,*))
  map6 = reform(Ne_wO_O24_3regmat(ir,*,*))
- map7 = reform(Ne_wIO_O24_3regmat(ir,*,*));7
+ map7 = reform(Ne_wIO_O24_3regmat(ir,*,*)) ;7
+ map35= reform(Ne_wIO_O24_hlaplac_1e6(ir,*,*))
  endif
 
  mini = min(map1)
@@ -229,10 +235,11 @@ endif
  map2 = saturate(map2,mini,maxi)
  map3 = saturate(map3,mini,maxi)
  map4 = saturate(map4,mini,maxi)
+ if orbit eq 1 then begin
  map5 = saturate(map5,mini,maxi)
  map6 = saturate(map6,mini,maxi)
  map7 = saturate(map7,mini,maxi)
- if orbit eq 1 then begin
+
  map8 = saturate(map8 ,mini,maxi)
  map9 = saturate(map9 ,mini,maxi)
  map10= saturate(map10,mini,maxi)
@@ -261,36 +268,50 @@ endif
  map33= saturate(map33,mini,maxi)
 endif
 
+if orbit eq 12 then begin
+ map34= saturate(map34,mini,maxi)
+endif
+if orbit eq 24 then begin
+ map35= saturate(map35,mini,maxi)
+endif
+ 
  device, retain     = 2
  device, true_color = 24
  device, decomposed = 0
  
- scalefactor=2
+ scalefactor=4
  rot=4
  loadct,39
 
  if not keyword_set(circular_eq) AND not keyword_set(circular_offeq)  then begin
- window,0,xs=np*scalefactor, ys=nt*scalefactor*7
+ window,0,xs=np*scalefactor, ys=nt*scalefactor*2
  tvscl,alog10(rotate(congrid(map1,nt*scalefactor,np*scalefactor),rot)),0
- tvscl,alog10(rotate(congrid(map4,nt*scalefactor,np*scalefactor),rot)),1
- tvscl,alog10(rotate(congrid(map7,nt*scalefactor,np*scalefactor),rot)),2
- tvscl,alog10(rotate(congrid(map16,nt*scalefactor,np*scalefactor),rot)),3
- tvscl,alog10(rotate(congrid(map28,nt*scalefactor,np*scalefactor),rot)),4
- tvscl,alog10(rotate(congrid(map29,nt*scalefactor,np*scalefactor),rot)),5
- tvscl,alog10(rotate(congrid(map30,nt*scalefactor,np*scalefactor),rot)),6
+;tvscl,alog10(rotate(congrid(map4,nt*scalefactor,np*scalefactor),rot)),1
+ if orbit eq  1 then $
+ tvscl,alog10(rotate(congrid(map28,nt*scalefactor,np*scalefactor),rot)),1
+ if orbit eq 12 then $
+ tvscl,alog10(rotate(congrid(map34,nt*scalefactor,np*scalefactor),rot)),1
+ if orbit eq 24 then $
+ tvscl,alog10(rotate(congrid(map35,nt*scalefactor,np*scalefactor),rot)),1
+
+;tvscl,alog10(rotate(congrid(map7,nt*scalefactor,np*scalefactor),rot)),2
+;tvscl,alog10(rotate(congrid(map16,nt*scalefactor,np*scalefactor),rot)),3
+;tvscl,alog10(rotate(congrid(map29,nt*scalefactor,np*scalefactor),rot)),5
+;tvscl,alog10(rotate(congrid(map30,nt*scalefactor,np*scalefactor),rot)),6
  endif
  if keyword_set(circular_eq) then begin
- window,0,xs=np*scalefactor, ys=nt*scalefactor*10
+ window,0,xs=np*scalefactor, ys=nt*scalefactor*2
  tvscl,alog10(rotate(congrid(map1 ,nt*scalefactor,np*scalefactor),rot)),0
- tvscl,alog10(rotate(congrid(map10,nt*scalefactor,np*scalefactor),rot)),1
- tvscl,alog10(rotate(congrid(map13,nt*scalefactor,np*scalefactor),rot)),2
- tvscl,alog10(rotate(congrid(map17,nt*scalefactor,np*scalefactor),rot)),3
- tvscl,alog10(rotate(congrid(map25,nt*scalefactor,np*scalefactor),rot)),4
- tvscl,alog10(rotate(congrid(map26,nt*scalefactor,np*scalefactor),rot)),5
- tvscl,alog10(rotate(congrid(map27,nt*scalefactor,np*scalefactor),rot)),6
- tvscl,alog10(rotate(congrid(map31,nt*scalefactor,np*scalefactor),rot)),7
- tvscl,alog10(rotate(congrid(map32,nt*scalefactor,np*scalefactor),rot)),8
- tvscl,alog10(rotate(congrid(map33,nt*scalefactor,np*scalefactor),rot)),9
+;tvscl,alog10(rotate(congrid(map10,nt*scalefactor,np*scalefactor),rot)),1
+ tvscl,alog10(rotate(congrid(map25,nt*scalefactor,np*scalefactor),rot)),1
+;tvscl,alog10(rotate(congrid(map13,nt*scalefactor,np*scalefactor),rot)),2
+;tvscl,alog10(rotate(congrid(map17,nt*scalefactor,np*scalefactor),rot)),3
+
+;tvscl,alog10(rotate(congrid(map26,nt*scalefactor,np*scalefactor),rot)),5
+;tvscl,alog10(rotate(congrid(map27,nt*scalefactor,np*scalefactor),rot)),6
+;tvscl,alog10(rotate(congrid(map31,nt*scalefactor,np*scalefactor),rot)),7
+;tvscl,alog10(rotate(congrid(map32,nt*scalefactor,np*scalefactor),rot)),8
+;tvscl,alog10(rotate(congrid(map33,nt*scalefactor,np*scalefactor),rot)),9
 
 ;tvscl,alog10(rotate(congrid(map23,nt*scalefactor,np*scalefactor),rot)),4
 ;tvscl,alog10(rotate(congrid(map24,nt*scalefactor,np*scalefactor),rot)),5
@@ -305,8 +326,8 @@ endif
  endif
  
  record_gif,'~/Pictures/',filename,'X'
- print,median(map1),median(map10),median(map25),median(map31)
- stop
+;print,median(map1),median(map10),median(map25),median(map31)
+;stop
  return
  
  window,0,xs=np*scalefactor, ys=nt*scalefactor*4
