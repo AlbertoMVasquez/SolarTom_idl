@@ -1,5 +1,24 @@
 pro wrapper_compare
 
+compare_reconstruction_model,orbit= 1,ir=15,filename='Orbit_01_10Rs.gif'
+compare_reconstruction_model,orbit= 1,ir=25,filename='Orbit_01_20Rs.gif'
+compare_reconstruction_model,orbit= 1,ir=32,filename='Orbit_01_30Rs.gif'
+compare_reconstruction_model,orbit= 1,ir=39,filename='Orbit_01_40Rs.gif'
+compare_reconstruction_model,orbit= 1,ir=44,filename='Orbit_01_50Rs.gif'
+compare_reconstruction_model,orbit= 1,ir=49,filename='Orbit_01_60Rs.gif'
+compare_reconstruction_model,orbit= 1,ir=54,filename='Orbit_01_70Rs.gif'
+compare_reconstruction_model,orbit= 1,ir=58,filename='Orbit_01_80Rs.gif'
+
+stop
+
+compare_reconstruction_model,orbit= 1,ir=00,filename='Orbit_CircularEquat_2.1Rs.gif',/circular_eq
+compare_reconstruction_model,orbit= 1,ir=03,filename='Orbit_CircularEquat_3.0Rs.gif',/circular_eq
+compare_reconstruction_model,orbit= 1,ir=07,filename='Orbit_CircularEquat_4.8Rs.gif',/circular_eq
+compare_reconstruction_model,orbit= 1,ir=10,filename='Orbit_CircularEquat_6.5Rs.gif',/circular_eq
+compare_reconstruction_model,orbit= 1,ir=13,filename='Orbit_CircularEquat_8.6Rs.gif',/circular_eq
+
+stop
+
 compare_reconstruction_model,orbit=12,ir=15,filename='Orbit_12_10Rs.gif'
 compare_reconstruction_model,orbit=12,ir=25,filename='Orbit_12_20Rs.gif'
 compare_reconstruction_model,orbit=12,ir=32,filename='Orbit_12_30Rs.gif'
@@ -8,6 +27,8 @@ compare_reconstruction_model,orbit=12,ir=44,filename='Orbit_12_50Rs.gif'
 compare_reconstruction_model,orbit=12,ir=49,filename='Orbit_12_60Rs.gif'
 compare_reconstruction_model,orbit=12,ir=54,filename='Orbit_12_70Rs.gif'
 compare_reconstruction_model,orbit=12,ir=58,filename='Orbit_12_80Rs.gif'
+
+stop
 
 compare_reconstruction_model,orbit=24,ir=15,filename='Orbit_24_10Rs.gif'
 compare_reconstruction_model,orbit=24,ir=25,filename='Orbit_24_20Rs.gif'
@@ -19,25 +40,6 @@ compare_reconstruction_model,orbit=24,ir=54,filename='Orbit_24_70Rs.gif'
 compare_reconstruction_model,orbit=24,ir=58,filename='Orbit_24_80Rs.gif'
 
 return
-
-compare_reconstruction_model,orbit= 1,ir=15,filename='Orbit_01_10Rs.gif'
-compare_reconstruction_model,orbit= 1,ir=25,filename='Orbit_01_20Rs.gif'
-compare_reconstruction_model,orbit= 1,ir=32,filename='Orbit_01_30Rs.gif'
-compare_reconstruction_model,orbit= 1,ir=39,filename='Orbit_01_40Rs.gif'
-compare_reconstruction_model,orbit= 1,ir=44,filename='Orbit_01_50Rs.gif'
-compare_reconstruction_model,orbit= 1,ir=49,filename='Orbit_01_60Rs.gif'
-compare_reconstruction_model,orbit= 1,ir=54,filename='Orbit_01_70Rs.gif'
-compare_reconstruction_model,orbit= 1,ir=58,filename='Orbit_01_80Rs.gif'
-
-return
-
-compare_reconstruction_model,orbit= 1,ir=00,filename='Orbit_CircularEquat_2.1Rs.gif',/circular_eq
-compare_reconstruction_model,orbit= 1,ir=03,filename='Orbit_CircularEquat_3.0Rs.gif',/circular_eq
-compare_reconstruction_model,orbit= 1,ir=07,filename='Orbit_CircularEquat_4.8Rs.gif',/circular_eq
-compare_reconstruction_model,orbit= 1,ir=10,filename='Orbit_CircularEquat_6.5Rs.gif',/circular_eq
-compare_reconstruction_model,orbit= 1,ir=13,filename='Orbit_CircularEquat_8.6Rs.gif',/circular_eq
-
-
 
 compare_reconstruction_model,orbit= 1,ir=00,filename='Orbit_CircularOffEq_2.1Rs.gif',/circular_offeq
 compare_reconstruction_model,orbit= 1,ir=03,filename='Orbit_CircularOffEq_3.0Rs.gif',/circular_offeq
