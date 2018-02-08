@@ -90,6 +90,12 @@ end
 ; movie,input_file='list.wisprI.Blank.CR2081.UnifLong.ExtOrb01.txt',data_dir='wisprI/CR2081_UnifLong/',table_file='table.UnifLong.ExtOrbit.01.txt',/BK
 ; movie,input_file='list.wisprO.Blank.CR2081.UnifLong.ExtOrb01.txt',data_dir='wisprO/CR2081_UnifLong/',table_file='table.UnifLong.ExtOrbit.01.txt',/BK
 
+; movie,input_file='list.wisprI.Blank.CR2081.UnifLong.ExtOrb12.txt',data_dir='wisprI/CR2081_UnifLong/',table_file='table.UnifLong.ExtOrbit.12.txt',/BK
+; movie,input_file='list.wisprO.Blank.CR2081.UnifLong.ExtOrb12.txt',data_dir='wisprO/CR2081_UnifLong/',table_file='table.UnifLong.ExtOrbit.12.txt',/BK
+
+; movie,input_file='list.wisprI.Blank.CR2081.UnifLong.ExtOrb24.txt',data_dir='wisprI/CR2081_UnifLong/',table_file='table.UnifLong.ExtOrbit.24.txt',/BK
+; movie,input_file='list.wisprO.Blank.CR2081.UnifLong.ExtOrb24.txt',data_dir='wisprO/CR2081_UnifLong/',table_file='table.UnifLong.ExtOrbit.24.txt',/BK
+
 ;;
 ; IMPORTANT NOTES on the "movie" tool:
 ;
