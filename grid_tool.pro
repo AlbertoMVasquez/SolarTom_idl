@@ -8,7 +8,7 @@ if NOT keyword_set (output_dir) then output_dir = '/data1/tomography_dev/SolarTo
   
 ; Set grid density key parameters:
 if keyword_set(WISPR) then begin
-  file = 'sphere_wedge_WISPR.dat'
+  file = 'sphere_wedge_WISPR2.dat'
   Nr   = 100
   dlon = 2.  ; deg
   dlat = 2.  ; deg
@@ -66,8 +66,6 @@ Theta  = (90.-Lat) * !dtor ; rad
 Nphi   = Nlon
 Ntheta = Nlat
 
-STOP
-
 ; Create Table for TECPLOT's SWMF tools:
 openw,1,output_dir+file
 printf,1,'      X [Rsun]        Y [Rsun]        Z [Rsun]'
@@ -85,9 +83,10 @@ close,1
 
 ;-----------plot stuff-----------------------------
 Nvoxels = float(Nlat)*float(Nlon)*float(Nr)
-
-window,xs=1000,ys=1000
+loadct,0
+window,xs=2000,ys=1600
 !p.multi=[0,1,2]
+!p.charsize=4
 plot,indgen(Nr)+1,r,xtitle='Index',ytitle='r [Rsun]'
 plot,r,dr,xtitle='r [Rsun]',ytitle='dr [Rsun]'
 !p.multi=0
@@ -103,5 +102,6 @@ print,'Nvoxels = ',Nvoxels
  printf,1,'-----------------------------------'
  close,1
 
+ stop
 END
 

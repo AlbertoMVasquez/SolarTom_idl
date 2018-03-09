@@ -1,13 +1,102 @@
 
+pro comp_euvi,b171=b171,b195=b195,b284=b284,lambda=lambda
+  common euv_stuff,lambda_suffix
+  
+  if lambda ne 0.35 and lambda ne 0.75 then begin
+     print,'Please provide a known value for lambda.'
+     return
+  endif
+
+  lambda_suffix = strmid(string(lambda),5,4)
+  
+  if keyword_set(b171) then begin
+     if lambda eq 0.35 then model = 'x_euvi.A.171.cr2081.26x90_bf4_ri.98_ro1.025_l0.35_NODECON_ureg'
+     if lambda eq 0.75 then model = 'x_euvi.A.171.cr2081.26x90_bf4_ri.98_ro1.025_l0.75_NODECON_nalai'
+     data_subdir = 'euvi/CR2081/A171/'
+     compare_dir = '/data1/tomography/bindata/Compare/'
+       data_file = '/list.A171.b4.nodecon.test'
+    endif
+  
+   if keyword_set(b195) then begin
+     if lambda eq 0.35 then model = 'x_euvi.A.195.cr2081.26x90_bf4_ri.98_ro1.025_l0.35_NODECON_ureg'
+     if lambda eq 0.75 then model = 'x_euvi.A.195.cr2081.26x90_bf4_ri.98_ro1.025_l0.75_NODECON_nalai'
+     data_subdir = 'euvi/CR2081/A195/'
+     compare_dir = '/data1/tomography/bindata/Compare/'
+       data_file = '/list.A195.b4.nodecon.test'
+    endif
+  
+   if keyword_set(b284) then begin
+     if lambda eq 0.35 then model = 'x_euvi.A.284.cr2081.26x90_bf4_ri.98_ro1.025_l0.35_NODECON_ureg'
+     if lambda eq 0.75 then model = 'x_euvi.A.284.cr2081.26x90_bf4_ri.98_ro1.025_l0.75_NODECON_nalai'
+     data_subdir = 'euvi/CR2081/A284/'
+     compare_dir = '/data1/tomography/bindata/Compare/'
+       data_file = '/list.A284.b4.nodecon.test'
+    endif
+
+               N = 0
+               x = ''
+  openr, 2, '/data1/tomography/DATA/' + data_subdir + data_file
+  readf, 2, N
+  orig_image_a = strarr(N)
+  orig_file_a  = strarr(N)
+  comp_file_a  = strarr(N)
+  factor_unit  = 1.0
+  for i=0,N-1 do begin
+     readf, 2, x
+     orig_image_a[i] = x
+     orig_file_a [i] = 'orig_'               + strmid(x,0,strlen(x)-4) + '.dat' 
+     comp_file_a [i] = 'comp_' + model + '_' + strmid(x,0,strlen(x)-4) + '.dat'
+     compare_euv, $
+        orig_image = orig_image_a[i],$
+        orig_file  =  orig_file_a[i],$
+        comp_file  =  comp_file_a[i],$
+        data_dir   = data_subdir , winn = 0, factor_unit = factor_unit, /compare3
+  endfor
+  close,2
+end
+
+pro comp_kcor
+           model = 'x_KCOR.CR2198.13imgs.bf4.50_30_60_l1e-5_V2'
+  ;        model = 'x_KCOR.CR2198.13imgs.bf4.50_30_60_l1e-5'
+  ;        model = 'x_KCOR.CR2198.13imgs.bf4.50_90_180_l1e-5'
+  ;        model = 'x_KCOR.CR2198.13imgs.bf1.295_90_180_l1e-5'
+  ;        model = 'x_KCOR.CR2198.13imgs.bf2.295_90_180_l1e-5'
+  ;        model = 'x_KCOR.CR2198.13imgs.bf2.295_45_90_l1e-5'
+
+     data_subdir = 'kcor/CR2198/'
+     compare_dir = '/data1/tomography/bindata/Compare/'
+       data_file = 'list_prep.txt'
+               N = 0
+               x = ''
+  openr, 2, '/data1/tomography/DATA/' + data_subdir + data_file
+  readf, 2, N
+  orig_image_a = strarr(N)
+  orig_file_a  = strarr(N)
+  comp_file_a  = strarr(N)
+  factor_unit  = 1.0
+  for i=0,N-1 do begin
+     readf, 2, x
+     orig_image_a[i] = x
+     orig_file_a [i] = 'orig_'               + strmid(x,0,strlen(x)-4) + '.dat' 
+     comp_file_a [i] = 'comp_' + model + '_' + strmid(x,0,strlen(x)-4) + '.dat'
+     compare_lascoc2, $
+        orig_image = orig_image_a[i],$
+        orig_file  =  orig_file_a[i],$
+        comp_file  =  comp_file_a[i],$
+        data_dir   = data_subdir , winn = 0, factor_unit = factor_unit, /compare3
+  endfor
+  close,2
+end
+
 pro comp_lam
           ;model = 'x_AWSOM_CR2081run5_WISPR_sphere_2.dat'
            model = 'x_AWSOM_CR2081run5_sphere_custom1.dat'
-        data_dir = '/data1/tomography/DATA/c2/CR2081/'
+     data_subdir = 'c2/CR2081/'
      compare_dir = '/data1/tomography_dev/bindata/Compare/'
        data_file = 'list.txt'
                N = 0
                x = ''
-  openr, 2, data_dir + data_file
+  openr, 2, '/data1/tomography/DATA/' + data_subdir + data_file
   readf, 2, N
   orig_image_a = strarr(N)
   orig_file_a  = strarr(N)
@@ -22,7 +111,7 @@ pro comp_lam
         orig_image = orig_image_a[i],$
         orig_file  =  orig_file_a[i],$
         comp_file  =  comp_file_a[i],$
-        data_dir   = 'c2/CR2081/', winn = i, factor_unit = factor_unit, /compare3
+        data_dir   = data_subdir , winn = i, factor_unit = factor_unit, /compare3
   endfor
   close,2
 end
@@ -50,16 +139,27 @@ pro comp4
                     data_dir  ='c2/pB_2002_highFreq/', winn=3
 end
 
-; compare_lascoc2,  orig_image='C2-PB-20070416_2100.fts',  orig_file ='orig_C2-PB-20070416_2100.dat',  comp_file ='comp_x_AWSOM_CR2081run5_WISPR_sphere_2.dat_C2-PB-20070416_2100.dat',  data_dir  ='c2/2007.04/'
-pro compare_lascoc2,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,data_dir=data_dir,winn=winn,compare3=compare3,factor_unit=factor_unit
-  Nx=512
-  Ny=512
-  factor_image=0.5
+pro compare_euv,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,data_dir=data_dir,winn=winn,compare3=compare3,factor_unit=factor_unit
+  Nx=1024
+  Ny=1024
+  factor_image=1
  ;factor_unit = 1.e10*0.79
   if NOT keyword_set(compare3)  then $
   compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,data_dir=data_dir,factor_image=factor_image,factor_unit=factor_unit,winn=winn
   if     keyword_set(compare3) then $
-  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,data_dir=data_dir,factor_image=factor_image,factor_unit=factor_unit,winn=winn,/compare3,/record,/pB
+  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,data_dir=data_dir,factor_image=factor_image,factor_unit=factor_unit,winn=winn,/compare3,/record,/euv,/log
+end
+
+; compare_lascoc2,  orig_image='C2-PB-20070416_2100.fts',  orig_file ='orig_C2-PB-20070416_2100.dat',  comp_file ='comp_x_AWSOM_CR2081run5_WISPR_sphere_2.dat_C2-PB-20070416_2100.dat',  data_dir  ='c2/2007.04/'
+pro compare_lascoc2,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,data_dir=data_dir,winn=winn,compare3=compare3,factor_unit=factor_unit
+  Nx=1024
+  Ny=1024
+  factor_image=1
+ ;factor_unit = 1.e10*0.79
+  if NOT keyword_set(compare3)  then $
+  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,data_dir=data_dir,factor_image=factor_image,factor_unit=factor_unit,winn=winn
+  if     keyword_set(compare3) then $
+  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,data_dir=data_dir,factor_image=factor_image,factor_unit=factor_unit,winn=winn,/compare3,/record,/pB,/log
 end
 
 ; compare_wispr,orig_image='WISPR_I_2025-06-13T22:00:00_squareFOV_binfac4_Blank.fts'
@@ -95,6 +195,9 @@ end
 
 ; movie,input_file='list.wisprI.Blank.CR2081.UnifLong.ExtOrb24.txt',data_dir='wisprI/CR2081_UnifLong/',table_file='table.UnifLong.ExtOrbit.24.txt',/BK
 ; movie,input_file='list.wisprO.Blank.CR2081.UnifLong.ExtOrb24.txt',data_dir='wisprO/CR2081_UnifLong/',table_file='table.UnifLong.ExtOrbit.24.txt',/BK
+
+; movie,input_file='list.wisprI.circular.txt',data_dir='wisprI/Circular/',table_file='table_spp_orbits_short_squareFOV_binfac4.CircularOrbits3degUnifStep_.dat',/BK
+; movie,input_file='list.wisprO.circular.txt',data_dir='wisprO/Circular/',table_file='table_spp_orbits_short_squareFOV_binfac4.CircularOrbits3degUnifStep_.dat',/BK
 
 ;;
 ; IMPORTANT NOTES on the "movie" tool:
@@ -162,17 +265,18 @@ pro compare_wispr,orig_image=orig_image,data_dir=data_dir,pB=pB,BK=BK
  ;Nx=2048 & Ny=2048 & Delta=128 & factor_image = 2.
 
   if keyword_set(BK) then $
-  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,Delta=Delta,/record,/crop,comp_gif=comp_gif,/create_FITS_for_tom,data_dir=data_dir,/BK
+  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,Delta=Delta,/record,/crop,comp_gif=comp_gif,/create_FITS_for_tom,data_dir=data_dir,/BK,/log
 
   if keyword_set(pB) then $
-  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,Delta=Delta,/record,/crop,comp_gif=comp_gif,/create_FITS_for_tom,data_dir=data_dir,/pB
+  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,Delta=Delta,/record,/crop,comp_gif=comp_gif,/create_FITS_for_tom,data_dir=data_dir,/pB,/log
   
 end
 
-pro compare_orig_comp,tomroot=tomroot,data_dir=data_dir,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,factor_unit=factor_unit,crop_image=crop_image,compare3=compare3,winn=winn,Delta=Delta,record=record,comp_gif=comp_gif,create_FITS_for_tom=create_FITS_for_tom,BK=BK,pB=pB
+pro compare_orig_comp,tomroot=tomroot,data_dir=data_dir,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,factor_unit=factor_unit,crop_image=crop_image,compare3=compare3,winn=winn,Delta=Delta,record=record,comp_gif=comp_gif,create_FITS_for_tom=create_FITS_for_tom,BK=BK,pB=pB,euv=euv,kcor=kcor,lasco_awsom=lasco_awsom,log=log
 
 common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOWHH,data_string
-  
+common euv_stuff,lambda_suffix
+
   if not keyword_set(factor_unit) then factor_unit = 1.
   
   if not keyword_set(tomroot) then tomroot = '/data1/'
@@ -182,7 +286,7 @@ common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOW
   
  ;if not keyword_set(data_dir) then data_dir='wisprI/'
   input_data_dir = tomroot+'tomography/DATA/'+data_dir
-  
+
   Io = fltarr(Nx,Ny)
   Ic = fltarr(Nx,Ny)
 
@@ -196,7 +300,9 @@ common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOW
   Io = rotate(Io,4)
   Ic = rotate(Ic,4)
 
-  mreadfits,input_data_dir+orig_image,hdr,img
+  if keyword_set(compare3) then $
+     mreadfits,input_data_dir+orig_image,hdr,img
+  
  ;img=img*factor_unit
 
   Io = Io / factor_unit
@@ -210,40 +316,49 @@ common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOW
      mwritefits,hdr,Ic,outfile=input_data_dir+newfilename
   endif
   
-  p = where(Ic gt 0.)
-  mini =    min(Ic(p))
-  maxi =    max(Ic(p))
-  mdIc = median(Ic(p))
-  mnIc =   mean(Ic(p))
-  
   if not keyword_set(factor_image) then factor_image=1.
 
-  img2= congrid(img,Nx/factor_image,Ny/factor_image)
+  if keyword_set(compare3) then $
+     img2= congrid(img,Nx/factor_image,Ny/factor_image)
+  
   Io2 = congrid(Io ,Nx/factor_image,Ny/factor_image)
   Ic2 = congrid(Ic ,Nx/factor_image,Ny/factor_image)
 
 ; Io2(Nx/factor_image-1,*) = max(Io2)
 
- if keyword_set(compare3) then begin
+if keyword_set(compare3) then begin
 
-  maxi = max([max(Io),max(Ic)])
+ ;Set suitable mini and maxi values for the images
+  po = where(Io  gt 0.)
+  pc = where(Ic  gt 0.)
+  if keyword_set(kcor) or keyword_set(lasco_awsom) then begin
+     mini = min([min(Io(po)),min(Ic(pc))])
+     maxi = max([max(Io(po)),max(Ic(pc))])
+  endif
+  if keyword_set(euv) then begin
+     mini = min([median(Io(po)),median(Ic(pc))])/500.
+     maxi = max(Io(po))
+  endif
 
+ ;Force all images to have same mini and maxi
   Img2([0,1],0) = [mini,maxi]
    Io2([0,1],0) = [mini,maxi]
    Ic2([0,1],0) = [mini,maxi]
-
   Img2 = Img2 > mini < maxi
    Io2 =  Io2 > mini < maxi
    Ic2 =  Ic2 > mini < maxi
 
+ ;An option for WISPR only
   if keyword_set(crop_image) then crop,img2,Io2,Ic2,Nx,Ny,Delta,factor_image
 
+  goto,skip_this
   loadct,39
   window,winn,xs=3*Nx/factor_image,ys=Ny/factor_image
   tvscl,alog10(img2),0
   tvscl,alog10( Io2),1
   tvscl,alog10( Ic2),2
-
+  skip_this:
+  
 ;---create over-sized window with white background----------------
   xsimage = Nx/factor_image
   ysimage = Ny/factor_image
@@ -251,30 +366,44 @@ common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOW
   DY      = ysimage/4
   x0      = DX/4
   y0      = DY/2
-  window,xs=2*xsimage+DX,ys=ysimage+DY
+  window,winn,xs=2*xsimage+DX,ys=ysimage+DY
   loadct,27
   tvscl,fltarr(2*xsimage+DX,ysimage+DY)
+
 ;-------------------------------------------------------
 ;Display images
-  loadct,39
+
+  ; Load a convenient color scale
+  if keyword_set(euv) then begin
+     if hdr.detector eq 'EUVI' then eit_colors,hdr.WAVELNTH
+  endif
+  if keyword_set(kcor) or keyword_set(lasco_awsom) then begin
+     loadct,39
+  endif
+
   frame=10
   black = fltarr(Nx/factor_image+frame,Ny/factor_image+frame)
-  tvscl,black,x0-frame/2,y0-frame/2  
-  tvscl,alog10( Io2),x0,y0
+  tvscl,black,x0-frame/2,y0-frame/2
+  if     keyword_set(log) then tvscl,alog10( Io2),x0,y0
+  if NOT keyword_set(log) then tvscl,      ( Io2),x0,y0
   deltaX = Nx/factor_image+Dx/10
   tvscl,black,x0+deltaX-frame/2,y0-frame/2  
-  tvscl,alog10( Ic2),x0+deltaX,y0
-
+  if     keyword_set(log) then tvscl,alog10( Ic2),x0+deltaX,y0
+  if NOT keyword_set(log) then tvscl,      ( Ic2),x0+deltaX,y0
 ;---PUT COLOR SCALE BAR---------------------------------------------------------
+  if     keyword_set(log) then begin
   logmini = alog10(mini)
   logmaxi = alog10(maxi)
+  endif
+  
   nsy= Ny/factor_image
   nsx= Dx/5
 
   black = fltarr(Nsx+frame,Nsy+frame)
   scale = fltarr(nsx,nsy)
 
-  for ix=0,nsx-1 do scale(ix,*)=logmini+(logmaxi-logmini)*findgen(nsy)/float(nsy-1)
+  if     keyword_set(log) then for ix=0,nsx-1 do scale(ix,*)=logmini+(logmaxi-logmini)*findgen(nsy)/float(nsy-1)
+  if NOT keyword_set(log) then for ix=0,nsx-1 do scale(ix,*)=   mini+(   maxi-   mini)*findgen(nsy)/float(nsy-1)
 
   xs0 = x0 + 2*xsimage + DX/3
   ys0 = y0
@@ -291,8 +420,14 @@ common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOW
   xyouts,[xs0-Dx/10],[ys0+ysimage+DY/10],['Log!d10!N(p!DB!N)'],$
          color=0,charsize=5,charthick=4,font=1,/device
 
+ if keyword_set(euv) then $
+  xyouts,[xs0-Dx/10],[ys0+ysimage+DY/10],['Log!d10!N(I)'],$
+         color=0,charsize=5,charthick=4,font=1,/device
+
  ; Place information around images:
-  xyouts,x0+[0,deltaX],(y0+ysimage+DY/5)*[1,1],$
+
+if keyword_set(lasco_awsom) then begin
+ xyouts,x0+[0,deltaX],(y0+ysimage+DY/5)*[1,1],$
          ['LASCO-C2 LAM Image: '+hdr.filename,'AWSoM Model'],$
          color=0,charsize=5,charthick=4,font=1,/device
 
@@ -300,15 +435,40 @@ common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOW
                          'TIME_OBS: '+hdr.TIME_OBS],$
          color=0,charsize=5,charthick=4,font=1,/device
 
- ; Record image
   filename = 'comparison_'+hdr.filename+'_AWSoM.gif'
-  outdir   = '/data1/tomography/DATA/'+data_dir
-  if keyword_set(record) then record_gif,outdir,filename,'X'
-stop
 endif
- 
 
-  if NOT keyword_set(compare3) then begin
+if keyword_set(kcor) then begin
+  xyouts,x0+[0,deltaX],(y0+ysimage+DY/5)*[1,1],$
+         ['KCOR Image','Synthetic Tomography Image'],$
+         color=0,charsize=5,charthick=4,font=1,/device
+
+  xyouts,[x0],[y0-DY/3],['DATE_OBS: '+hdr.DATE_OBS],$
+         color=0,charsize=5,charthick=4,font=1,/device
+
+  filename = 'comparison_'+hdr.DATE_OBS+'.gif'
+endif
+
+if keyword_set(euv) then begin
+
+  xyouts,x0+[0,deltaX],(y0+ysimage+DY/5)*[1,1],$
+         [hdr.detector+' image in band '+strmid(string(hdr.WAVELNTH),9,3)+' A','Synthetic Tomography Image'],$
+         color=0,charsize=5,charthick=4,font=1,/device
+
+  xyouts,[x0],[y0-DY/3],['DATE_OBS: '+hdr.DATE_OBS],$
+         color=0,charsize=5,charthick=4,font=1,/device
+
+  filename = 'comparison_'+hdr.DATE_OBS+'_L'+lambda_suffix+'.gif'
+endif
+
+ ; Record image
+    outdir   = '/data1/tomography/DATA/'+data_dir
+  if keyword_set(record) then record_gif,outdir,filename,'X'
+skip2:
+;stop
+endif
+
+if NOT keyword_set(compare3) then begin
   if NOT keyword_set(winn) then winn=0
   if keyword_set(crop_image) then crop,img2,Io2,Ic2,Nx,Ny,Delta,factor_image   
   Ic2  = Ic2 > mini < maxi
@@ -406,6 +566,7 @@ endif
 
 end
 
+; This routine is designed only for WISPR
 pro crop,img2,Io2,Ic2,Nx,Ny,Delta,factor_image
   Delta=Delta/factor_image
   Nx   = (size(Io2))(1)
