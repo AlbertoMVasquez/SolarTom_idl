@@ -4,6 +4,8 @@
 ; convert_AWSOM_to_xfile,input_file='CR2081run5_sphere_custom1.dat',N_dummy_lines=26,Nrad=200,Nlat=180,Nlon=360,/givenrho
 ; convert_AWSOM_to_xfile,input_file='CR2081run5_sphere_custom2.dat',N_dummy_lines=26,Nrad=100,Nlat= 90,Nlon=180,/givenrho
 
+; convert_AWSOM_to_xfile,input_file='CR2082_LASCOC2_custom1.dat',N_dummy_lines=10,Nrad=200,Nlat=180,Nlon=360
+
 pro convert_AWSOM_to_xfile,Nrad=Nrad,Nlat=Nlat,Nlon=Nlon,input_file=input_file,output_file=output_file,input_dir=input_dir,output_dir=output_dir,N_dummy_lines=N_dummy_lines,givenrho=givenrho
 
   if not keyword_set(input_file) then begin
@@ -27,13 +29,13 @@ pro convert_AWSOM_to_xfile,Nrad=Nrad,Nlat=Nlat,Nlon=Nlon,input_file=input_file,o
   print,'Grid:',Nrad,Nlat,Nlon
   
   N_e = fltarr(Nrad,Nlat,Nlon)
-  x=''
+  x   = ''
 
-  mp  = 1.672621898d-27 * 1.e3   ; gr
-  x1  = 0.d
-  y1  = 0.d
-  z1  = 0.d
-  Ne1 = 0.d
+  mp  = 1.672621898e-27 * 1.e3   ; gr
+  x1  = 0.
+  y1  = 0.
+  z1  = 0.
+  Ne1 = 0.
   
 ; Read data from TECPLOT's SWMF tools:
   openr,1,input_dir+input_file

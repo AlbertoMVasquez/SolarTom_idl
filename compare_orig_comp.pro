@@ -1,33 +1,34 @@
 
-pro comp_euvi,b171=b171,b195=b195,b284=b284,lambda=lambda
-  common euv_stuff,lambda_suffix
+pro comp_euvi,b171=b171,b195=b195,b284=b284,solution=solution
+  common euv_stuff,model
   
-  if lambda ne 0.35 and lambda ne 0.75 then begin
-     print,'Please provide a known value for lambda.'
+  if keyword_set(solution) eq 0 OR solution gt 3 then begin
+     print,'Please provide a known solution.'
      return
   endif
 
-  lambda_suffix = strmid(string(lambda),5,4)
-  
   if keyword_set(b171) then begin
-     if lambda eq 0.35 then model = 'x_euvi.A.171.cr2081.26x90_bf4_ri.98_ro1.025_l0.35_NODECON_ureg'
-     if lambda eq 0.75 then model = 'x_euvi.A.171.cr2081.26x90_bf4_ri.98_ro1.025_l0.75_NODECON_nalai'
+     if solution eq 1 then model = 'x_euvi.A.171.cr2081.26x90_bf2_ri.98_ro1.025_l0.35_NODECON_ureg'
+     if solution eq 2 then model = 'x_euvi.A.171.cr2081.26x90_bf4_ri.98_ro1.025_l0.75_NODECON_nalai'
+     if solution eq 3 then model = 'x_euvi_A171_b4_nodecon_100_90_180_Rmax2.0_InstrRmax1.5_bf4'
      data_subdir = 'euvi/CR2081/A171/'
      compare_dir = '/data1/tomography/bindata/Compare/'
        data_file = '/list.A171.b4.nodecon.test'
     endif
   
    if keyword_set(b195) then begin
-     if lambda eq 0.35 then model = 'x_euvi.A.195.cr2081.26x90_bf4_ri.98_ro1.025_l0.35_NODECON_ureg'
-     if lambda eq 0.75 then model = 'x_euvi.A.195.cr2081.26x90_bf4_ri.98_ro1.025_l0.75_NODECON_nalai'
+     if solution eq 1 then model = 'x_euvi.A.195.cr2081.26x90_bf4_ri.98_ro1.025_l0.35_NODECON_ureg'
+     if solution eq 2 then model = 'x_euvi.A.195.cr2081.26x90_bf4_ri.98_ro1.025_l0.75_NODECON_nalai'
+     if solution eq 3 then model = 'x_euvi_A195_b4_nodecon_100_90_180_Rmax2.0_InstrRmax1.5_bf4'
      data_subdir = 'euvi/CR2081/A195/'
      compare_dir = '/data1/tomography/bindata/Compare/'
        data_file = '/list.A195.b4.nodecon.test'
     endif
   
    if keyword_set(b284) then begin
-     if lambda eq 0.35 then model = 'x_euvi.A.284.cr2081.26x90_bf4_ri.98_ro1.025_l0.35_NODECON_ureg'
-     if lambda eq 0.75 then model = 'x_euvi.A.284.cr2081.26x90_bf4_ri.98_ro1.025_l0.75_NODECON_nalai'
+     if solution eq 1 then model = 'x_euvi.A.284.cr2081.26x90_bf4_ri.98_ro1.025_l0.35_NODECON_ureg'
+     if solution eq 2 then model = 'x_euvi.A.284.cr2081.26x90_bf4_ri.98_ro1.025_l0.75_NODECON_nalai'
+     if solution eq 3 then model = 'x_euvi_A284_b4_nodecon_100_90_180_Rmax2.0_InstrRmax1.5_bf4'
      data_subdir = 'euvi/CR2081/A284/'
      compare_dir = '/data1/tomography/bindata/Compare/'
        data_file = '/list.A284.b4.nodecon.test'
@@ -56,16 +57,17 @@ pro comp_euvi,b171=b171,b195=b195,b284=b284,lambda=lambda
 end
 
 pro comp_kcor
-           model = 'x_KCOR.CR2198.13imgs.bf4.50_30_60_l1e-5_V2'
+  ;        model = 'x_KCOR.CR2198.13imgs.bf4.50_30_60_l1e-5_V2'
   ;        model = 'x_KCOR.CR2198.13imgs.bf4.50_30_60_l1e-5'
   ;        model = 'x_KCOR.CR2198.13imgs.bf4.50_90_180_l1e-5'
+  ;        model = 'x_KCOR.CR2198.13imgs.bf2.295_45_90_l1e-5'
   ;        model = 'x_KCOR.CR2198.13imgs.bf1.295_90_180_l1e-5'
   ;        model = 'x_KCOR.CR2198.13imgs.bf2.295_90_180_l1e-5'
-  ;        model = 'x_KCOR.CR2198.13imgs.bf2.295_45_90_l1e-5'
+           model = 'x_KCOR.CR2198.13imgs.bf2.295_90_180_l1e-5_CORRECTED'
 
      data_subdir = 'kcor/CR2198/'
      compare_dir = '/data1/tomography/bindata/Compare/'
-       data_file = 'list_prep.txt'
+       data_file = 'list_prep_test.txt'
                N = 0
                x = ''
   openr, 2, '/data1/tomography/DATA/' + data_subdir + data_file
@@ -159,7 +161,7 @@ pro compare_lascoc2,orig_image=orig_image,orig_file=orig_file,comp_file=comp_fil
   if NOT keyword_set(compare3)  then $
   compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,data_dir=data_dir,factor_image=factor_image,factor_unit=factor_unit,winn=winn
   if     keyword_set(compare3) then $
-  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,data_dir=data_dir,factor_image=factor_image,factor_unit=factor_unit,winn=winn,/compare3,/record,/pB,/log
+  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,data_dir=data_dir,factor_image=factor_image,factor_unit=factor_unit,winn=winn,/compare3,/record,/pB,/log,/kcor
 end
 
 ; compare_wispr,orig_image='WISPR_I_2025-06-13T22:00:00_squareFOV_binfac4_Blank.fts'
@@ -275,7 +277,7 @@ end
 pro compare_orig_comp,tomroot=tomroot,data_dir=data_dir,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,factor_unit=factor_unit,crop_image=crop_image,compare3=compare3,winn=winn,Delta=Delta,record=record,comp_gif=comp_gif,create_FITS_for_tom=create_FITS_for_tom,BK=BK,pB=pB,euv=euv,kcor=kcor,lasco_awsom=lasco_awsom,log=log
 
 common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOWHH,data_string
-common euv_stuff,lambda_suffix
+common euv_stuff,model
 
   if not keyword_set(factor_unit) then factor_unit = 1.
   
@@ -334,6 +336,8 @@ if keyword_set(compare3) then begin
   if keyword_set(kcor) or keyword_set(lasco_awsom) then begin
      mini = min([min(Io(po)),min(Ic(pc))])
      maxi = max([max(Io(po)),max(Ic(pc))])
+     mini =      min(Io(po))
+     maxi =      max(Io(po))
   endif
   if keyword_set(euv) then begin
      mini = min([median(Io(po)),median(Ic(pc))])/500.
@@ -458,14 +462,14 @@ if keyword_set(euv) then begin
   xyouts,[x0],[y0-DY/3],['DATE_OBS: '+hdr.DATE_OBS],$
          color=0,charsize=5,charthick=4,font=1,/device
 
-  filename = 'comparison_'+hdr.DATE_OBS+'_L'+lambda_suffix+'.gif'
+  filename = 'comparison_'+hdr.DATE_OBS+'_'+model+'.gif'
 endif
 
  ; Record image
     outdir   = '/data1/tomography/DATA/'+data_dir
   if keyword_set(record) then record_gif,outdir,filename,'X'
 skip2:
-;stop
+stop
 endif
 
 if NOT keyword_set(compare3) then begin
