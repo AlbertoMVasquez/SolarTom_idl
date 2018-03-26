@@ -47,6 +47,7 @@ pro convert_AWSOM_to_xfile,Nrad=Nrad,Nlat=Nlat,Nlon=Nlon,input_file=input_file,o
         for irad=0,Nrad-1 do begin
            readf,1,x1,y1,z1,Ne1
            if keyword_set(givenrho) then Ne1=Ne1/mp ; rho -> Ne
+           N_e(irad,ilat,ilon) = Ne1
         endfor
      endfor   
   endfor
@@ -57,5 +58,6 @@ pro convert_AWSOM_to_xfile,Nrad=Nrad,Nlat=Nlat,Nlon=Nlon,input_file=input_file,o
   close,1
 
   print,'Your output is in: '+output_dir+output_file
+
 
 end

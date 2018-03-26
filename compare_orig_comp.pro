@@ -191,7 +191,7 @@ end
 ; movie,input_file='list.test.txt',data_dir='wisprI/',table_file='table.test.txt',/BK
 ; movie,input_file='list.test2.txt',data_dir='wisprI/',table_file='table.test2.txt',/BK
 
-; movie,input_file='list.wisprI.Blank.CR2081.UnifLong.ExtOrb01.txt',data_dir='wisprI/CR2081_UnifLong/',table_file='table.UnifLong.ExtOrbit.01.txt',/BK
+; movie,input_file='list.wisprI.Blank.CR2081.UnifLong.ExtOrb01.txt',data_dir='wisprI/CR2081_UnifLong/',model_file='x_AWSOM_CR2081run5_WISPR_sphere.dat',table_file='table.UnifLong.ExtOrbit.01.txt',/BK
 ; movie,input_file='list.wisprO.Blank.CR2081.UnifLong.ExtOrb01.txt',data_dir='wisprO/CR2081_UnifLong/',table_file='table.UnifLong.ExtOrbit.01.txt',/BK
 
 ; movie,input_file='list.wisprI.Blank.CR2081.UnifLong.ExtOrb12.txt',data_dir='wisprI/CR2081_UnifLong/',table_file='table.UnifLong.ExtOrbit.12.txt',/BK
@@ -202,6 +202,9 @@ end
 
 ; movie,input_file='list.wisprI.circular.txt',data_dir='wisprI/Circular/',table_file='table_spp_orbits_short_squareFOV_binfac4.CircularOrbits3degUnifStep_.dat',/BK
 ; movie,input_file='list.wisprO.circular.txt',data_dir='wisprO/Circular/',table_file='table_spp_orbits_short_squareFOV_binfac4.CircularOrbits3degUnifStep_.dat',/BK
+
+; movie,input_file='list.wisprI.Blank.CR2082.UnifLong.ExtOrb01.txt',data_dir='wisprI/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.ExtOrbit.01.UPDATED-POINTINGS.txt',/BK
+; movie,input_file='list.wisprO.Blank.CR2082.UnifLong.ExtOrb01.txt',data_dir='wisprO/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.ExtOrbit.01.UPDATED-POINTINGS.txt',/BK
 
 ;;
 ; IMPORTANT NOTES on the "movie" tool:
@@ -218,8 +221,11 @@ end
 ; of header, must be located in:
 ; /data1/work/SPP/SORBET_VIZZER_WISPR_RevA/
 ;
+; The "model_file" is the filename of the model used to run compare.c,
+; which is located in $tomroot/bindata/
+;
 ;;
-pro movie,input_file=input_file,data_dir=data_dir,table_file=table_file,pB=pB,BK=BK
+pro movie,input_file=input_file,data_dir=data_dir,table_file=table_file,model_file=model_file,pB=pB,BK=BK
 common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOWHH,data_string
   openr,3,'/data1/work/SPP/SORBET_VIZZER_WISPR_RevA/'+table_file
   x=''
@@ -244,17 +250,18 @@ common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOW
 ;    readf,3,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOWHH
      readf,3,data_string
      readf,2,orig_image
-     if keyword_set(BK) then compare_wispr,orig_image=orig_image,data_dir=data_dir,/BK
-     if keyword_set(pB) then compare_wispr,orig_image=orig_image,data_dir=data_dir,/pB
+     if keyword_set(BK) then compare_wispr,orig_image=orig_image,data_dir=data_dir,model_file=model_file,/BK
+     if keyword_set(pB) then compare_wispr,orig_image=orig_image,data_dir=data_dir,model_file=model_file,/pB
   endfor
   close,/all
 end
 
-pro compare_wispr,orig_image=orig_image,data_dir=data_dir,pB=pB,BK=BK
+pro compare_wispr,orig_image=orig_image,data_dir=data_dir,model_file=model_file,pB=pB,BK=BK
 
-  model     = 'x_AWSOM_CR2081run5_WISPR_sphere_2.dat'
+  model     = model_file
+ ;model     = 'x_AWSOM_CR2081run5_WISPR_sphere_2.dat'
  ;model     = 'x_AWSOM_CR2081run5_sphere_custom1.dat'
-
+  
   orig_file = 'orig_'          +strmid(orig_image,0,strlen(orig_image)-4)+'.dat'
   if keyword_set(pB) then begin
      comp_file = 'comp_'+model+'_'+strmid(orig_image,0,strlen(orig_image)-4)+'.dat'
@@ -269,14 +276,14 @@ pro compare_wispr,orig_image=orig_image,data_dir=data_dir,pB=pB,BK=BK
  ;Nx=2048 & Ny=2048 & Delta=128 & factor_image = 2.
 
   if keyword_set(BK) then $
-  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,Delta=Delta,/record,/crop,comp_gif=comp_gif,/create_FITS_for_tom,data_dir=data_dir,/BK,/log
+  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,Delta=Delta,/record,comp_gif=comp_gif,/create_FITS_for_tom,data_dir=data_dir,/BK,/log,/wispr
 
   if keyword_set(pB) then $
   compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,Delta=Delta,/record,/crop,comp_gif=comp_gif,/create_FITS_for_tom,data_dir=data_dir,/pB,/log
   
 end
 
-pro compare_orig_comp,tomroot=tomroot,data_dir=data_dir,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,factor_unit=factor_unit,crop_image=crop_image,compare3=compare3,winn=winn,Delta=Delta,record=record,comp_gif=comp_gif,create_FITS_for_tom=create_FITS_for_tom,BK=BK,pB=pB,euv=euv,kcor=kcor,lasco_awsom=lasco_awsom,log=log
+pro compare_orig_comp,tomroot=tomroot,data_dir=data_dir,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,factor_unit=factor_unit,crop_image=crop_image,compare3=compare3,winn=winn,Delta=Delta,record=record,comp_gif=comp_gif,create_FITS_for_tom=create_FITS_for_tom,BK=BK,pB=pB,euv=euv,kcor=kcor,lasco_awsom=lasco_awsom,wispr=wispr,log=log
 
 common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOWHH,data_string
 common euv_stuff,model
@@ -303,10 +310,10 @@ common euv_stuff,model
 
   Io = rotate(Io,4)
   Ic = rotate(Ic,4)  
-  ;stop
+  stop
   
-  if keyword_set(compare3) then $
-     mreadfits,input_data_dir+orig_image,hdr,img
+                                ;if keyword_set(compare3) then
+  mreadfits,input_data_dir+orig_image,hdr,img
   
  ;img=img*factor_unit
 
@@ -314,10 +321,8 @@ common euv_stuff,model
   Ic = Ic / factor_unit
   
   if keyword_set(create_FITS_for_tom) then begin
-     if keyword_set(BK) then $
-     newfilename = strmid(orig_image,0,strlen(orig_image)-9)+'Synth.BK.fts'
-     if keyword_set(pB) then $
-     newfilename = strmid(orig_image,0,strlen(orig_image)-9)+'Synth.pB.fts'
+     if keyword_set(BK) then newfilename = strmid(orig_image,0,strlen(orig_image)-9)+'Synth.BK.fts'
+     if keyword_set(pB) then newfilename = strmid(orig_image,0,strlen(orig_image)-9)+'Synth.pB.fts'
      mwritefits,hdr,Ic,outfile=input_data_dir+newfilename
   endif
   
@@ -331,13 +336,13 @@ common euv_stuff,model
 
 ; Io2(Nx/factor_image-1,*) = max(Io2)
 
-if keyword_set(compare3) then begin
+
 
  ;Set suitable mini and maxi values for the images
   po = where(Io  gt 0.)
   pc = where(Ic  gt 0.)
   
-  if keyword_set(kcor) or keyword_set(lasco_awsom) then begin
+  if keyword_set(kcor) or keyword_set(lasco_awsom) or keyword_set(wispr) then begin
      mini = min([min(Io(po)),min(Ic(pc))])
      maxi = max([max(Io(po)),max(Ic(pc))])
 ;    mini =      min(Io(po))
@@ -355,6 +360,7 @@ if keyword_set(compare3) then begin
      maxi = max(Io(po))
   endif
 
+if keyword_set(compare3) then begin
  ;Force all images to have same mini and maxi
   Img2([0,1],0) = [mini,maxi]
    Io2([0,1],0) = [mini,maxi]
