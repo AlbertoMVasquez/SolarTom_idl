@@ -93,6 +93,7 @@ end
 pro comp_lam
           ;model = 'x_AWSOM_CR2081run5_WISPR_sphere_2.dat'
            model = 'x_AWSOM_CR2081run5_sphere_custom1.dat'
+          ;model = 'x_AWSOM_CR2082_LASCOC2_custom1.dat'
      data_subdir = 'c2/CR2081/'
      compare_dir = '/data1/tomography_dev/bindata/Compare/'
        data_file = 'list.txt'
@@ -114,8 +115,9 @@ pro comp_lam
         orig_file  =  orig_file_a[i],$
         comp_file  =  comp_file_a[i],$
         data_dir   = data_subdir , winn = i, factor_unit = factor_unit, /compare3
+;     stop
   endfor
-  close,2
+  close,/all
 end
 
 pro comp4
@@ -154,14 +156,14 @@ end
 
 ; compare_lascoc2,  orig_image='C2-PB-20070416_2100.fts',  orig_file ='orig_C2-PB-20070416_2100.dat',  comp_file ='comp_x_AWSOM_CR2081run5_WISPR_sphere_2.dat_C2-PB-20070416_2100.dat',  data_dir  ='c2/2007.04/'
 pro compare_lascoc2,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,data_dir=data_dir,winn=winn,compare3=compare3,factor_unit=factor_unit
-  Nx=1024
-  Ny=1024
-  factor_image=1
+  Nx=512;1024
+  Ny=512;1024
+  factor_image=0.5
  ;factor_unit = 1.e10*0.79
   if NOT keyword_set(compare3)  then $
   compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,data_dir=data_dir,factor_image=factor_image,factor_unit=factor_unit,winn=winn
   if     keyword_set(compare3) then $
-  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,data_dir=data_dir,factor_image=factor_image,factor_unit=factor_unit,winn=winn,/compare3,/record,/pB,/log,/kcor
+  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,data_dir=data_dir,factor_image=factor_image,factor_unit=factor_unit,winn=winn,/compare3,/record,/pB,/log,/lasco_awsom;/kcor
 end
 
 ; compare_wispr,orig_image='WISPR_I_2025-06-13T22:00:00_squareFOV_binfac4_Blank.fts'
@@ -300,8 +302,9 @@ common euv_stuff,model
   close,1
 
   Io = rotate(Io,4)
-  Ic = rotate(Ic,4)
-
+  Ic = rotate(Ic,4)  
+  ;stop
+  
   if keyword_set(compare3) then $
      mreadfits,input_data_dir+orig_image,hdr,img
   
@@ -333,11 +336,19 @@ if keyword_set(compare3) then begin
  ;Set suitable mini and maxi values for the images
   po = where(Io  gt 0.)
   pc = where(Ic  gt 0.)
+  
   if keyword_set(kcor) or keyword_set(lasco_awsom) then begin
      mini = min([min(Io(po)),min(Ic(pc))])
      maxi = max([max(Io(po)),max(Ic(pc))])
-     mini =      min(Io(po))
-     maxi =      max(Io(po))
+;    mini =      min(Io(po))
+;    maxi =      max(Io(po))
+
+     medo = median(Io(po))
+     medc = median(Ic(pc))
+     correction = medo/medc
+     correction = 0.1
+    ;print,'Correction:',correction
+    ;Ic2        = Ic2*correction     
   endif
   if keyword_set(euv) then begin
      mini = min([median(Io(po)),median(Ic(pc))])/500.
@@ -439,7 +450,7 @@ if keyword_set(lasco_awsom) then begin
                          'TIME_OBS: '+hdr.TIME_OBS],$
          color=0,charsize=5,charthick=4,font=1,/device
 
-  filename = 'comparison_'+hdr.filename+'_AWSoM.gif'
+  filename = 'comparison_'+hdr.filename+'_AWSoM-CR2081.gif'
 endif
 
 if keyword_set(kcor) then begin
@@ -469,7 +480,6 @@ endif
     outdir   = '/data1/tomography/DATA/'+data_dir
   if keyword_set(record) then record_gif,outdir,filename,'X'
 skip2:
-stop
 endif
 
 if NOT keyword_set(compare3) then begin

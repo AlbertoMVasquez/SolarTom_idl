@@ -8,7 +8,7 @@ if NOT keyword_set (output_dir) then output_dir = '/data1/tomography_dev/SolarTo
   
 ; Set grid density key parameters:
 if keyword_set(WISPR) then begin
-  file = 'sphere_wedge_WISPR2.dat'
+  file = 'sphere_wedge_WISPR.dat'
   Nr   = 100
   dlon = 2.  ; deg
   dlat = 2.  ; deg

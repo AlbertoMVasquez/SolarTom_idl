@@ -6,6 +6,8 @@
 
 ; convert_AWSOM_to_xfile,input_file='CR2082_LASCOC2_custom1.dat',N_dummy_lines=10,Nrad=200,Nlat=180,Nlon=360
 
+; convert_AWSOM_to_xfile,input_file='CR2082_sphere_WISPR.dat',N_dummy_lines=10,Nrad=100,Nlat=90,Nlon=180
+
 pro convert_AWSOM_to_xfile,Nrad=Nrad,Nlat=Nlat,Nlon=Nlon,input_file=input_file,output_file=output_file,input_dir=input_dir,output_dir=output_dir,N_dummy_lines=N_dummy_lines,givenrho=givenrho
 
   if not keyword_set(input_file) then begin
@@ -45,7 +47,6 @@ pro convert_AWSOM_to_xfile,Nrad=Nrad,Nlat=Nlat,Nlon=Nlon,input_file=input_file,o
         for irad=0,Nrad-1 do begin
            readf,1,x1,y1,z1,Ne1
            if keyword_set(givenrho) then Ne1=Ne1/mp ; rho -> Ne
-           N_e(irad,ilat,ilon) = Ne1
         endfor
      endfor   
   endfor
