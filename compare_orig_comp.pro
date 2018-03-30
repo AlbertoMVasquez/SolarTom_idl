@@ -92,9 +92,9 @@ end
 
 pro comp_lam
           ;model = 'x_AWSOM_CR2081run5_WISPR_sphere_2.dat'
-           model = 'x_AWSOM_CR2081run5_sphere_custom1.dat'
-          ;model = 'x_AWSOM_CR2082_LASCOC2_custom1.dat'
-     data_subdir = 'c2/CR2081/'
+          ;model = 'x_AWSOM_CR2081run5_sphere_custom1.dat'
+           model = 'x_AWSOM_CR2082_LASCOC2_custom1.dat'
+     data_subdir = 'c2/CR2082/'
      compare_dir = '/data1/tomography_dev/bindata/Compare/'
        data_file = 'list.txt'
                N = 0
@@ -203,8 +203,17 @@ end
 ; movie,input_file='list.wisprI.circular.txt',data_dir='wisprI/Circular/',table_file='table_spp_orbits_short_squareFOV_binfac4.CircularOrbits3degUnifStep_.dat',/BK
 ; movie,input_file='list.wisprO.circular.txt',data_dir='wisprO/Circular/',table_file='table_spp_orbits_short_squareFOV_binfac4.CircularOrbits3degUnifStep_.dat',/BK
 
+; CR2082:
+
 ; movie,input_file='list.wisprI.Blank.CR2082.UnifLong.ExtOrb01.txt',data_dir='wisprI/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.ExtOrbit.01.UPDATED-POINTINGS.txt',/BK
 ; movie,input_file='list.wisprO.Blank.CR2082.UnifLong.ExtOrb01.txt',data_dir='wisprO/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.ExtOrbit.01.UPDATED-POINTINGS.txt',/BK
+
+; movie,input_file='list.wisprI.circular.txt',data_dir='wisprI/Circular_CR2082/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.CircularOrbit01.short.UPDATED-POINTINGS.txt',/BK
+; movie,input_file='list.wisprO.circular.txt',data_dir='wisprO/Circular_CR2082/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.CircularOrbit01.short.UPDATED-POINTINGS.txt',/BK
+
+; movie,input_file='list.wisprI.Blank.CR2082.UnifLong.ExtOrb24.txt',data_dir='wisprI/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.ExtOrbit.24.UPDATED-POINTINGS.txt',/BK
+; movie,input_file='list.wisprO.Blank.CR2082.UnifLong.ExtOrb24.txt',data_dir='wisprO/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.ExtOrbit.24.UPDATED-POINTINGS.txt',/BK
+
 
 ;;
 ; IMPORTANT NOTES on the "movie" tool:
@@ -310,16 +319,12 @@ common euv_stuff,model
 
   Io = rotate(Io,4)
   Ic = rotate(Ic,4)  
-  stop
-  
                                 ;if keyword_set(compare3) then
   mreadfits,input_data_dir+orig_image,hdr,img
-  
- ;img=img*factor_unit
 
   Io = Io / factor_unit
   Ic = Ic / factor_unit
-  
+
   if keyword_set(create_FITS_for_tom) then begin
      if keyword_set(BK) then newfilename = strmid(orig_image,0,strlen(orig_image)-9)+'Synth.BK.fts'
      if keyword_set(pB) then newfilename = strmid(orig_image,0,strlen(orig_image)-9)+'Synth.pB.fts'
@@ -328,32 +333,29 @@ common euv_stuff,model
   
   if not keyword_set(factor_image) then factor_image=1.
 
-  if keyword_set(compare3) then $
-     img2= congrid(img,Nx/factor_image,Ny/factor_image)
-  
+ ;if keyword_set(compare3) then $
+  img2= congrid(img,Nx/factor_image,Ny/factor_image)
   Io2 = congrid(Io ,Nx/factor_image,Ny/factor_image)
   Ic2 = congrid(Ic ,Nx/factor_image,Ny/factor_image)
-
-; Io2(Nx/factor_image-1,*) = max(Io2)
-
-
 
  ;Set suitable mini and maxi values for the images
   po = where(Io  gt 0.)
   pc = where(Ic  gt 0.)
+
+  if keyword_set(wispr) then begin
+    mini =      min(Ic(pc))
+    maxi =      max(Ic(pc))
+ endif
   
-  if keyword_set(kcor) or keyword_set(lasco_awsom) or keyword_set(wispr) then begin
+  if keyword_set(kcor) or keyword_set(lasco_awsom) then begin
      mini = min([min(Io(po)),min(Ic(pc))])
      maxi = max([max(Io(po)),max(Ic(pc))])
-;    mini =      min(Io(po))
-;    maxi =      max(Io(po))
-
      medo = median(Io(po))
      medc = median(Ic(pc))
      correction = medo/medc
-     correction = 0.1
-    ;print,'Correction:',correction
-    ;Ic2        = Ic2*correction     
+     correction = 0.15
+     print,'Correction:',correction
+     Ic2        = Ic2*correction     
   endif
   if keyword_set(euv) then begin
      mini = min([median(Io(po)),median(Ic(pc))])/500.
@@ -372,14 +374,15 @@ if keyword_set(compare3) then begin
  ;An option for WISPR only
   if keyword_set(crop_image) then crop,img2,Io2,Ic2,Nx,Ny,Delta,factor_image
 
-  goto,skip_this
+ goto,skip_this
   loadct,39
   window,winn,xs=3*Nx/factor_image,ys=Ny/factor_image
   tvscl,alog10(img2),0
   tvscl,alog10( Io2),1
   tvscl,alog10( Ic2),2
-  skip_this:
-  
+  stop 
+ skip_this:
+
 ;---create over-sized window with white background----------------
   xsimage = Nx/factor_image
   ysimage = Ny/factor_image
@@ -456,7 +459,7 @@ if keyword_set(lasco_awsom) then begin
                          'TIME_OBS: '+hdr.TIME_OBS],$
          color=0,charsize=5,charthick=4,font=1,/device
 
-  filename = 'comparison_'+hdr.filename+'_AWSoM-CR2081.gif'
+  filename = 'comparison_'+hdr.filename+'_AWSoM-CR2082-SCALED.gif'
 endif
 
 if keyword_set(kcor) then begin

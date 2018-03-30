@@ -1,10 +1,27 @@
 pro wrapper_compare
 
-compare_reconstruction_model,orbit= 1,ir=00,filename='Orbit_CircularEquat_2.1Rs.gif',/circular_eq
-compare_reconstruction_model,orbit= 1,ir=03,filename='Orbit_CircularEquat_3.0Rs.gif',/circular_eq
-compare_reconstruction_model,orbit= 1,ir=07,filename='Orbit_CircularEquat_4.8Rs.gif',/circular_eq
-compare_reconstruction_model,orbit= 1,ir=10,filename='Orbit_CircularEquat_6.5Rs.gif',/circular_eq
-compare_reconstruction_model,orbit= 1,ir=13,filename='Orbit_CircularEquat_8.6Rs.gif',/circular_eq
+suffix_model='CR2082'
+compare_reconstruction_model,orbit= 1,ir=00,filename='Orbit_CircularEquat_2.1Rs_'+suffix_model+'.gif',/circular_eq,/CR2082
+compare_reconstruction_model,orbit= 1,ir=01,filename='Orbit_CircularEquat_2.4Rs_'+suffix_model+'.gif',/circular_eq,/CR2082
+compare_reconstruction_model,orbit= 1,ir=03,filename='Orbit_CircularEquat_3.0Rs_'+suffix_model+'.gif',/circular_eq,/CR2082
+compare_reconstruction_model,orbit= 1,ir=07,filename='Orbit_CircularEquat_4.8Rs_'+suffix_model+'.gif',/circular_eq,/CR2082
+compare_reconstruction_model,orbit= 1,ir=10,filename='Orbit_CircularEquat_6.5Rs_'+suffix_model+'.gif',/circular_eq,/CR2082
+compare_reconstruction_model,orbit= 1,ir=13,filename='Orbit_CircularEquat_8.6Rs_'+suffix_model+'.gif',/circular_eq,/CR2082
+compare_reconstruction_model,orbit= 1,ir=14,filename='Orbit_CircularEquat_9.3Rs_'+suffix_model+'.gif',/circular_eq,/CR2082
+
+suffix_model='CR2082'
+compare_reconstruction_model,orbit=01,ir=00,filename='Orb_01_UnifLong_02Rs_'+suffix_model+'.gif',/UniformLong,/CR2082
+compare_reconstruction_model,orbit= 1,ir=03,filename='Orb_01_UnifLong_03Rs_'+suffix_model+'.gif',/UniformLong,/CR2082
+compare_reconstruction_model,orbit= 1,ir=07,filename='Orb_01_UnifLong_05Rs_'+suffix_model+'.gif',/UniformLong,/CR2082
+compare_reconstruction_model,orbit= 1,ir=15,filename='Orb_01_UnifLong_10Rs_'+suffix_model+'.gif',/UniformLong,/CR2082
+compare_reconstruction_model,orbit= 1,ir=20,filename='Orb_01_UnifLong_15Rs_'+suffix_model+'.gif',/UniformLong,/CR2082
+compare_reconstruction_model,orbit= 1,ir=25,filename='Orb_01_UnifLong_20Rs_'+suffix_model+'.gif',/UniformLong,/CR2082
+compare_reconstruction_model,orbit= 1,ir=32,filename='Orb_01_UnifLong_30Rs_'+suffix_model+'.gif',/UniformLong,/CR2082
+compare_reconstruction_model,orbit= 1,ir=39,filename='Orb_01_UnifLong_40Rs_'+suffix_model+'.gif',/UniformLong,/CR2082
+compare_reconstruction_model,orbit= 1,ir=44,filename='Orb_01_UnifLong_50Rs_'+suffix_model+'.gif',/UniformLong,/CR2082
+compare_reconstruction_model,orbit= 1,ir=49,filename='Orb_01_UnifLong_60Rs_'+suffix_model+'.gif',/UniformLong,/CR2082
+compare_reconstruction_model,orbit= 1,ir=54,filename='Orb_01_UnifLong_70Rs_'+suffix_model+'.gif',/UniformLong,/CR2082
+compare_reconstruction_model,orbit= 1,ir=58,filename='Orb_01_UnifLong_80Rs_'+suffix_model+'.gif',/UniformLong,/CR2082
 
 return
 
@@ -100,7 +117,7 @@ return
 
 end
 
-pro compare_reconstruction_model,ir=ir,filename=filename,orbit=orbit,circular_eq=circular_eq,circular_offeq=circular_offeq,UniformLong=UniformLong
+pro compare_reconstruction_model,ir=ir,filename=filename,orbit=orbit,circular_eq=circular_eq,circular_offeq=circular_offeq,UniformLong=UniformLong,CR2082=CR2082
 
 input_dir = '/data1/tomography/bindata/'
   
@@ -115,6 +132,8 @@ files=[$
   'x_wisprIO.512.Orbit01.60images_l1e-5',$
   'x_wisprIO.512.Orbit12.60images_l1e-5',$
   'x_wisprIO.512.Orbit24.60images_l1e-5']
+
+if keyword_set(CR2082) then files[0] = 'x_AWSOM_CR2082_sphere_WISPR.dat'
 
 files1=[$
 'x_wisprI.512.Orbit01.60images_3regmat_l1e-5',$      
@@ -232,6 +251,11 @@ files10=[$
 'x_wisprIO.512.CR2081.UnifLong.SciOrb12.bf4_hlaplac_l1e-6',$
 'x_wisprIO.512.CR2081.UnifLong.SciOrb24.bf4_hlaplac_l1e-6']
 
+if keyword_set(CR2082) then begin
+files10[0]='x_wisprIO.512.CR2082.UnifLong.ExtOrb01.bf4_hlaplac_l1e-6'
+files10[3]='x_wisprIO.512.CR2082.UnifLong.SciOrb01.bf4_hlaplac_l1e-6'
+endif
+
 readtom_sph,input_dir,files10[0],nr,nt,rmin,rmax,Ne_wIO_UnifLong_ExtOrb01_bf4_hlaplac_l1e6
 readtom_sph,input_dir,files10[1],nr,nt,rmin,rmax,Ne_wIO_UnifLong_ExtOrb12_bf4_hlaplac_l1e6
 readtom_sph,input_dir,files10[2],nr,nt,rmin,rmax,Ne_wIO_UnifLong_ExtOrb24_bf4_hlaplac_l1e6
@@ -268,7 +292,8 @@ map45= reform(Ne_wIO_UnifLong_SciOrb01_bf4_hlaplac_l1e6_2(ir,*,*))
 map46= reform(Ne_wIO_UnifLong_SciOrb12_bf4_hlaplac_l1e6_2(ir,*,*))
 map47= reform(Ne_wIO_UnifLong_SciOrb24_bf4_hlaplac_l1e6_2(ir,*,*))
 
-files12=['x_wisprIO.512.CircularOrbit01.120images_hlaplac_l1e-6']
+                            files12 = ['x_wisprIO.512.CircularOrbit01.120images_hlaplac_l1e-6']
+if keyword_set(CR2082) then files12 = ['x_wisprIO.512.CircularOrbit01.CR2082.120images_hlaplac_l1e-6']
 readtom_sph,input_dir,files12[0],nr,nt,rmin,rmax,Ne_wIO_CO01_120imgs_hlaplac_1e6
 map48= reform(Ne_wIO_CO01_120imgs_hlaplac_1e6(ir,*,*))
 
@@ -397,6 +422,7 @@ endif
  rot         = 4
  scalefactor = 4
  Npanels     = 3
+ if keyword_set(circular_eq) OR keyword_set(circular_offeq) then Npanels = 2
 
  ;---create over-sized window with white background----------------
   xsimage = np*scalefactor
@@ -413,7 +439,7 @@ endif
 
  loadct,39
  if keyword_set(UniformLong) then begin
-    height_string = strmid(filename,strlen(filename)-8,2)
+    height_string = strmid(filename,16,2)
     x = x0
     y = y0+DY/2
     map = alog10(rotate(congrid(map1 ,nt*scalefactor,np*scalefactor),rot))
@@ -491,7 +517,7 @@ endif
 
  
  if keyword_set(circular_eq) then begin
-    height_string = strmid(filename,strlen(filename)-9,3)
+    height_string = strmid(filename,20,3)
     x = x0
     y = y0+DY/2
     map = alog10(rotate(congrid(map1 ,nt*scalefactor,np*scalefactor),rot))
@@ -504,8 +530,7 @@ endif
 
   y = (ysimage+DY)*(Npanels-2)+DY*4./5
   map=alog10(rotate(congrid(map25,nt*scalefactor,np*scalefactor),rot))
-  carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=1,ytitle_status=1,titulo_status=1,title='Reconstruction with CircOrb /  60 Images'
-  y = (ysimage+DY)*(Npanels-3)+DY*2./3
+ ;carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=1,ytitle_status=1,titulo_status=1,title='Reconstruction with CircOrb /  60 Images'
   map=alog10(rotate(congrid(map48,nt*scalefactor,np*scalefactor),rot))
   carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=1,ytitle_status=1,titulo_status=1,title='Reconstruction with CircOrb / 120 Images'
 ;tvscl,alog10(rotate(congrid(map25,nt*scalefactor,np*scalefactor),rot)),1
