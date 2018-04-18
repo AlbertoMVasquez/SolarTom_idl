@@ -1,0 +1,181 @@
+pro comp,factor=factor,img_num=img_num
+  
+  common data,img_lascoc2,img_kcor,pa_lascoc2,pa_kcor,ra_lascoc2,ra_kcor,hdr_lascoc2,hdr_kcor
+  if not keyword_set(factor)  then factor  = 1.e3
+  if not keyword_set(img_num) then img_num = 0
+  
+  dir='/data1/tomography_dev/DATA/c2/CR2198/'
+  files=['23690612pB.fts','23690730pB.fts','23690852pB.fts','23690978pB.fts']
+  mreadfits,dir+files[img_num],hdr_lascoc2,img_lascoc2
+
+  dir='/data1/tomography_dev/DATA/kcor/CR2198/'
+  files=['20171203_174720_kcor_l1.fts','20171204_175906_kcor_l1.fts','20171205_175217_kcor_l1.fts','20171206_211550_kcor_l1.fts']
+  mreadfits,dir+files[img_num],hdr_kcor,img_kcor
+
+  print,'LASCO-C2 OBS TIME: ',hdr_lascoc2.time_obs
+  print,'KCOR     OBS TIME: ',hdr_kcor   .date_obs
+  
+  rotate_image,hdr_lascoc2,img_lascoc2, instrument = 'lascoc2'
+  rotate_image,hdr_kcor   ,img_kcor,    instrument = 'kcor'
+  
+  computegrid,hdr_lascoc2,ra_lascoc2,pa_lascoc2,instrument='lascoc2'
+  computegrid,hdr_kcor   ,ra_kcor   ,pa_kcor   ,instrument='kcor'
+
+  display_equatorial_polar_profiles,factor=factor
+  
+; Display both images in same size, multiplying KCOR by factor:
+  loadct,39
+  window,0,xs=1024,ys=512
+  mini = 1.
+  tvscl,alog10(img_lascoc2 > mini),0
+  tvscl,alog10(congrid(img_kcor*factor,512,512) > mini),1
+
+  stop
+  
+goto,skip_for_diego
+; Display ra and pa arrays (for Diego)
+  window,1,xs=1024,ys=512
+  tvscl,ra_lascoc2,0
+  tvscl,pa_lascoc2,1
+  window,2,xs=1024,ys=512
+  tvscl,congrid(ra_kcor,512,512),0
+  tvscl,congrid(pa_kcor,512,512),1
+skip_for_diego:
+  
+; Display radial profiles at PA = pa0 \pm Delta_pa,
+; multiplying KCOR data by factor:
+
+  display_radial_profiles,pa0=270,Delta_pa=0.5,factor=factor
+  
+return
+end
+
+pro computegrid,hdr,ra,pa,instrument=instrument
+
+if instrument eq 'kcor' then begin
+ Rs=hdr.rsun              ; Sun radius in arcsec
+ px=hdr.cdelt1            ; Pixel size in arcsec                     
+ Rs=Rs/px                 ; Sun radius in pixels
+ px=1./Rs                 ; Pixel size in Rsun units
+ ix0=hdr.crpix1-1         ; Disk center x-pixel, changed to IDL convention (FITS convention starts with index=1, IDL starts with index=0). 
+ iy0=hdr.crpix2-1         ; Disk center y-pixel, changed to IDL convention
+endif
+
+if instrument eq 'lascoc2' then begin
+ Rs=hdr.rsun_pix          ; Sun radius in pixels
+ px=1./Rs                 ; Pixel size in Rsun units
+ ix0=hdr.xsun-1           ; Disk center x-pixel, changed to IDL convention
+ iy0=hdr.ysun-1           ; Disk center y-pixel, changed to IDL convention
+endif
+
+ x  = px*(findgen(hdr.naxis1) - ix0)
+ y  = px*(findgen(hdr.naxis1) - iy0)
+ u  = 1. + fltarr(hdr.naxis1)
+ xa = x#u
+ ya = u#y
+ ra = sqrt(xa^2 + ya^2)
+
+ ta = fltarr(hdr.naxis1,hdr.naxis1)
+
+ p=where(xa gt 0.)
+ ta(p) = Acos( ya(p) / ra(p) )
+ p=where(xa lt 0.)
+ ta(p) = 2.*!pi-Acos( ya(p) / ra(p) )
+ p=where(xa eq 0. AND ya gt 0.)
+ if p(0) ne -1 then ta(p)=0.
+ p=where(xa eq 0. AND ya lt 0.)
+ if p(0) ne -1 then ta(p)=!pi
+ ta=2.*!pi-ta
+ PA=ta/!dtor
+
+return
+end
+
+pro rotate_image,hdr,image,instrument=instrument
+
+EPS        = +1.e-08
+hugenegnum = -1.e+10
+  
+if instrument eq 'kcor' then begin
+ ix0=hdr.crpix1-1         ; Disk center x-pixel, changed to IDL convention (FITS convention starts with index=1, IDL starts with index=0). 
+ iy0=hdr.crpix2-1         ; Disk center y-pixel, changed to IDL convention
+ ANGLE = hdr.inst_rot
+endif
+
+if instrument eq 'lascoc2' then begin
+ ix0=hdr.xsun-1           ; Disk center x-pixel, changed to IDL convention
+ iy0=hdr.ysun-1           ; Disk center y-pixel, changed to IDL convention
+ ANGLE = hdr.rollangl
+endif
+       
+if abs(ANGLE) gt EPS then begin
+ rimage=rot(image,ANGLE,1,ix0,iy0,/pivot,missing=hugenegnum)
+ image = rimage
+endif
+
+return
+end
+
+pro display_radial_profiles,pa0=pa0,factor=factor,Delta_pa=Delta_pa
+  common data,img_lascoc2,img_kcor,pa_lascoc2,pa_kcor,ra_lascoc2,ra_kcor,hdr_lascoc2,hdr_kcor
+  if not keyword_set(pa0     ) then pa0      = 270.0 ; deg
+  if not keyword_set(Delta_pa) then Delta_pa =   0.5 ; deg
+  if not keyword_set(factor  ) then factor   =   1.0
+
+  Rmin_lascoc2 = 2.3  ; Rsun
+  Rmax_lascoc2 = 6.1  ; Rsun
+  Rmin_kcor    = 1.05 ; Rsun
+  Rmax_kcor    = 3.0  ; Rsun
+  
+  i_lascoc2 = where(pa_lascoc2 ge pa0-Delta_pa and pa_lascoc2 le pa0+Delta_pa and $
+                    ra_lascoc2 ge Rmin_lascoc2 and ra_lascoc2 le Rmax_lascoc2 )
+
+  f = 1.
+  i_kcor     = where(pa_kcor   ge pa0-Delta_pa/f and pa_kcor    le pa0+Delta_pa/f and $
+                     ra_kcor   ge Rmin_kcor      and ra_kcor    le Rmax_kcor      )
+
+  loadct,0
+  window,3
+  !p.charsize=3
+  !p.symsize=3
+    plot,ra_lascoc2(i_lascoc2),       img_lascoc2(i_lascoc2),psym=4,$
+         xtitle='r [R!DSUN!N]',ytitle='pB [x10!U-10!N BSUN]',$
+         title='Diamonds: LASCO-C2, Triangles: KCOR x'+string(factor)
+   oplot,ra_kcor   (i_kcor   ),factor*img_kcor   (i_kcor   ),psym=5
+   return
+end
+
+pro display_equatorial_polar_profiles,factor=factor
+  common data,img_lascoc2,img_kcor,pa_lascoc2,pa_kcor,ra_lascoc2,ra_kcor,hdr_lascoc2,hdr_kcor
+
+  window,2,xs=2400,ys=1650
+  !p.multi=[0,2,2]
+  !p.charsize=3
+
+  mini = 1.e-1
+  maxi = 1.e+3
+  
+   plot,ra_lascoc2(0:hdr_lascoc2.naxis1/2-1,hdr_lascoc2.ysun-1),img_lascoc2(0:hdr_lascoc2.naxis1/2-1,hdr_lascoc2.ysun-1)>.1,/ylog,xstyle=1,$
+         title='East Equatorial profiles',$
+        xtitle='r [R!DSUN!N]',ytitle='pB [x 10!U-10!N B!DSUN!N]',yr=[mini,maxi],ystyle=1
+  oplot,ra_kcor(0:hdr_kcor.naxis1/2-1,hdr_kcor.crpix2 -1),img_kcor(0:hdr_kcor.naxis1/2-1,hdr_kcor.crpix2 -1)*factor,psym=4
+
+     plot,ra_lascoc2(hdr_lascoc2.naxis1/2:hdr_lascoc2.naxis1-1,hdr_lascoc2.ysun-1),img_lascoc2(hdr_lascoc2.naxis1/2:hdr_lascoc2.naxis1-1,hdr_lascoc2.ysun-1)>.1,/ylog,xstyle=1,$
+          title='West Equatorial profiles',$
+         xtitle='r [R!DSUN!N]',ytitle='pB [x 10!U-10!N B!DSUN!N]',yr=[mini,maxi],ystyle=1
+  oplot,ra_kcor(hdr_kcor.naxis1/2:hdr_kcor.naxis1-1,hdr_kcor.crpix2-1),img_kcor(hdr_kcor.naxis1/2:hdr_kcor.naxis1-1,hdr_kcor.crpix2-1)*factor,psym=4
+
+   plot,ra_lascoc2(hdr_lascoc2.xsun-1,hdr_lascoc2.naxis2/2:hdr_lascoc2.naxis2-1),img_lascoc2(hdr_lascoc2.xsun-1,hdr_lascoc2.naxis2/2:hdr_lascoc2.naxis2-1)>.1,/ylog,xstyle=1,$
+         title='North Polar profiles',$
+        xtitle='r [R!DSUN!N]',ytitle='pB [x 10!U-10!N B!DSUN!N]',yr=[mini,maxi],ystyle=1
+  oplot,ra_kcor(hdr_kcor.crpix1-1,hdr_kcor.naxis2/2:hdr_kcor.naxis2-1),img_kcor(hdr_kcor.crpix1-1,hdr_kcor.naxis2/2:hdr_kcor.naxis2-1)*factor ,psym=4
+
+     plot,ra_lascoc2(hdr_lascoc2.xsun-1,0:hdr_lascoc2.naxis2/2-1),img_lascoc2(hdr_lascoc2.xsun-1,0:hdr_lascoc2.naxis2/2-1)>.1,/ylog,xstyle=1,$
+         title='South Polar profiles',$
+        xtitle='r [R!DSUN!N]',ytitle='pB [x 10!U-10!N B!DSUN!N]',yr=[mini,maxi],ystyle=1
+  oplot,ra_kcor(hdr_kcor.crpix1 -1,0:hdr_kcor.naxis2/2-1),img_kcor(hdr_kcor.crpix1 -1,0:hdr_kcor.naxis2/2-1)*factor,psym=4
+
+  !p.multi=0
+
+  return
+end

@@ -214,6 +214,8 @@ end
 ; movie,input_file='list.wisprI.Blank.CR2082.UnifLong.ExtOrb24.txt',data_dir='wisprI/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.ExtOrbit.24.UPDATED-POINTINGS.txt',/BK
 ; movie,input_file='list.wisprO.Blank.CR2082.UnifLong.ExtOrb24.txt',data_dir='wisprO/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.ExtOrbit.24.UPDATED-POINTINGS.txt',/BK
 
+; movie,input_file='list.wisprO.circular.TEST.txt',data_dir='wisprO/Circular_CR2082/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.CircularOrbit01.short.UPDATED-POINTINGS.TEST.txt',/BK
+; movie,input_file='list.wisprI.TEST.txt',data_dir='wisprI/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.ExtOrbit.01.UPDATED-POINTINGS.TEST.txt',/BK
 
 ;;
 ; IMPORTANT NOTES on the "movie" tool:
