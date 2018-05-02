@@ -1,6 +1,6 @@
-pro comp,factor=factor,img_num=img_num;,suffix=suffix
+pro comp,factor=factor,img_num=img_num,r0=r0;,suffix=suffix
   
-  common data,img_lascoc2,img_kcor,pa_lascoc2,pa_kcor,ra_lascoc2,ra_kcor,hdr_lascoc2,hdr_kcor
+  common data,img_lascoc2,img_kcor,pa_lascoc2,pa_kcor,ra_lascoc2,ra_kcor,hdr_lascoc2,hdr_kcor,x_lascoc2,y_lascoc2,x_kcor,y_kcor
   if not keyword_set(factor)  then factor  = 1.e3
   if not keyword_set(img_num) then img_num = 0
   
@@ -16,20 +16,21 @@ pro comp,factor=factor,img_num=img_num;,suffix=suffix
 
   print,'LASCO-C2 OBS TIME: ',hdr_lascoc2.time_obs
   print,'KCOR     OBS TIME: ',hdr_kcor   .date_obs
-  
+stop  
   rotate_image,hdr_lascoc2,img_lascoc2, instrument = 'lascoc2'
   rotate_image,hdr_kcor   ,img_kcor,    instrument = 'kcor'
   
-  computegrid,hdr_lascoc2,ra_lascoc2,pa_lascoc2,instrument='lascoc2'
-  computegrid,hdr_kcor   ,ra_kcor   ,pa_kcor   ,instrument='kcor'
+  computegrid,hdr_lascoc2,ra_lascoc2,pa_lascoc2,x_lascoc2,y_lascoc2,instrument='lascoc2'
+  computegrid,hdr_kcor   ,ra_kcor   ,pa_kcor   ,x_kcor   ,y_kcor   ,instrument='kcor'
 
-  ps1,'~/Pictures/profiles_'+suffix+'.eps',0
-  display_equatorial_polar_profiles,factor=factor
+  ps1,'~/Pictures/latitudinal_profiles_'+suffix+'.eps',0
+  !p.charsize=1
+  loadct,0
+  display_latitudinal_profiles,factor=factor,r0=r0
   ps2
   
 ; Display both images in same size, multiplying KCOR by factor,
 ; and sharing same color-scale.
-  loadct,39
   window,0,xs=2048,ys=1024
   img1=img_lascoc2
   img2=img_kcor*factor
@@ -42,10 +43,26 @@ pro comp,factor=factor,img_num=img_num;,suffix=suffix
   p=where(ra_lascoc2 le Rmin_LASCOC2)
   img1(p)=0.
 
-; Draw a circle of width dr at r=Rmin_LASCOC2 in img2 (KCOR)
-  dr = 0.01
-  p=where(ra_kcor ge Rmin_LASCOC2*(1.-dr/2.) and ra_kcor le Rmin_LASCOC2*(1.+dr/2.))
-  img2(p) = maxi
+; Draw white circles of width dr at several radii, in both images
+; and make latitudinal profiles.
+  dr = 0.005
+  Nradii = 4
+  Rmin   = 2.3
+  Step_r = 0.2
+  radii = Rmin + Step_r * findgen(Nradii)
+  for ir = 0,Nradii-1 do begin
+     radius = radii[ir]
+     p=where(ra_lascoc2 ge radius*(1.-dr/2.) and ra_lascoc2 le radius*(1.+dr/2.))
+     img1(p) = maxi
+     p=where(ra_kcor    ge radius*(1.-dr/2.) and ra_kcor    le radius*(1.+dr/2.))
+     img2(p) = maxi
+     ps1,'~/Pictures/latitudinal_profiles_'+suffix+'_'+strmid(string(radius),6,3)+'.eps',0
+     !p.charsize=1
+     loadct,0
+     display_latitudinal_profiles,factor=factor,r0=radius
+     ps2
+  endfor
+  loadct,39
 
 ; Force both images to have same MINI and MAXI
   img1([0,1]) = [mini,maxi]
@@ -76,7 +93,7 @@ skip_for_diego:
 return
 end
 
-pro computegrid,hdr,ra,pa,instrument=instrument
+pro computegrid,hdr,ra,pa,x,y,instrument=instrument
 
 if instrument eq 'kcor' then begin
  Rs=hdr.rsun              ; Sun radius in arcsec
@@ -143,7 +160,7 @@ return
 end
 
 pro display_radial_profiles,pa0=pa0,factor=factor,Delta_pa=Delta_pa
-  common data,img_lascoc2,img_kcor,pa_lascoc2,pa_kcor,ra_lascoc2,ra_kcor,hdr_lascoc2,hdr_kcor
+  common data,img_lascoc2,img_kcor,pa_lascoc2,pa_kcor,ra_lascoc2,ra_kcor,hdr_lascoc2,hdr_kcor,x_lascoc2,y_lascoc2,x_kcor,y_kcor
   if not keyword_set(pa0     ) then pa0      = 270.0 ; deg
   if not keyword_set(Delta_pa) then Delta_pa =   0.5 ; deg
   if not keyword_set(factor  ) then factor   =   1.0
@@ -171,8 +188,9 @@ pro display_radial_profiles,pa0=pa0,factor=factor,Delta_pa=Delta_pa
    return
 end
 
+
 pro display_equatorial_polar_profiles,factor=factor
-  common data,img_lascoc2,img_kcor,pa_lascoc2,pa_kcor,ra_lascoc2,ra_kcor,hdr_lascoc2,hdr_kcor
+  common data,img_lascoc2,img_kcor,pa_lascoc2,pa_kcor,ra_lascoc2,ra_kcor,hdr_lascoc2,hdr_kcor,x_lascoc2,y_lascoc2,x_kcor,y_kcor
 
  ;window,2,xs=2400,ys=1650
   !p.multi=[0,2,2]
@@ -204,4 +222,60 @@ pro display_equatorial_polar_profiles,factor=factor
   !p.multi=0
 
   return
+end
+
+function findval, ima ,ya ,za , r0, t0
+y0=-r0*sin(t0)
+z0= r0*cos(t0)
+iyA=max(where(ya le y0))
+izA=max(where(za le z0))
+Df=0.
+if iyA eq -1 or izA eq -1 then goto,fin
+iyB=iyA+1
+izB=izA+1
+if iyA eq n_elements(ya)-1 then iyB=iyA
+if izA eq n_elements(za)-1 then izB=izA
+D1=ima(iyA,izA) 
+D2=ima(iyB,izA) 
+D4=ima(iyA,izB) 
+D5=ima(iyB,izB)
+if iyA lt iyB AND izA lt izB then begin
+ D3=D1+(D2-D1)*(y0-yA(iyA))/(yA(iyB)-yA(iyA))
+ D6=D4+(D5-D4)*(y0-yA(iyA))/(yA(iyB)-yA(iyA))
+ Df=D3+(D6-D3)*(z0-zA(izA))/(zA(izB)-zA(izA))
+endif
+if iyA lt iyB AND izA eq izB then Df=D1+(D2-D1)*(y0-yA(iyA))/(yA(iyB)-yA(iyA))
+if iyA eq iyB AND izA lt izB then Df=D1+(D4-D1)*(z0-zA(izA))/(zA(izB)-zA(izA))
+if iyA eq iyB AND izA eq izB then Df=D1
+;stop
+fin:
+return,Df
+end
+
+pro display_latitudinal_profiles,r0=r0,factor=factor
+common data,img_lascoc2,img_kcor,pa_lascoc2,pa_kcor,ra_lascoc2,ra_kcor,hdr_lascoc2,hdr_kcor,x_lascoc2,y_lascoc2,x_kcor,y_kcor
+
+if not keyword_set(r0) then begin
+   print,'please specify r0.'
+   stop
+endif
+
+Nt=180
+t0a = 2.*!pi*findgen(Nt)/float(Nt-1)
+
+da_c2    = fltarr(Nt)
+da_kcor  = fltarr(Nt)
+
+for it=0,Nt-1 do begin
+t0=t0a(it)
+da_c2  (it) = findval(img_lascoc2, x_lascoc2,  y_lascoc2, r0, t0)
+da_kcor(it) = findval(img_kcor   , x_kcor   ,  y_kcor   , r0, t0)
+endfor
+
+ plot,t0a/!dtor,da_c2  ,xstyle=1,$
+      xtitle = 'PA [deg]',ytitle='pB [10!U-10!N B!DSUN!N]',$
+      title  = 'LASCO-C2 (solid) and KCOR (dashed) at '+strmid(string(r0),6,3)+' R!DSUN!N'
+oplot,t0a/!dtor,da_kcor*factor,linestyle=3
+
+return
 end
