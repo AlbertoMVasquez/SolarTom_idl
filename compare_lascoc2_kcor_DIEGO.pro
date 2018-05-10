@@ -199,8 +199,8 @@ pro display_radial_profiles_interp,t0=t0,factor=factor
   if not keyword_set(factor  ) then factor   =   1.0
   
   if not keyword_set(t0) then begin
-     print,'please specify t0.'
-;     stop
+     print,'please specify the angle'
+     stop
   endif
 
   Nt=180
@@ -229,7 +229,7 @@ pro display_radial_profiles_interp,t0=t0,factor=factor
   datitos = findgen(Nt+1)/float(Nt)
   datitos(4) = max(da_kcor*factor)
   datitos(5) = max(da_c2)
- stop
+
   plot,radd,datitos  ,xstyle=1,/nodata,$
        xtitle = 'rad [Rsun]',ytitle='pB [10!U-10!N B!DSUN!N]',$
        title  = 'LASCO-C2 (solid) and KCOR (dashed) at '+strmid(string(r0),6,3)+' R!DSUN!N'
