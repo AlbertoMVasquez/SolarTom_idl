@@ -233,7 +233,7 @@ pro display_radial_profiles_interp,t0=t0,factor=factor,alog=alog
 if not keyword_set(alog) then begin
   plot,radd,datitos  ,xstyle=1,/nodata,$
        xtitle = 'rad [Rsun]',ytitle='pB [10!U-10!N B!DSUN!N]',$
-       title  = 'LASCO-C2 (solid) and KCOR (dashed) at '+strmid(string(r0),6,3)+' R!DSUN!N'
+       title  = 'LASCO-C2 (solid) and KCOR (dashed) at '+strmid(string(t0/!dtor),6,4)+' radians'
   oplot,r0_kcor,da_kcor*factor,linestyle=3
   oplot,r0_lascoc2,da_c2,linestyle=4
   
@@ -242,7 +242,7 @@ endif
 if keyword_set(alog) then begin
   plot,radd,alog(datitos)  ,xstyle=1,/nodata,$
        xtitle = 'rad [Rsun]',ytitle='log( pB [10!U-10!N B!DSUN!N] )',$
-       title  = 'LASCO-C2 (solid) and KCOR (dashed) at '+strmid(string(r0),6,3)+' R!DSUN!N'
+       title  = 'LASCO-C2 (solid) and KCOR (dashed) at '+strmid(string(t0/!dtor),6,4)+' radians'
   oplot,r0_kcor,alog(da_kcor*factor),linestyle=3
   oplot,r0_lascoc2,alog(da_c2),linestyle=4
 
