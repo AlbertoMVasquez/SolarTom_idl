@@ -25,7 +25,7 @@ pro comp,factor=factor,img_num=img_num,r0=r0;,suffix=suffix
 stop
 
 
-display_radial_profiles_interp,t0=!pi/2., factor=1000
+display_radial_profiles_interp,t0=!pi/2., factor=1000,/alog
 
 stop
   ps1,'/data1/tomography/SolarTom_idl/Pictures/latitudinal_profiles_'+suffix+'.eps',0
@@ -194,7 +194,7 @@ stop
 return
 end
 
-pro display_radial_profiles_interp,t0=t0,factor=factor
+pro display_radial_profiles_interp,t0=t0,factor=factor,alog=alog
   common data,img_lascoc2,img_kcor,pa_lascoc2,pa_kcor,ra_lascoc2,ra_kcor,hdr_lascoc2,hdr_kcor,x_lascoc2,y_lascoc2,x_kcor,y_kcor
   if not keyword_set(factor  ) then factor   =   1.0
   
@@ -230,13 +230,23 @@ pro display_radial_profiles_interp,t0=t0,factor=factor
   datitos(4) = max(da_kcor*factor)
   datitos(5) = max(da_c2)
 
+if not keyword_set(alog) then begin
   plot,radd,datitos  ,xstyle=1,/nodata,$
        xtitle = 'rad [Rsun]',ytitle='pB [10!U-10!N B!DSUN!N]',$
        title  = 'LASCO-C2 (solid) and KCOR (dashed) at '+strmid(string(r0),6,3)+' R!DSUN!N'
   oplot,r0_kcor,da_kcor*factor,linestyle=3
   oplot,r0_lascoc2,da_c2,linestyle=4
   
+endif
 
+if keyword_set(alog) then begin
+  plot,radd,alog(datitos)  ,xstyle=1,/nodata,$
+       xtitle = 'rad [Rsun]',ytitle='log( pB [10!U-10!N B!DSUN!N] )',$
+       title  = 'LASCO-C2 (solid) and KCOR (dashed) at '+strmid(string(r0),6,3)+' R!DSUN!N'
+  oplot,r0_kcor,alog(da_kcor*factor),linestyle=3
+  oplot,r0_lascoc2,alog(da_c2),linestyle=4
+
+endif
   return
 end
 
