@@ -25,7 +25,18 @@ pro comp,factor=factor,img_num=img_num,r0=r0;,suffix=suffix
 stop
 
 
-display_radial_profiles_interp,t0=!pi/2., factor=1000,/alog
+;display_radial_profiles_interp,t0=120*!dtor, factor=1000,/alog,suffix='log_'
+;display_radial_profiles_interp,t0=280*!dtor, factor=1000,/alog,suffix='log_'
+
+;display_radial_profiles_interp,t0=110*!dtor, factor=1000,/alog_alb,suffix='ylog_'
+;display_radial_profiles_interp,t0=260*!dtor, factor=1000,/alog_alb,suffix='ylog_'
+
+display_radial_profiles_interp,t0=110*!dtor, factor=factor,/alog10,suffix='log10_'+hdr_kcor   .date_obs+'_'
+display_radial_profiles_interp,t0=260*!dtor, factor=factor,/alog10,suffix='log10_'+hdr_kcor   .date_obs+'_'
+
+;display_radial_profiles_interp,t0=120*!dtor, factor=1000,suffix=''
+;display_radial_profiles_interp,t0=280*!dtor, factor=1000,suffix=''
+
 
 stop
   ps1,'/data1/tomography/SolarTom_idl/Pictures/latitudinal_profiles_'+suffix+'.eps',0
@@ -194,7 +205,7 @@ stop
 return
 end
 
-pro display_radial_profiles_interp,t0=t0,factor=factor,alog=alog
+pro display_radial_profiles_interp,t0=t0,factor=factor,alog10=alog10,suffix=suffix,alog_alb=alog_alb
   common data,img_lascoc2,img_kcor,pa_lascoc2,pa_kcor,ra_lascoc2,ra_kcor,hdr_lascoc2,hdr_kcor,x_lascoc2,y_lascoc2,x_kcor,y_kcor
   if not keyword_set(factor  ) then factor   =   1.0
   
@@ -227,26 +238,59 @@ pro display_radial_profiles_interp,t0=t0,factor=factor,alog=alog
    
   radd = (Rmax_lascoc2 - Rmin_kcor)*findgen(Nt+1)/float(Nt) + Rmin_kcor
   datitos = findgen(Nt+1)/float(Nt)
-  datitos(4) = max(da_kcor*factor)
-  datitos(5) = max(da_c2)
+  datitos(3) = max(da_kcor*factor)
+  datitos(2) = max(da_c2)
+  datitos(0) = min(da_kcor(where(da_kcor gt 0.))*factor )
+  datitos(1) = min(da_c2 )
+; if not keyword_set(alog) then begin
+;    stop
+;    ps1,'/data1/tomography/SolarTom_idl/Pictures/radial_profiles_'+suffix+''+strmid(string(t0/!dtor),6,3)+'.eps',0
+;    !p.charsize=1
+;    loadct,12
+;    blue  = 100
+;    red   = 200
+;    green =  20
+;    plot,radd,datitos  ,xstyle=1,/nodata,$
+;         xtitle = 'rad [Rsun]',ytitle='pB [10!U-10!N B!DSUN!N]',$
+;         title  = 'LASCO-C2 (blue) and KCOR (red) at PA = '+strmid(string(t0/!dtor),6,4)+' deg'
+;    oplot,r0_kcor,da_kcor*factor,th=3,color=red
+;    oplot,r0_lascoc2,da_c2,th=3,color=blue
+;    ps2
+; endif
+ 
+ if keyword_set(alog10) then begin
+   ps1,'/data1/tomography/SolarTom_idl/Pictures/radial_profiles_'+suffix+''+strmid(string(t0/!dtor),6,3)+'.eps',0
+    !p.charsize=1
+    loadct,12
+    blue  = 100
+    red   = 200
+    green =  20
+    plot,radd,alog10(datitos)  ,xstyle=1,/nodata,xr=[1,6],yr=[-2,4],$
+         xtitle = 'rad [Rsun]',ytitle='Log!D10!N( pB [10!U-10!N B!DSUN!N] )',$
+         title  = 'LASCO-C2 (blue) and KCOR (red) at PA = '+strmid(string(t0/!dtor),6,4)+' deg'
+    oplot,r0_kcor,alog10(da_kcor*factor),th=3,color=red
+    oplot,r0_lascoc2,alog10(da_c2),th=3,color=blue
+    ps2
+ endif
 
-if not keyword_set(alog) then begin
-  plot,radd,datitos  ,xstyle=1,/nodata,$
-       xtitle = 'rad [Rsun]',ytitle='pB [10!U-10!N B!DSUN!N]',$
-       title  = 'LASCO-C2 (solid) and KCOR (dashed) at '+strmid(string(t0/!dtor),6,4)+' radians'
-  oplot,r0_kcor,da_kcor*factor,linestyle=3
-  oplot,r0_lascoc2,da_c2,linestyle=4
-  
-endif
+ if keyword_set(alog_alb) then begin
+stop
+   ps1,'/data1/tomography/SolarTom_idl/Pictures/radial_profiles_'+suffix+''+strmid(string(t0/!dtor),6,3)+'.eps',0
+    !p.charsize=1
+    loadct,12
+    blue  = 100
+    red   = 200
+    green =  20
+    plot,radd,(datitos)  ,xstyle=1,/nodata,xr=[1,6],yr=[-2,4],/ylog,$
+         xtitle = 'rad [Rsun]',ytitle='Log!D10!N( pB [10!U-10!N B!DSUN!N] )',$
+         title  = 'LASCO-C2 (blue) and KCOR (red) at PA = '+strmid(string(t0/!dtor),6,4)+' deg'
+    oplot,r0_kcor,(da_kcor(where(da_kcor gt 0.))*factor),th=3,color=red
+    oplot,r0_lascoc2,(da_c2),th=3,color=blue
+    ps2
+ endif
 
-if keyword_set(alog) then begin
-  plot,radd,alog(datitos)  ,xstyle=1,/nodata,$
-       xtitle = 'rad [Rsun]',ytitle='log( pB [10!U-10!N B!DSUN!N] )',$
-       title  = 'LASCO-C2 (solid) and KCOR (dashed) at '+strmid(string(t0/!dtor),6,4)+' radians'
-  oplot,r0_kcor,alog(da_kcor*factor),linestyle=3
-  oplot,r0_lascoc2,alog(da_c2),linestyle=4
 
-endif
+loadct,0
   return
 end
 
