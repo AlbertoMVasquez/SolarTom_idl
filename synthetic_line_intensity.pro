@@ -67,8 +67,8 @@ end
 pro create_LOS_grid,impact_los=impact_los
   common los_grid,s,r_s,Ns,s_step,s_max,los_length
 
-  ; All s-related uantitites in Rsun units:
-  s_max      = 5.*impact_los       ; LOS integration will be over segment [-s_max,+s_max] around nearest point to Sun.
+  ; All s-related quantitites in Rsun units:
+  s_max      = 2.*impact_los       ; LOS integration will be over segment [-s_max,+s_max] around nearest point to Sun.
   los_length = 2.*s_max            ; Length of integration segment.
   s_step     = impact_los / 100.   ; Make step in s = imact_parameter / 100.
   Ns         = los_length / s_step ; Number of points in LOS grid.
@@ -117,15 +117,42 @@ end
 
 function G_function, Te0, Ne0, r0 ; this is the ordering of the indexes in G table.
   common G_table,G,T_e,N_e,r,photT
-  ; For now simply assign closest value, I will next implement a 3-linear interpolator
-  fTe = abs(Te0-T_e) & iTe = where(fTe eq min(fTe))
-  fNe = abs(Ne0-N_e) & iNe = where(fNe eq min(fNe))
-  fr  = abs(r0 -r  ) & ir  = where(fr  eq min(fr ))
+
+  goto,tri_linear_interpolator
+  ; Simply assign closest value, I will next implement a 3-linear interpolator
+  fTe = abs(Te0-T_e) & iTe = median(where(fTe eq min(fTe)))
+  fNe = abs(Ne0-N_e) & iNe = median(where(fNe eq min(fNe)))
+  fr  = abs(r0 -r  ) & ir  = median(where(fr  eq min(fr )))
   if iTe eq -1 or iNe eq -1 or ir eq -1 then begin
      print,'Can not assign value to G_function'
      stop
   endif
-  G_value = G(iTe,iNe,ir)  
+  G_value = G(iTe,iNe,ir)
+  goto,exit
+  
+  tri_linear_interpolator:
+  ; Tri-linear interpolator
+  ; Rename dimensions. X is Ne, the weakest dependence of G.
+  xa = N_e & x0 = Ne0
+  ya = T_e & y0 = Te0
+  za = r   & z0 = r0
+  ; Find the x-planes that surround x0
+  ixA = max(where(xa le x0))
+  if ixA eq -1 then begin
+     print,'Ne value is out of range'
+     stop
+  endif
+  ixB=ixA+1
+  ; Define two 2D y-z arrays at x-planes that surround x0. 
+  DATA_ARRAY_xA = reform(G(*,ixA,*))
+  DATA_ARRAY_xB = reform(G(*,ixB,*))
+  ; Bi-linearly interpolate in xA and xB planes.   
+  G_xA = findval2D( DATA_ARRAY_xA ,ya ,za , y0, z0 )
+  G_xB = findval2D( DATA_ARRAY_xB ,ya ,za , y0, z0 )
+  ; Linearly interpolate the value og G along x, betwee xA and xB planes.
+  G_value = G_xA + (G_xB-G_xA)*(x0-xa(ixA))/(xa(ixB)-xa(ixB))
+
+  exit:
   return,G_value
 end
 
@@ -146,4 +173,31 @@ function Te_model, r0, N_T_model_ID
      Te_value = Te_mean
   endif
   return,Te_value
+end
+
+function findval2D, DATA_ARRAY ,ya ,za , y0, z0
+iyA=max(where(ya le y0))
+izA=max(where(za le z0))
+Df=0.
+if iyA eq -1 or izA eq -1 then begin
+   print,'Te and/or r out of range.'
+   stop
+endif
+iyB=iyA+1
+izB=izA+1
+if iyA eq n_elements(ya)-1 then iyB=iyA
+if izA eq n_elements(za)-1 then izB=izA
+D1=DATA_ARRAY(iyA,izA) 
+D2=DATA_ARRAY(iyB,izA) 
+D4=DATA_ARRAY(iyA,izB) 
+D5=DATA_ARRAY(iyB,izB)
+if iyA lt iyB AND izA lt izB then begin
+ D3=D1+(D2-D1)*(y0-yA(iyA))/(ya(iyB)-ya(iyA))
+ D6=D4+(D5-D4)*(y0-yA(iyA))/(ya(iyB)-ya(iyA))
+ Df=D3+(D6-D3)*(z0-zA(izA))/(za(izB)-za(izA))
+endif
+if iyA lt iyB AND izA eq izB then Df=D1+(D2-D1)*(y0-ya(iyA))/(ya(iyB)-ya(iyA))
+if iyA eq iyB AND izA lt izB then Df=D1+(D4-D1)*(z0-za(izA))/(za(izB)-za(izA))
+if iyA eq iyB AND izA eq izB then Df=D1
+return,Df
 end
