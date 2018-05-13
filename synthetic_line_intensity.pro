@@ -68,7 +68,7 @@ pro create_LOS_grid,impact_los=impact_los
   common los_grid,s,r_s,Ns,s_step,s_max,los_length
 
   ; All s-related quantitites in Rsun units:
-  s_max      = 2.*impact_los       ; LOS integration will be over segment [-s_max,+s_max] around nearest point to Sun.
+  s_max      = 1.5*impact_los       ; LOS integration will be over segment [-s_max,+s_max] around nearest point to Sun.
   los_length = 2.*s_max            ; Length of integration segment.
   s_step     = impact_los / 100.   ; Make step in s = imact_parameter / 100.
   Ns         = los_length / s_step ; Number of points in LOS grid.
@@ -119,6 +119,7 @@ function G_function, Te0, Ne0, r0 ; this is the ordering of the indexes in G tab
   common G_table,G,T_e,N_e,r,photT
 
   goto,tri_linear_interpolator
+  
   ; Simply assign closest value, I will next implement a 3-linear interpolator
   fTe = abs(Te0-T_e) & iTe = median(where(fTe eq min(fTe)))
   fNe = abs(Ne0-N_e) & iNe = median(where(fNe eq min(fNe)))
@@ -150,7 +151,7 @@ function G_function, Te0, Ne0, r0 ; this is the ordering of the indexes in G tab
   G_xA = findval2D( DATA_ARRAY_xA ,ya ,za , y0, z0 )
   G_xB = findval2D( DATA_ARRAY_xB ,ya ,za , y0, z0 )
   ; Linearly interpolate the value og G along x, betwee xA and xB planes.
-  G_value = G_xA + (G_xB-G_xA)*(x0-xa(ixA))/(xa(ixB)-xa(ixB))
+  G_value = G_xA + (G_xB-G_xA)*(x0-xa(ixA))/(xa(ixB)-xa(ixA))
 
   exit:
   return,G_value
