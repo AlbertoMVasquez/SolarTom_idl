@@ -199,7 +199,7 @@ if instrument eq 'lascoc2' then begin
  ANGLE = -hdr.rollangl
 endif
        
-if abs(ANGLE) gt EPS then begin
+]if abs(ANGLE) gt EPS then begin
  rimage=rot(image,ANGLE,1,ix0,iy0,/pivot,missing=hugenegnum)
  image = rimage
 endif
