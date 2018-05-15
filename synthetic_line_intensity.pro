@@ -95,7 +95,7 @@ pro compute_LOS_emissivity,N_T_model_ID=N_T_model_ID,fip_factor=fip_factor
     ;Test:
     ;print, is, s[is], r0, Te0, Ne0, G_s[is] 
   endfor
-  stop
+
   return
 end
 

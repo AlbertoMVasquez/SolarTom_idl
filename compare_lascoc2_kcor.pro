@@ -46,21 +46,21 @@ endif
   
   computegrid,hdr_lascoc2,ra_lascoc2,pa_lascoc2,x_lascoc2,y_lascoc2,instrument='lascoc2'
   computegrid,hdr_kcor   ,ra_kcor   ,pa_kcor   ,x_kcor   ,y_kcor   ,instrument='kcor'
-
   if keyword_set(cor1) then $  
   computegrid,hdr_cor1   ,ra_cor1   ,pa_cor1   ,x_cor1   ,y_cor1   ,instrument='cor1'
 
   display_radial_profiles,t0=t0*!dtor,/alog10,suffix='log10_'+hdr_kcor   .date_obs+'_'
-
-  stop
   
 ; Display all images in same size sharing same color-scale.
   
   img1=img_lascoc2
   img2=img_kcor
+  if keyword_set(cor1) then $  
   img3=img_cor1
   
   mini = 1.
+    maxi = max([max(img1),max(img2)])
+  if keyword_set(cor1) then $
   maxi = max([max(img1),max(img2),max(img3)])
 
 ; Make zero r < 2.3 Rsun for img1 (LASCO_c2)
@@ -74,10 +74,12 @@ endif
   img2(p)=0.
 
 ; Make zero r < 1.45 Rsun for img3 (COR1)
+if keyword_set(cor1) then begin
   Rmin_COR1 = 1.45
   p=where(ra_COR1 le Rmin_COR1)
   img3(p)=0.
-
+endif
+  
 ; Draw white circles of width dr at several radii, in all images
 
   dr = 0.005
@@ -94,6 +96,12 @@ endif
      if keyword_set(cor1) then begin
      p=where(ra_cor1    ge radius*(1.-dr/2.) and ra_cor1    le radius*(1.+dr/2.))
      img3(p) = maxi
+     ps1,'~/Pictures/latitudinal_profiles_'+suffix+'_'+strmid(string(radius),6,3)+extra_suffix+'.eps',0
+     !p.charsize=1
+     loadct,0
+     if     keyword_set(cor1) then display_latitudinal_profiles,r0=radius,/cor1
+     if not keyword_set(cor1) then display_latitudinal_profiles,r0=radius
+     ps2
      endif
   endfor
   loadct,39
@@ -101,15 +109,20 @@ endif
 ; Force both images to have same MINI and MAXI
   img1([0,1]) = [mini,maxi]
   img2([0,1]) = [mini,maxi]
-  img3([0,1]) = [mini,maxi]
   img1 = img1 > mini < maxi
   img2 = img2 > mini < maxi
+  numimg=2
+if keyword_set(cor1) then begin
+  numimg=numimg+1
+  img3([0,1]) = [mini,maxi]
   img3 = img3 > mini < maxi
+endif
 
   size=1024
-  window,0,xs=size*3,ys=size
+  window,0,xs=size*numimg,ys=size
   tvscl,alog10(congrid(img1,size,size) > mini),0
   tvscl,alog10(congrid(img2,size,size) > mini),1
+  if keyword_set(cor1) then $
   tvscl,alog10(congrid(img3,size,size) > mini),2
 
   record_gif,'~/Pictures/','images_'+suffix+'.gif','X'
@@ -128,7 +141,7 @@ goto,skip_for_diego
   tvscl,congrid(pa_cor1,512,512),1
 skip_for_diego:
   
-  
+
 return
 end
 
@@ -232,8 +245,7 @@ fin:
 return,Df
 end
 
-
-pro display_latitudinal_profiles,r0=r0
+pro display_latitudinal_profiles,r0=r0,cor1=cor1
   common data,img_lascoc2,img_kcor,img_cor1,pa_lascoc2,pa_kcor,pa_cor1,ra_lascoc2,ra_kcor,ra_cor1,hdr_lascoc2,hdr_kcor,dr_cor1,x_lascoc2,y_lascoc2,x_kcor,y_kcor,x_cor1,y_cor1
   common fovs,Rmin_KCOR,Rmin_COR1,Rmin_LASCOC2
   common cor1,da_cor1
@@ -255,10 +267,12 @@ for it=0,Nt-1 do begin
 t0=t0a(it)
 da_c2  (it) = findval(img_lascoc2, x_lascoc2,  y_lascoc2, r0, t0)
 da_kcor(it) = findval(img_kcor   , x_kcor   ,  y_kcor   , r0, t0)
+if keyword_set(cor1) then $
 da_cor1(it) = findval(img_cor1   , x_cor1   ,  y_cor1   , r0, t0)
 endfor
 
 goto,skip_polar_subtraction  ; Ask ALBERT how and why we could use this.
+if keyword_set(cor1) then $
 cor1_polar_subtraction,r0=r0,t0a=t0a
 kcor_polar_subtraction,r0=r0,t0a=t0a
 skip_polar_subtraction:
@@ -280,6 +294,7 @@ if r0 ge Rmin_LASCOC2 then titulo='LASCO-2 (blue) and COR1 (green) at '
  green =  20
  if r0 ge Rmin_LASCOC2                     then oplot,t0a/!dtor,da_c2  ,th=3,color=blue
  if r0 gt Rmin_KCOR and r0 le Rmin_LASCOC2 then oplot,t0a/!dtor,da_kcor,th=3,color=red
+ if keyword_set(cor1) then $
  if r0 gt Rmin_COR1                        then oplot,t0a/!dtor,da_cor1,th=3,color=green
  loadct,0
  
@@ -401,3 +416,5 @@ pro display_radial_profiles,t0=t0,alog10=alog10,suffix=suffix,alog_alb=alog_alb
 loadct,0
   return
 end
+
+

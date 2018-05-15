@@ -16,8 +16,12 @@
 ;
 ; Examples of calling sequence:
 ;
+; derivs_hollowsph,nrad=295,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='295_90_180',/hlaplac
+; derivs_hollowsph,nrad=295,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='295_90_180',/identity
+; derivs_hollowsph,nrad=295,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='295_90_180',/laplac3
+; derivs_hollowsph,nrad=295,ntheta=45,nphi= 90,directory='/data1/tomography/bindata/',fname_ext='295_45_90',/hlaplac
 ; derivs_hollowsph,nrad=100,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='100_90_180_Idl',/hlaplac
-; derivs_hollowsph,nrad=100,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='100_90_180_Idl',/laplac3
+; derivs_hollowsph,nrad=100,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='100_90_180',/laplac3
 ; derivs_hollowsph,nrad= 26,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext= '26_90_180',/hlaplac
 ; derivs_hollowsph,nrad=100,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='100_90_180_test',/identity
 ;
@@ -75,7 +79,6 @@ endfor
 print,'Done with Identity. Its number of rows   is: r_row_count + 1 =',i_row_count + 1
 print,'                    Its number of values is:       count + 1 =',      count + 1
 
-stop
    fname_identity = 'identity_'+fname_ext
    print,'The filename extension is '+ fname_identity
    
@@ -111,8 +114,7 @@ stop
    print,''
    print,'RUN row_to_col.c !!!!!'
    print,''
-   
-
+ 
    return
    
 endif
