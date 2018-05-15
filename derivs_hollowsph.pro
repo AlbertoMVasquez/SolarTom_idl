@@ -79,7 +79,6 @@ endfor
 print,'Done with Identity. Its number of rows   is: r_row_count + 1 =',i_row_count + 1
 print,'                    Its number of values is:       count + 1 =',      count + 1
 
-stop
    fname_identity = 'identity_'+fname_ext
    print,'The filename extension is '+ fname_identity
    
@@ -115,8 +114,7 @@ stop
    print,''
    print,'RUN row_to_col.c !!!!!'
    print,''
-   
-
+ 
    return
    
 endif
