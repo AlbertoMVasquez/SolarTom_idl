@@ -1,5 +1,17 @@
-; kcor_prep,data_dir='/data1/tomography_dev/DATA/kcor/CR2198/',file_list='list.txt'
+;---------------------------------------------------------------------
+;
+; Brief description:
+;
+; Tool to prepare KCOR images for tomography.
+;
+; History:  V1.0, Alberto M. Vasquez, CLaSP, Spring-2018.
+;
+; Calling sequence example:
+; kcor_prep,data_dir='/data1/tomography/DATA/kcor/CR2198/',file_list='list.txt'
+;
+;---------------------------------------------------------------------
 
+; Main routine:
 pro kcor_prep,data_dir=data_dir,file_list=file_list
   common data,hdr
   common constants,AU
@@ -14,6 +26,7 @@ pro kcor_prep,data_dir=data_dir,file_list=file_list
   for i = 0,N-1 do begin
      readf,1,filename
      mreadfits,data_dir+filename,hdr,img
+     stop
      new_filename = strmid(filename,0,strlen(filename)-4)+'_prep.fts'
      expand_header
      mwritefits,hdr,img,outfile=data_dir+new_filename
@@ -23,6 +36,7 @@ pro kcor_prep,data_dir=data_dir,file_list=file_list
   return
 end
 
+; Sub-routines:
 pro expand_header
   common data,hdr
   common constants,AU  
