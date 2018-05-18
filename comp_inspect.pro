@@ -45,7 +45,7 @@ endfor
  iwidth = where(image_width gt 0.) & minwidth = min(image_width(iwidth)) * 0.5
  tvscl,alog10(peak_img  > minpeak ),0
  tvscl,alog10(width_img > minwidth),1
- 
+stop 
  return
 end
 

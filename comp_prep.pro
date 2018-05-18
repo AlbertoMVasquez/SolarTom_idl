@@ -13,8 +13,9 @@
 
 ; Main routine:
 pro comp_prep,data_dir=data_dir,file_list=file_list
-  common data,header_peak_struct,output_header
-  common constants,AU
+  common data,image_pak,image_width,header_peak_struct,output_header,image_total_intensity
+  common constants,AU,c
+
   load_constants
   N=0
   filename=''
@@ -45,6 +46,8 @@ pro comp_prep,data_dir=data_dir,file_list=file_list
      header_width_struct   = fitshead2struct(header_width  , dash2underscore=dash2underscore)
      stop
      expand_header
+
+     compute_line_total_intensity_image
      
      new_filename = strmid(filename,0,strlen(filename)-4)+'_prep.fts'
      mwritefits,hdr,img,outfile=data_dir+new_filename
@@ -54,10 +57,18 @@ pro comp_prep,data_dir=data_dir,file_list=file_list
   return
 end
 
+pro  compute_line_total_intensity_image
+  common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity
+  common constants,AU,c
+  image_w = (image_width/c)*header_peak.WAVELENG*1.e-9 ; line width in units of [m]
+  image_total_intensity = image_peak * sqrt(!pi) * image_w ; total intensity in units of [Bsun]
+  return
+end
+
 ; Sub-routines:
 pro create_output_header
-  common data,header_peak_struct,output_header
-  common constants,AU  
+  common data,image_pak,image_width,header_peak_struct,output_header,image_total_intensity
+  common constants,AU,c
 
   stop
   geocentric_sun_ephemeris = get_sun(hdr.DATE_OBS)
@@ -73,8 +84,10 @@ pro create_output_header
 end
 
 pro load_constants
-  common constants,AU
-  AU = 149597870700. ; m
+  common constants,AU,c
+  AU = 149597870700.            ; m
+  c  =    299792458.            ; m/sec
+  
 return
 end
 
