@@ -13,7 +13,7 @@
 
 ; Main routine:
 pro comp_prep,data_dir=data_dir,file_list=file_list
-  common data,image_pak,image_width,header_peak_struct,output_header,image_total_intensity
+  common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity
   common constants,AU,c
   load_constants
   N=0
@@ -21,7 +21,7 @@ pro comp_prep,data_dir=data_dir,file_list=file_list
   openr,1,data_dir+file_list
   readf,1,N
   output_file_list = strmid(file_list,0,strlen(file_list)-4)+'_total_intensity.txt'
-   openw,2,data_dir+new_file_list
+   openw,2,data_dir+output_file_list
   printf,2,N  
   for i = 0,N-1 do begin
      readf,1,filename
@@ -42,7 +42,7 @@ pro comp_prep,data_dir=data_dir,file_list=file_list
      header_peak_struct    = fitshead2struct(header_peak   , dash2underscore=dash2underscore)
      header_width_struct   = fitshead2struct(header_width  , dash2underscore=dash2underscore)
      compute_line_total_intensity_image
-     expand_header
+     create_output_header
      output_filename = strmid(filename,0,strlen(filename)-4)+'_total_intensity.fts'
      mwritefits,output_header,image_total_intensity,outfile=data_dir+output_filename
      printf,2,output_filename
@@ -59,7 +59,7 @@ pro compute_line_total_intensity_image
   ; that will select the value upon the value of: header_peak.WAVELENG
   ; ... Bsun = .... from table....
   Bsun = 1.0 ; (Just for now, until table is coded)
-  image_w = (image_width/c) * header_peak.WAVELENG * 10. ; line width in units of [A]
+  image_w = (image_width/c) * header_peak_struct.WAVELENG * 10. ; line width in units of [A]
   image_p = image_peak*1.e-6*Bsun ; line peak in units of [Bsun]
   image_total_intensity = image_peak * sqrt(!pi) * image_w ; total intensity in units of [Bsun*A]
   return
@@ -67,12 +67,12 @@ end
 
 ; Sub-routines:
 pro create_output_header
-  common data,image_pak,image_width,header_peak_struct,output_header,image_total_intensity
+  common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity
   common constants,AU,c
 
-  output_header = header_peak ; start from header_peak, then add whatever else we need.
-
-  geocentric_sun_ephemeris = get_sun(hdr.DATE_OBS)
+  output_header = header_peak_struct ; start from header_peak_struct, then add whatever else we need.
+;stop
+  geocentric_sun_ephemeris = get_sun(output_header.DATE_D$OBS+'T'+output_header.TIME_D$OBS)
   DSUN = geocentric_sun_ephemeris[0] * AU ; m
   
   output_header  = create_struct(output_header,      $
@@ -80,7 +80,7 @@ pro create_output_header
                       'HAEX_OBS'  ,DSUN ,$ ; m
                       'HAEY_OBS'  ,0.   ,$
                       'HAEZ_OBS'  ,0.   )
-  stop
+
   return
 end
 
