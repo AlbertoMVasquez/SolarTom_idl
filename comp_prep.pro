@@ -60,7 +60,7 @@ end
 pro  compute_line_total_intensity_image
   common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity
   common constants,AU,c
-  image_w = (image_width/c)*header_peak.WAVELENG*1.e-9 ; line width in units of [m]
+  image_w = (image_width/c)*header_peak.WAVELENG*1.e-9     ; line width      in units of [m]
   image_total_intensity = image_peak * sqrt(!pi) * image_w ; total intensity in units of [Bsun]
   return
 end
