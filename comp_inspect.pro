@@ -1,8 +1,8 @@
-pro comp_inspect,r0=r0
+pro comp_inspect,r0=r0,data_dir=data_dir,filename=filename
   common data, image_peak, image_width, x, y
   
- data_dir = '/data1/tomography_dev/DATA/comp/1074/CR2198/'
- filename = '20171205.175250.comp.1074.dynamics.fts'
+; data_dir = '/data1/tomography_dev/DATA/comp/1074/CR2198/'
+; filename = '20171205.175250.comp.1074.dynamics.fts'
 
 ;file = '20171121.194526.comp.1074.dynamics.fts'
 ;file = '20171205.180031.comp.1074.dynamics.fts'
@@ -45,7 +45,6 @@ endfor
  iwidth = where(image_width gt 0.) & minwidth = min(image_width(iwidth)) * 0.5
  tvscl,alog10(peak_img  > minpeak ),0
  tvscl,alog10(width_img > minwidth),1
-stop 
  return
 end
 

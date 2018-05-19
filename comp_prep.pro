@@ -25,6 +25,7 @@ pro comp_prep,data_dir=data_dir,file_list=file_list
   printf,2,N  
   for i = 0,N-1 do begin
      readf,1,filename
+     comp_inspect,r0=1.1,data_dir=data_dir,filename=filename
      goto,skip_readfits
          crap  = readfits(data_dir+filename,header_primary, exten_no=0)
          peak  = readfits(data_dir+filename,header_peak,    exten_no=1)
@@ -46,6 +47,7 @@ pro comp_prep,data_dir=data_dir,file_list=file_list
      output_filename = strmid(filename,0,strlen(filename)-4)+'_total_intensity.fts'
      mwritefits,output_header,image_total_intensity,outfile=data_dir+output_filename
      printf,2,output_filename
+     stop
   endfor
   close,/all
   return
@@ -69,18 +71,18 @@ end
 pro create_output_header
   common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity
   common constants,AU,c
-
   output_header = header_peak_struct ; start from header_peak_struct, then add whatever else we need.
-;stop
-  geocentric_sun_ephemeris = get_sun(output_header.DATE_D$OBS+'T'+output_header.TIME_D$OBS)
-  DSUN = geocentric_sun_ephemeris[0] * AU ; m
-  
-  output_header  = create_struct(output_header,      $
-                      'DSUN'      ,DSUN ,$ ; m
-                      'HAEX_OBS'  ,DSUN ,$ ; m
-                      'HAEY_OBS'  ,0.   ,$
-                      'HAEZ_OBS'  ,0.   )
-
+  geocentric_sun_ephemeris = get_sun(output_header.DATE_OBS)
+  DSUN     = geocentric_sun_ephemeris[ 0] * AU ; m
+  CRLN_OBS = geocentric_sun_ephemeris[10]      ; deg
+  CRLT_OBS = geocentric_sun_ephemeris[11]      ; deg
+  output_header  = create_struct(output_header,$
+                      'DSUN'      ,DSUN       ,$ ; m
+                      'CRLN_OBS'  ,CRLN_OBS   ,$ ; deg
+                      'CRLT_OBS'  ,CRLT_OBS   ,$ ; deg                                 
+                      'HAEX_OBS'  ,DSUN       ,$ ; m
+                      'HAEY_OBS'  ,0.         ,$
+                      'HAEZ_OBS'  ,0.          )
   return
 end
 
@@ -90,5 +92,3 @@ pro load_constants
   c  =    299792458.            ; m/sec
 return
 end
-
-
