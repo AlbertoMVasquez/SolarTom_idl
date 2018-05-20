@@ -1,16 +1,6 @@
-pro comp_inspect,r0=r0,data_dir=data_dir,filename=filename
+ pro comp_inspect,r0=r0,data_dir=data_dir,filename=filename
   common data, image_peak, image_width, x, y
   
-; data_dir = '/data1/tomography_dev/DATA/comp/1074/CR2198/'
-; filename = '20171205.175250.comp.1074.dynamics.fts'
-
-;file = '20171121.194526.comp.1074.dynamics.fts'
-;file = '20171205.180031.comp.1074.dynamics.fts'
-;file = '20171205.175056.comp.1074.polarization.fts'
-;file = '20171121.comp.1074.mean.synoptic.fts'
- 
-; mreadfits,dir+file,hdr,img
-
      fits_open, data_dir+filename, fcb
      fits_read,  fcb, tmp,         header_primary, /header_only, exten_no=0; reads primary header only
      fits_read,  fcb, image_peak,  header_peak,    extname='Intensity'
@@ -31,10 +21,10 @@ for ir=0,n_elements(r0)-1 do begin
  ring = where(ra ge r0[ir]-dr/2. and ra le r0[ir]+dr/2.)
  peak_img(ring) = max(image_peak)
  width_img(ring)= max(image_width)
- ps1,'~/Pictures/peak_latiudinal_profiles.'+string(r0[ir])+'.eps',0
+ ps1,data_dir+filename+'_peak_latiudinal_profile.'+string(r0[ir])+'.eps',0
  display_latitudinal_profiles,height=r0[ir],/peak
  ps2
- ps1,'~/Pictures/width_latiudinal_profiles.'+string(r0[ir])+'.eps',0
+ ps1,data_dir+filename+'_width_latiudinal_profile.'+string(r0[ir])+'.eps',0
  display_latitudinal_profiles,height=r0[ir],/width
  ps2 
 endfor
@@ -45,6 +35,7 @@ endfor
  iwidth = where(image_width gt 0.) & minwidth = min(image_width(iwidth)) * 0.5
  tvscl,alog10(peak_img  > minpeak ),0
  tvscl,alog10(width_img > minwidth),1
+ record_gif,data_dir,filename+'_images.gif','X'
  return
 end
 
