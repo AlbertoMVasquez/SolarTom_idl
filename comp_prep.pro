@@ -51,8 +51,14 @@ pro comp_prep,data_dir=data_dir,file_list=file_list,r0=r0
         print,'There are Infinite and/or NaN values in the ourput image.'
         stop
      endif
+     pneg = where(image_total_intensity lt 0.)
+     if pneg(0) ne -1 then begin
+        print,'There are negative values in the ourput image.'
+        stop
+     endif
      comp_inspect,r0=r0,data_dir=data_dir,filename=filename
      printf,2,output_filename
+     print,output_filename
      ;stop
   endfor
   close,/all
