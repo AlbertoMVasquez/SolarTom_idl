@@ -26,7 +26,6 @@ pro comp_prep,data_dir=data_dir,file_list=file_list,r0=r0
   printf,2,N  
   for i = 0,N-1 do begin
      readf,1,filename
-     comp_inspect,r0=r0,data_dir=data_dir,filename=filename
      goto,skip_readfits
          crap  = readfits(data_dir+filename,header_primary, exten_no=0)
          peak  = readfits(data_dir+filename,header_peak,    exten_no=1)
@@ -47,6 +46,12 @@ pro comp_prep,data_dir=data_dir,file_list=file_list,r0=r0
      create_output_header
      output_filename = strmid(filename,0,strlen(filename)-4)+'_total_intensity.fts'
      mwritefits,output_header,image_total_intensity,outfile=data_dir+output_filename
+     pinf = where(finite(image_total_intensity) ne 1)
+     if pinf(0) ne -1 then begin
+        print,'There are Infinite and/or NaN values in the ourput image.'
+        stop
+     endif
+     comp_inspect,r0=r0,data_dir=data_dir,filename=filename
      printf,2,output_filename
      ;stop
   endfor
@@ -95,48 +100,48 @@ return
 end
 
  pro comp_inspect,r0=r0,data_dir=data_dir,filename=filename
-  common data, image_peak, image_width, x, y
-  
-     fits_open, data_dir+filename, fcb
-     fits_read,  fcb, tmp,         header_primary, /header_only, exten_no=0; reads primary header only
-     fits_read,  fcb, image_peak,  header_peak,    extname='Intensity'
-     fits_read,  fcb, image_width, header_width,   extname='Line Width'
-     fits_close, fcb
-     header_primary_struct = fitshead2struct(header_primary, dash2underscore=dash2underscore)
-     header_peak_struct    = fitshead2struct(header_peak   , dash2underscore=dash2underscore)
-     header_width_struct   = fitshead2struct(header_width  , dash2underscore=dash2underscore)
+   common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity
+   common grid,ra,pa,x, y
 
- computegrid,header_peak_struct,ra,pa,x,y,instrument=instrument
+ computegrid
 
 ; Images for display:
  peak_img  = image_peak
  width_img = image_width
+ total_img = image_total_intensity
 if not keyword_set(r0) then r0=1.05
  dr=0.01
 for ir=0,n_elements(r0)-1 do begin
  ring = where(ra ge r0[ir]-dr/2. and ra le r0[ir]+dr/2.)
  peak_img(ring) = max(image_peak)
  width_img(ring)= max(image_width)
+ total_img(ring)= max(image_total_intensity)
  ps1,data_dir+filename+'_peak_latiudinal_profile.'+string(r0[ir])+'.eps',0
  display_latitudinal_profiles,height=r0[ir],/peak
  ps2
  ps1,data_dir+filename+'_width_latiudinal_profile.'+string(r0[ir])+'.eps',0
  display_latitudinal_profiles,height=r0[ir],/width
  ps2 
+ ps1,data_dir+filename+'_total_intensity_latiudinal_profile.'+string(r0[ir])+'.eps',0
+ display_latitudinal_profiles,height=r0[ir],/total
+ ps2 
 endfor
  
- window,xs=620*2,ys=620
+ window,xs=620*3,ys=620
  loadct,39
  ipeak  = where(image_peak  gt 0.) & minpeak  = min(image_peak (ipeak )) 
  iwidth = where(image_width gt 0.) & minwidth = min(image_width(iwidth)) * 0.5
+ itotal = where(image_total_intensity gt 0.) & mintotal  = min(image_total_intensity (ipeak )) 
  tvscl,alog10(peak_img  > minpeak ),0
  tvscl,alog10(width_img > minwidth),1
+ tvscl,alog10(total_img > mintotal),2
  record_gif,data_dir,filename+'_images.gif','X'
  return
 end
 
-pro display_latitudinal_profiles,height=height,peak=peak,width=width
-  common data, image_peak, image_width, x, y  
+pro display_latitudinal_profiles,height=height,peak=peak,width=width,total=total
+   common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity
+   common grid,ra,pa,x, y
 
 if not keyword_set(height) then begin
    print,'please specify hright.'
@@ -153,6 +158,11 @@ if keyword_set(width) then begin
    titulo   = 'Line Width '
 endif
 
+if keyword_set(total) then begin
+   img_data = image_total_intensity
+   titulo   = 'Total Intensity '
+endif
+
 Nt=180
 t0a = 2.*!pi*findgen(Nt)/float(Nt-1)
 
@@ -166,8 +176,9 @@ endfor
  mini = min(da)
  maxi = max(da)
 
+ !p.charsize=1
  plot,t0a/!dtor,da ,xstyle=1,yr=[mini,maxi],/nodata,$
-      xtitle = 'PA [deg]',ytitle='Peak Intensity',$
+      xtitle = 'PA [deg]',$
       title  = titulo+'at '+strmid(string(height),6,4)+' R!DSUN!N'
  loadct,12
  blue  = 100
@@ -179,8 +190,12 @@ endfor
 return
 end
 
-pro computegrid,hdr,ra,pa,x,y,instrument=instrument
+pro computegrid
+   common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity
+   common grid,ra,pa,x, y
 
+ hdr = header_peak_struct
+   
  Rs     = hdr.RSUN        ; Sun radius in arcsec
  px     = hdr.cdelt1      ; Pixel size in arcsec 
  Rs=Rs/px                 ; Sun radius in pixels
