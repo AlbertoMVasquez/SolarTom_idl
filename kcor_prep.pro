@@ -26,6 +26,7 @@ pro kcor_prep,data_dir=data_dir,file_list=file_list
   for i = 0,N-1 do begin
      readf,1,filename
      mreadfits,data_dir+filename,hdr,img
+          stop
      new_filename = strmid(filename,0,strlen(filename)-4)+'_prep.fts'
      expand_header
      mwritefits,hdr,img,outfile=data_dir+new_filename

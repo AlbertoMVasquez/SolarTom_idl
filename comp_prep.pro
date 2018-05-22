@@ -6,8 +6,9 @@
 ;
 ; History:  V1.0, Alberto M. Vasquez, CLaSP, Spring-2018.
 ;
-; Calling sequence example:
+; Calling sequence examples:
 ; comp_prep,data_dir='/data1/tomography/DATA/comp/1074/CR2198/',file_list='list.txt',r0=[1.1]
+; comp_prep,data_dir='/data1/tomography/DATA/comp/1079/CR2198/',file_list='list.txt',r0=[1.05,1.35]
 ;
 ;---------------------------------------------------------------------
 
@@ -35,31 +36,41 @@ pro comp_prep,data_dir=data_dir,file_list=file_list,r0=r0
     ; sequence above, but it is a bit faster. NOTE from Giuliana: These
     ; apply scaling by default, but CoMP data does not use BZERO and BSCALE. 
      fits_open,  data_dir+filename, fcb
-     fits_read,  fcb, tmp,         header_primary, /header_only, exten_no=0; reads primary header only
+     fits_read,  fcb, tmp,         header_primary, /header_only, exten_no=0 ; reads primary header only
      fits_read,  fcb, image_peak,  header_peak,    extname='Intensity'
      fits_read,  fcb, image_width, header_width,   extname='Line Width'
      fits_close, fcb
+
+;goto,skip2
      header_primary_struct = fitshead2struct(header_primary, dash2underscore=dash2underscore)
      header_peak_struct    = fitshead2struct(header_peak   , dash2underscore=dash2underscore)
      header_width_struct   = fitshead2struct(header_width  , dash2underscore=dash2underscore)
-     compute_line_total_intensity_image
+skip2:
+
+;    mreadfits,data_dir+filename,header_peak_struct,image,/nodata
      create_output_header
-     output_filename = strmid(filename,0,strlen(filename)-4)+'_total_intensity.fts'
-     mwritefits,output_header,image_total_intensity,outfile=data_dir+output_filename
+     compute_line_total_intensity_image
+
      pinf = where(finite(image_total_intensity) ne 1)
      if pinf(0) ne -1 then begin
-        print,'There are Infinite and/or NaN values in the ourput image.'
+        print,'There are Infinite and/or NaN values in the output image.'
         stop
      endif
      pneg = where(image_total_intensity lt 0.)
      if pneg(0) ne -1 then begin
-        print,'There are negative values in the ourput image.'
+        print,'There are negative values in the output image.'
         stop
      endif
+     
      comp_inspect,r0=r0,data_dir=data_dir,filename=filename
+
+     output_filename = strmid(filename,0,strlen(filename)-4)+'_total_intensity.fts'     
+     mwritefits,output_header,image_total_intensity,outfile=data_dir+output_filename
+    ;writefits,data_dir+output_filename,image_total_intensity,output_header
      printf,2,output_filename
      print,output_filename
-     ;stop
+     
+;    stop
   endfor
   close,/all
   return
@@ -71,9 +82,9 @@ pro compute_line_total_intensity_image
   ; Here I will code a table of Bsun values in units of
   ; erg cm-2 sec-1 sr-1 A-1
   ; that will select the value upon the value of: header_peak.WAVELENG
-  ; ... Bsun = .... from table....
+                                ; ... Bsun = .... from table....
   Bsun = 1.0 ; (Just for now, until table is coded)
-  image_w = (image_width/c) * header_peak_struct.WAVELENG * 10. ; line width in units of [A]
+  image_w = (image_width/c) * output_header.WAVELENG * 10. ; line width in units of [A]
   image_p = image_peak*1.e-6*Bsun ; line peak in units of [Bsun]
   image_total_intensity = image_peak * sqrt(!pi) * image_w ; total intensity in units of [Bsun*A]
   return
@@ -83,7 +94,16 @@ end
 pro create_output_header
   common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity
   common constants,AU,c
+  
   output_header = header_peak_struct ; start from header_peak_struct, then add whatever else we need.
+  
+goto,skip
+  output_header = create_struct(output_header,$
+                                'NAXIS1'  ,(size(image_peak))[1],$
+                                'NAXIS2'  ,(size(image_peak))[1],$
+                                'WAVELENG',output_header.WAVE_REF)
+skip:
+  
   geocentric_sun_ephemeris = get_sun(output_header.DATE_OBS)
   DSUN     = geocentric_sun_ephemeris[ 0] * AU ; m
   CRLN_OBS = geocentric_sun_ephemeris[10]      ; deg
@@ -200,7 +220,7 @@ pro computegrid
    common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity
    common grid,ra,pa,x, y
 
- hdr = header_peak_struct
+ hdr = output_header
    
  Rs     = hdr.RSUN        ; Sun radius in arcsec
  px     = hdr.cdelt1      ; Pixel size in arcsec 
