@@ -7,9 +7,9 @@
 ; History:  V1.0, Alberto M. Vasquez, CLaSP, Spring-2018.
 ;
 ; Calling sequence examples:
-; comp_prep,data_dir='/data1/tomography/DATA/comp/1074/CR2198/',file_list='list_mean.txt',r0=[1.0,1.35],/meanfits
-; comp_prep,data_dir='/data1/tomography/DATA/comp/1074/CR2198/',file_list='list.txt',r0=[1.05,1.1,1.35],/dynamics
-; comp_prep,data_dir='/data1/tomography/DATA/comp/1074/CR2198/',file_list='list.txt',r0=[1.05,1.1,1.35],/dynamics
+; comp_prep,data_dir='/data1/tomography/DATA/comp/1074/CR2198/',file_list='list_mean.txt',r0=[1.1,1.3],/meanfits
+; comp_prep,data_dir='/data1/tomography/DATA/comp/1074/CR2198/',file_list='list.txt',r0=[1.1,1.3],/dynamics
+; comp_prep,data_dir='/data1/tomography/DATA/comp/1079/CR2198/',file_list='list.txt',r0=[1.1,1.3],/dynamics
 ;
 ;---------------------------------------------------------------------
 
@@ -258,7 +258,7 @@ t0=t0a(it)
 da(it) = findval(img_data, x, y, height, t0)
 endfor
 
- mini = max([min(da),-1.])
+ mini = max([min(da),0.])
  maxi = max(da)
 
  !p.charsize=1
