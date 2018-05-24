@@ -7,9 +7,9 @@
 ; History:  V1.0, Alberto M. Vasquez, CLaSP, Spring-2018.
 ;
 ; Calling sequence example:
-; kcor_prep,data_dir='/data1/tomography/DATA/kcor/CR2198/Original_Images/',file_list='list.txt',r0=[1.05,2.0]
-; kcor_prep,data_dir='/data1/tomography/DATA/kcor/CR2198/Nooffset_Images/',file_list='list.txt',r0=[1.05,2.0]
-; kcor_prep,data_dir='/data1/tomography/DATA/kcor/CR2198/AvgNoOffset_Images/',file_list='list.txt',r0=[1.05,2.0]
+; kcor_prep,data_dir='/data1/tomography/DATA/kcor/CR2198/Original_Images/',file_list='list.txt',r0=[1.05,1.5,2.0]
+; kcor_prep,data_dir='/data1/tomography/DATA/kcor/CR2198/Nooffset_Images/',file_list='list.txt',r0=[1.09,1.5,2.0]
+; kcor_prep,data_dir='/data1/tomography/DATA/kcor/CR2198/AvgNoOffset_Images/',file_list='list.txt',r0=[1.09,1.5,2.0]
 ;
 ;---------------------------------------------------------------------
 
@@ -34,6 +34,8 @@ pro kcor_prep,data_dir=data_dir,file_list=file_list,r0=r0
      mwritefits,hdr,img,outfile=data_dir+new_filename
      printf,2,new_filename
      kcor_inspect,r0=r0,data_dir=data_dir,filename=filename
+     stop
+    ;print,'Exp Time:',hdr.exptime
   endfor
   close,/all
   return
@@ -128,7 +130,8 @@ pro computegrid
    common grid,ra,pa,x, y
 
  Rs     = hdr.RSUN        ; Sun radius in arcsec
- px     = hdr.cdelt1      ; Pixel size in arcsec 
+ px     = hdr.cdelt1      ; Pixel size in arcsec
+ print,'Px: ',px
  Rs=Rs/px                 ; Sun radius in pixels
  px=1./Rs                 ; Pixel size in Rsun units
  ix0=hdr.crpix1-1         ; Disk center x-pixel, changed to IDL convention (FITS convention starts with index=1, IDL starts with index=0). 

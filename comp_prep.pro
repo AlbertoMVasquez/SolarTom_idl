@@ -7,15 +7,26 @@
 ; History:  V1.0, Alberto M. Vasquez, CLaSP, Spring-2018.
 ;
 ; Calling sequence examples:
-; comp_prep,data_dir='/data1/tomography/DATA/comp/1074/CR2198/',file_list='list.txt',r0=[1.1]
-; comp_prep,data_dir='/data1/tomography/DATA/comp/1079/CR2198/',file_list='list.txt',r0=[1.05,1.35]
+; comp_prep,data_dir='/data1/tomography/DATA/comp/1074/CR2198/',file_list='list_mean.txt',r0=[1.05,1.35],/meanfits
+; comp_prep,data_dir='/data1/tomography/DATA/comp/1074/CR2198/',file_list='list.txt',r0=[1.05,1.1,1.35],/dynamics
+; comp_prep,data_dir='/data1/tomography/DATA/comp/1074/CR2198/',file_list='list.txt',r0=[1.05,1.1,1.35],/dynamics
 ;
 ;---------------------------------------------------------------------
 
 ; Main routine:
-pro comp_prep,data_dir=data_dir,file_list=file_list,r0=r0
-  common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity
+pro comp_prep,data_dir=data_dir,file_list=file_list,r0=r0,dynamics=dynamics,meanfits=meanfits
+  common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity,image_Imean,header_Imean_struct
   common constants,AU,c
+  common files,filetype
+  
+  filetype=''
+  if keyword_set(dynamics) then filetype = 'dynamics'
+  if keyword_set(meanfits) then filetype = 'meanfits'
+  if filetype eq '' then begin
+     print,'Specify filetype.'
+     return
+  endif
+  
   load_constants
   if not keyword_set(r0) then r0 = [1.1]
   N=0
@@ -36,18 +47,20 @@ pro comp_prep,data_dir=data_dir,file_list=file_list,r0=r0
     ; sequence above, but it is a bit faster. NOTE from Giuliana: These
     ; apply scaling by default, but CoMP data does not use BZERO and BSCALE. 
      fits_open,  data_dir+filename, fcb
-     fits_read,  fcb, tmp,         header_primary, /header_only, exten_no=0 ; reads primary header only
-     fits_read,  fcb, image_peak,  header_peak,    extname='Intensity'
-     fits_read,  fcb, image_width, header_width,   extname='Line Width'
+     fits_read,  fcb, tmp, header_primary, /header_only, exten_no=0 ; reads primary header only
+     if filetype eq 'dynamics' then begin
+        fits_read,  fcb, image_peak,  header_peak,    extname='Intensity'
+        fits_read,  fcb, image_width, header_width,   extname='Line Width'
+        header_primary_struct = fitshead2struct(header_primary, dash2underscore=dash2underscore)
+        header_peak_struct    = fitshead2struct(header_peak   , dash2underscore=dash2underscore)
+        header_width_struct   = fitshead2struct(header_width  , dash2underscore=dash2underscore)
+     endif
+     if filetype eq 'meanfits' then begin
+        fits_read,  fcb, image_Imean, header_Imean, extname = 'I'
+        header_Imean_struct    = fitshead2struct(header_Imean   , dash2underscore=dash2underscore)
+     endif
      fits_close, fcb
 
-;goto,skip2
-     header_primary_struct = fitshead2struct(header_primary, dash2underscore=dash2underscore)
-     header_peak_struct    = fitshead2struct(header_peak   , dash2underscore=dash2underscore)
-     header_width_struct   = fitshead2struct(header_width  , dash2underscore=dash2underscore)
-skip2:
-
-;    mreadfits,data_dir+filename,header_peak_struct,image,/nodata
      create_output_header
      compute_line_total_intensity_image
 
@@ -69,33 +82,44 @@ skip2:
     ;writefits,data_dir+output_filename,image_total_intensity,output_header
      printf,2,output_filename
      print,output_filename
-     
-;    stop
+
   endfor
   close,/all
   return
 end
 
 pro compute_line_total_intensity_image
-  common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity
+  common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity,image_Imean,header_Imean_struct
   common constants,AU,c
+  common files,filetype
+
   ; Here I will code a table of Bsun values in units of
   ; erg cm-2 sec-1 sr-1 A-1
   ; that will select the value upon the value of: header_peak.WAVELENG
                                 ; ... Bsun = .... from table....
-  Bsun = 1.0 ; (Just for now, until table is coded)
-  image_w = (image_width/c) * output_header.WAVELENG * 10. ; line width in units of [A]
-  image_p = image_peak*1.e-6*Bsun ; line peak in units of [Bsun]
-  image_total_intensity = image_peak * sqrt(!pi) * image_w ; total intensity in units of [Bsun*A]
+  Bsun = 1.0                    ; (Just for now, until table is coded)
+
+  if filetype eq 'dynamics' then begin
+     image_w = (image_width*1.e3/c) * output_header.WAVELENG * 10. ; line width in units of [A]
+     image_p = image_peak*1.e-6*Bsun ; line peak in units of [Bsun]
+     image_total_intensity = image_peak * sqrt(!pi) * image_w ; total intensity in units of [Bsun*A]
+  endif
+  if filetype eq 'meanfits' then begin
+     image_total_intensity = image_Imean ; I guess in this case this is the total intensity in units of [Bsun*A]     
+  endif
+
   return
 end
 
 ; Sub-routines:
 pro create_output_header
-  common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity
+  common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity,image_Imean,header_Imean_struct
   common constants,AU,c
-  
-  output_header = header_peak_struct ; start from header_peak_struct, then add whatever else we need.
+  common files,filetype
+
+  ; Initialize header using the one read with the image.
+  if filetype eq 'dynamics' then output_header = header_peak_struct
+  if filetype eq 'meanfits' then output_header = header_Imean_struct
   
 goto,skip
   output_header = create_struct(output_header,$
@@ -126,19 +150,28 @@ return
 end
 
  pro comp_inspect,r0=r0,data_dir=data_dir,filename=filename
-   common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity
+   common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity,image_Imean,header_Imean_struct
    common grid,ra,pa,x, y
-
+   common files,filetype
+   
  computegrid
 
 ; Images for display:
- peak_img  = image_peak
- width_img = image_width
- total_img = image_total_intensity
-if not keyword_set(r0) then r0=1.05
+ if filetype eq 'dynamics' then begin
+    peak_img  = image_peak
+    width_img = image_width
+    total_img = image_total_intensity
+ endif
+ if filetype eq 'meanfits' then begin
+    mean_img = image_Imean
+ endif
+ 
+ if not keyword_set(r0) then r0=1.05
  dr=0.01
+
 for ir=0,n_elements(r0)-1 do begin
- ring = where(ra ge r0[ir]-dr/2. and ra le r0[ir]+dr/2.)
+   ring = where(ra ge r0[ir]-dr/2. and ra le r0[ir]+dr/2.)
+if filetype eq 'dynamics' then begin
  peak_img(ring) = max(image_peak)
  width_img(ring)= max(image_width)
  total_img(ring)= max(image_total_intensity)
@@ -150,11 +183,19 @@ for ir=0,n_elements(r0)-1 do begin
  ps2 
  ps1,data_dir+filename+'_total_intensity_latiudinal_profile.'+string(r0[ir])+'.eps',0
  display_latitudinal_profiles,height=r0[ir],/total
- ps2 
+ ps2
+endif
+if filetype eq 'meanfits' then begin
+ mean_img(ring) = max(image_Imean)
+ ps1,data_dir+filename+'_meanimage_intensity_latiudinal_profile.'+string(r0[ir])+'.eps',0
+ display_latitudinal_profiles,height=r0[ir],/meanimage
+ ps2
+endif
 endfor
- 
+
+loadct,39
+if filetype eq 'dynamics' then begin 
  window,xs=620*3,ys=620
- loadct,39
  ipeak  = where(image_peak  gt 0.) & minpeak  = min(image_peak (ipeak )) 
  iwidth = where(image_width gt 0.) & minwidth = min(image_width(iwidth)) * 0.5
  itotal = where(image_total_intensity gt 0.) & mintotal  = min(image_total_intensity (ipeak )) 
@@ -162,15 +203,25 @@ endfor
  tvscl,alog10(width_img > minwidth),1
  tvscl,alog10(total_img > mintotal),2
  record_gif,data_dir,filename+'_images.gif','X'
+endif
+if filetype eq 'meanfits' then begin
+   window,xs=620,ys=620
+   iImean  = where(image_Imean  gt 0.) & minImean  = min(image_Imean (iImean))
+   tvscl,alog10(mean_img  > minImean ),0
+   record_gif,data_dir,filename+'_images.gif','X'
+endif
+loadct,0
+
  return
 end
 
-pro display_latitudinal_profiles,height=height,peak=peak,width=width,total=total
-   common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity
+pro display_latitudinal_profiles,height=height,peak=peak,width=width,total=total,meanimage=meanimage
+   common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity,image_Imean,header_Imean_struct
    common grid,ra,pa,x, y
+   common files,filetype
 
 if not keyword_set(height) then begin
-   print,'please specify hright.'
+   print,'please specify height.'
    stop
 endif
 
@@ -187,6 +238,11 @@ endif
 if keyword_set(total) then begin
    img_data = image_total_intensity
    titulo   = 'Total Intensity '
+endif
+
+if keyword_set(meanimage)  then begin
+   img_data = image_Imean
+   titulo   = 'Mean-Image Intensity '
 endif
 
 Nt=180
@@ -217,7 +273,7 @@ return
 end
 
 pro computegrid
-   common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity
+   common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity,image_Imean,header_Imean_struct
    common grid,ra,pa,x, y
 
  hdr = output_header
