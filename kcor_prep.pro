@@ -31,6 +31,9 @@ pro kcor_prep,data_dir=data_dir,file_list=file_list,r0=r0
      mreadfits,data_dir+filename,hdr,img
      new_filename = strmid(filename,0,strlen(filename)-4)+'_prep.fts'
      expand_header
+    ;Make -666 all null pixels.
+     izero = where(img eq 0.)
+     if izero(0) ne -1. then img(izero) = -666.
      mwritefits,hdr,img,outfile=data_dir+new_filename
      printf,2,new_filename
      kcor_inspect,r0=r0,data_dir=data_dir,filename=filename
@@ -108,7 +111,7 @@ t0=t0a(it)
 da(it) = findval(img_data, x, y, height, t0)
 endfor
 
- mini = min(da)
+ mini = max([min(da),-1.])
  maxi = max(da)
 
  !p.charsize=1

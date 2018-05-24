@@ -7,7 +7,7 @@
 ; History:  V1.0, Alberto M. Vasquez, CLaSP, Spring-2018.
 ;
 ; Calling sequence examples:
-; comp_prep,data_dir='/data1/tomography/DATA/comp/1074/CR2198/',file_list='list_mean.txt',r0=[1.05,1.35],/meanfits
+; comp_prep,data_dir='/data1/tomography/DATA/comp/1074/CR2198/',file_list='list_mean.txt',r0=[1.0,1.35],/meanfits
 ; comp_prep,data_dir='/data1/tomography/DATA/comp/1074/CR2198/',file_list='list.txt',r0=[1.05,1.1,1.35],/dynamics
 ; comp_prep,data_dir='/data1/tomography/DATA/comp/1074/CR2198/',file_list='list.txt',r0=[1.05,1.1,1.35],/dynamics
 ;
@@ -72,7 +72,6 @@ pro comp_prep,data_dir=data_dir,file_list=file_list,r0=r0,dynamics=dynamics,mean
      pneg = where(image_total_intensity lt 0.)
      if pneg(0) ne -1 then begin
         print,'There are negative values in the output image.'
-        stop
      endif
      
      comp_inspect,r0=r0,data_dir=data_dir,filename=filename
@@ -108,6 +107,10 @@ pro compute_line_total_intensity_image
      image_total_intensity = image_Imean ; I guess in this case this is the total intensity in units of [Bsun*A]     
   endif
 
+  ; Make -666 all null pixels.
+  izero = where(image_total_intensity eq 0.)
+  if izero(0) ne -1. then image_total_intensity(izero) = -666.
+  
   return
 end
 
@@ -241,7 +244,7 @@ if keyword_set(total) then begin
 endif
 
 if keyword_set(meanimage)  then begin
-   img_data = image_Imean
+   img_data = image_total_intensity
    titulo   = 'Mean-Image Intensity '
 endif
 
@@ -255,7 +258,7 @@ t0=t0a(it)
 da(it) = findval(img_data, x, y, height, t0)
 endfor
 
- mini = min(da)
+ mini = max([min(da),-1.])
  maxi = max(da)
 
  !p.charsize=1
