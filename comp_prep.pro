@@ -8,8 +8,8 @@
 ;
 ; Calling sequence examples:
 ; comp_prep,data_dir='/data1/tomography/DATA/comp/1074/CR2198/',file_list='list_mean.txt',r0=[1.1,1.3],/meanfits
-; comp_prep,data_dir='/data1/tomography/DATA/comp/1074/CR2198/',file_list='list.txt',r0=[1.1,1.3],/dynamics
-; comp_prep,data_dir='/data1/tomography/DATA/comp/1079/CR2198/',file_list='list.txt',r0=[1.1,1.3],/dynamics
+; comp_prep,data_dir='/data1/tomography/DATA/comp/1074/CR2198/',file_list='list.txt'     ,r0=[1.1,1.3],/dynamics
+; comp_prep,data_dir='/data1/tomography/DATA/comp/1079/CR2198/',file_list='list.txt'     ,r0=[1.1,1.3],/dynamics
 ;
 ;---------------------------------------------------------------------
 
@@ -38,14 +38,6 @@ pro comp_prep,data_dir=data_dir,file_list=file_list,r0=r0,dynamics=dynamics,mean
   printf,2,N  
   for i = 0,N-1 do begin
      readf,1,filename
-     goto,skip_readfits
-         crap  = readfits(data_dir+filename,header_primary, exten_no=0)
-         peak  = readfits(data_dir+filename,header_peak,    exten_no=1)
-         width = readfits(data_dir+filename,header_width,   exten_no=4)
-     skip_readfits:     
-    ; The following fits_open sequence produces same results as the readfits
-    ; sequence above, but it is a bit faster. NOTE from Giuliana: These
-    ; apply scaling by default, but CoMP data does not use BZERO and BSCALE. 
      fits_open,  data_dir+filename, fcb
      fits_read,  fcb, tmp, header_primary, /header_only, exten_no=0 ; reads primary header only
      if filetype eq 'dynamics' then begin
@@ -81,7 +73,6 @@ pro comp_prep,data_dir=data_dir,file_list=file_list,r0=r0,dynamics=dynamics,mean
     ;writefits,data_dir+output_filename,image_total_intensity,output_header
      printf,2,output_filename
      print,output_filename
-
   endfor
   close,/all
   return
@@ -104,13 +95,14 @@ pro compute_line_total_intensity_image
      image_total_intensity = image_peak * sqrt(!pi) * image_w ; total intensity in units of [Bsun*A]
   endif
   if filetype eq 'meanfits' then begin
-     image_total_intensity = image_Imean ; I guess in this case this is the total intensity in units of [Bsun*A]     
+     image_total_intensity = image_Imean*1.e-6*Bsun ; In this case this is the intensity at central reference wavelength in units of [Bsun]
   endif
 
   ; Make -666 all null pixels.
   izero = where(image_total_intensity eq 0.)
   if izero(0) ne -1. then image_total_intensity(izero) = -666.
-  
+
+  image_total_intensity = float(image_total_intensity) ; Make sure image is single precision.
   return
 end
 

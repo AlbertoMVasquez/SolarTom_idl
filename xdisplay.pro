@@ -1,16 +1,27 @@
 
-; xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.295_90_180_l1e-5_hlaplac_CORRECTED_3',nr=295,nt=90,rmin=1.05,rmax=4.00,r0=1.2,win=0
-; xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.295_90_180_l1e-6_hlaplac_CORRECTED_3',nr=295,nt=90,rmin=1.05,rmax=4.00,r0=1.2,win=1
-; xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.295_90_180_NoOffSet_l1e-6_hlaplac'   ,nr=295,nt=90,rmin=1.05,rmax=4.00,r0=1.2,win=2
-; xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.295_90_180_AvgNoOffSet_l1e-6_hlaplac',nr=295,nt=90,rmin=1.05,rmax=4.00,r0=1.2,win=3
-; xdisplay,dir='/data1/tomography/bindata/',file='x_comp1074.CR2198.bf2.ri1.00.ro1.50_50_90_180_meanimage_hlaplac_l1e-1',nr=50,nt=90,rmin=1.0,rmax=1.5,r0=1.1,win=4
+; xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.295_90_180_l1e-5_hlaplac_CORRECTED_3',nr=295,nt=90,rmin=1.05,rmax=4.00,r0=1.1,win=0
+; xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.295_90_180_l1e-6_hlaplac_CORRECTED_3',nr=295,nt=90,rmin=1.05,rmax=4.00,r0=1.1,win=1
+; xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.295_90_180_NoOffSet_l1e-6_hlaplac'   ,nr=295,nt=90,rmin=1.05,rmax=4.00,r0=1.1,win=2
 
-pro xdisplay,dir=dir,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0=r0,mini=mini,maxi=maxi,win=win
-  clrtbl = 40
+;r0=1.1 
+;xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_keepneg_hlaplac_l1e-4',nr=295,nt=90,rmin=1.05,rmax=4.00,r0=r0,win=0,titulo='KCOR-KeepNeg: Ne [cm!U-3!N]'
+;xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_dropneg_hlaplac_l1e-4',nr=295,nt=90,rmin=1.05,rmax=4.00,r0=r0,win=1,titulo='KCOR-DropNeg: Ne [cm!U-3!N]'
+
+; xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.295_90_180_AvgNoOffSet_l1e-6_hlaplac',nr=295,nt=90,rmin=1.05,rmax=4.00,r0=1.1,win=3
+
+;r0=1.07
+;xdisplay,dir='/data1/tomography/bindata/',file='x_comp1074.CR2198.bf2.ri1.00.ro1.50_50_90_180_meanimage_hlaplac_l1e-1',nr=50,nt=90,rmin=1.0,rmax=1.5,r0=r0,titulo='Mn-Peak-1074-Emissivity',mini=1.,win=0
+;xdisplay,dir='/data1/tomography/bindata/',file='x_comp1074.dynamics.CR2198.bf2.ri1.00.ro1.50_50_90_180',nr=50,nt=90,rmin=1.0,rmax=1.5,r0=r0,win=1,titulo='FeXIII-1074 Emissivity',mini=1.;,maxi=25.
+;xdisplay,dir='/data1/tomography/bindata/',file='x_comp1079.dynamics.CR2198.bf2.ri1.00.ro1.50_50_90_180',nr=50,nt=90,rmin=1.0,rmax=1.5,r0=r0,win=2,titulo='FeXIII-1079 Emissivity',mini=1.;,maxi=20.
+
+pro xdisplay,dir=dir,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0=r0,mini=mini,maxi=maxi,win=win,log=log,clrtbl=clrtbl,titulo=titulo
+  if not keyword_set(titulo)      then titulo      = 'Reconstruction'
+  if not keyword_set(clrtbl)      then clrtbl      = 39
   if not keyword_set(np)          then np          = 2*nt
   if not keyword_set(scalefactor) then scalefactor = 4
   xread,dir=dir,file=file,nr=nr,nt=nt,np=np,map=map
-  xshell,map=map,r0=r0,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,rmin=rmin,rmax=rmax,win=win,file=file
+  if not keyword_set(log) then xshell,map=map,r0=r0,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,rmin=rmin,rmax=rmax,win=win,file=file,titulo=titulo
+  if     keyword_set(log) then xshell,map=map,r0=r0,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,rmin=rmin,rmax=rmax,win=win,file=file,titulo=titulo,/log
   return
 end
 
@@ -22,7 +33,7 @@ close,1
 return
 end
 
-pro xshell,map=map,r0=r0,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,rmin=rmin,rmax=rmax,log=log,interp=interp,win=win,file=file
+pro xshell,map=map,r0=r0,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,rmin=rmin,rmax=rmax,log=log,interp=interp,win=win,file=file,titulo=titulo
 
 ; set graph stuff
 device, retain     = 2
@@ -96,11 +107,11 @@ endif
   Npanels = 1
   xsimage = np*scalefactor
   ysimage = nt*scalefactor
-  DX      = xsimage/2
+  DX      = xsimage/1.25
   DY      = ysimage/1.25
   x0      = DX/2.5
   y0      = (ysimage+DY)*(Npanels-1)
-  window,0,xs=xsimage+DX,ys=(ysimage+DY)*Npanels
+  window,win,xs=xsimage+DX,ys=(ysimage+DY)*Npanels
   loadct,27
   tvscl,fltarr(xsimage+DX,(ysimage+DY)*Npanels)
 
@@ -111,7 +122,7 @@ endif
     y = y0+DY/2
     carrmap,map=map2,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,clrtbl=clrtbl,$
             xtitle_status=1,ytitle_status=1,titulo_status=1,$
-            title='Reconstruction at '+height_string+' R!DSUN!N',$
+            title=titulo+' at '+height_string+' R!DSUN!N',$
             /color_scale,DX=DX,DY=DY,mini=mini,maxi=maxi,xsimage=xsimage,ysimage=ysimage
   record_gif,'~/Pictures/',file+'_'+height_string+'_Rsun.gif','X'
 return
@@ -126,8 +137,8 @@ pro carrmap,map=map,xi=xi,yi=yi,np=np,nt=nt,scalefactor=scalefactor,clrtbl=clrtb
   
     x=xi
     y=yi
+    loadct,clrtbl
     tvscl,map,x,y
-    loadct,0
     nlon=np*scalefactor
     nlat=nt*scalefactor
     LatMIN = -90.
@@ -136,13 +147,13 @@ pro carrmap,map=map,xi=xi,yi=yi,np=np,nt=nt,scalefactor=scalefactor,clrtbl=clrtb
     LonMAX = 360.
     LAT=LatMIN+(LatMAX-LatMIN)*FINDGEN(Nlat)/FLOAT(Nlat-1)
     LON=LonMIN+(LonMAX-LonMIN)*FINDGEN(Nlon)/FLOAT(Nlon-1)
-    loadct,clrtbl
     xtitle=''
     ytitle=''
     titulo=''
     if xtitle_status eq 1 then xtitle='Carrington Longitude [deg]'
     if ytitle_status eq 1 then ytitle='Latitude [deg]'
     if titulo_status eq 1 then titulo=title
+    loadct,40
     contour,map,lon,lat,pos=[X,Y,X+nlon,Y+nlat],/noerase,/nodata,$
         /device,color=255,xstyle=1,ystyle=1,charsize=4.,$
         xtitle=xtitle,$
@@ -160,7 +171,9 @@ pro carrmap,map=map,xi=xi,yi=yi,np=np,nt=nt,scalefactor=scalefactor,clrtbl=clrtb
       for ix=0,nsx-1 do scale(ix,*)=mini+(maxi-mini)*findgen(nsy)/float(nsy-1)
       xs0 = x + xsimage + DX/3
       ys0 = y
-      tvscl,black,xs0-frame/2,ys0-frame/2    
+      loadct,0
+      tvscl,black,xs0-frame/2,ys0-frame/2
+      loadct,clrtbl
       tvscl,scale,xs0,ys0
 
       loadct,0
