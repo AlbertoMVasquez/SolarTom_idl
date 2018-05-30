@@ -1,28 +1,76 @@
 
-; xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.295_90_180_l1e-5_hlaplac_CORRECTED_3',nr=295,nt=90,rmin=1.05,rmax=4.00,r0=1.1,win=0
-; xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.295_90_180_l1e-6_hlaplac_CORRECTED_3',nr=295,nt=90,rmin=1.05,rmax=4.00,r0=1.1,win=1
-; xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.295_90_180_NoOffSet_l1e-6_hlaplac'   ,nr=295,nt=90,rmin=1.05,rmax=4.00,r0=1.1,win=2
+; xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.295_90_180_l1e-5_hlaplac_CORRECTED_3',nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=1.1,win=0
+; xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.295_90_180_l1e-6_hlaplac_CORRECTED_3',nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=1.1,win=1
+; xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.295_90_180_NoOffSet_l1e-6_hlaplac'   ,nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=1.1,win=2
 
-;r0=1.1 
-;xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_keepneg_hlaplac_l1e-4',nr=295,nt=90,rmin=1.05,rmax=4.00,r0=r0,win=0,titulo='KCOR-KeepNeg: Ne [cm!U-3!N]'
-;xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_dropneg_hlaplac_l1e-4',nr=295,nt=90,rmin=1.05,rmax=4.00,r0=r0,win=1,titulo='KCOR-DropNeg: Ne [cm!U-3!N]'
+;r0A=1.1 
+;xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_keepneg_hlaplac_l1e-4',nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=r0A,win=0,titulo='KCOR-KeepNeg: Ne [cm!U-3!N]'
+;xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_dropneg_hlaplac_l1e-4',nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=r0A,win=1,titulo='KCOR-DropNeg: Ne [cm!U-3!N]'
 
-; xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.295_90_180_AvgNoOffSet_l1e-6_hlaplac',nr=295,nt=90,rmin=1.05,rmax=4.00,r0=1.1,win=3
+;r0A=1.1 
+;xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_keepneg_hlaplac_l5e-5',nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=r0A,win=0,titulo='KCOR-KeepNeg Ne [cm!U-3!N]',rad_range=[1.1,2.0],lat_range=[-90.,+90.]
+;xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_dropneg_hlaplac_l5e-5',nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=r0A,win=1,titulo='KCOR-DropNeg-hlaplac Ne [cm!U-3!N]',rad_range=[1.1,2.0],lat_range=[-90.,+90.]
+;xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_dropneg_hlaplac-d2r_l5e-5',nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=r0A,win=1,titulo='KCOR-DropNeg-hlaplac+d2r Ne [cm!U-3!N]',rad_range=[1.1,2.0],lat_range=[-90.,+90.]
 
-;r0=1.07
-;xdisplay,dir='/data1/tomography/bindata/',file='x_comp1074.CR2198.bf2.ri1.00.ro1.50_50_90_180_meanimage_hlaplac_l1e-1',nr=50,nt=90,rmin=1.0,rmax=1.5,r0=r0,titulo='Mn-Peak-1074-Emissivity',mini=1.,win=0
-;xdisplay,dir='/data1/tomography/bindata/',file='x_comp1074.dynamics.CR2198.bf2.ri1.00.ro1.50_50_90_180',nr=50,nt=90,rmin=1.0,rmax=1.5,r0=r0,win=1,titulo='FeXIII-1074 Emissivity',mini=1.;,maxi=25.
-;xdisplay,dir='/data1/tomography/bindata/',file='x_comp1079.dynamics.CR2198.bf2.ri1.00.ro1.50_50_90_180',nr=50,nt=90,rmin=1.0,rmax=1.5,r0=r0,win=2,titulo='FeXIII-1079 Emissivity',mini=1.;,maxi=20.
+;xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.295_90_180_AvgNoOffSet_l1e-6_hlaplac',nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=1.1,win=3
 
-pro xdisplay,dir=dir,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0=r0,mini=mini,maxi=maxi,win=win,log=log,clrtbl=clrtbl,titulo=titulo
+;r0A=1.07
+;xdisplay,dir='/data1/tomography/bindata/',file='x_comp1074.CR2198.bf2.ri1.00.ro1.50_50_90_180_meanimage_hlaplac_l1e-1',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,titulo='Mn-Peak-1074-Emissivity',mini=1.,win=0
+;xdisplay,dir='/data1/tomography/bindata/',file='x_comp1074.dynamics.CR2198.bf2.ri1.00.ro1.50_50_90_180',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=1,titulo='FeXIII-1074 Emissivity',mini=1.;,maxi=25.
+;xdisplay,dir='/data1/tomography/bindata/',file='x_comp1079.dynamics.CR2198.bf2.ri1.00.ro1.50_50_90_180',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=2,titulo='FeXIII-1079 Emissivity',mini=1.;,maxi=20.
+
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.171.cr2081.26x90_bf4_ri.98_ro1.025_l1.0_NODECON',nr=26,nt=90,rmin=1.0,rmax=1.25,r0A=r0A,win=0,titulo='EUVI-171 FBE for CR-2081',rad_range=[1.02,1.23],lat_range=[-90.,+90.]
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2081.26x90_bf4_ri.98_ro1.025_l1.0_NODECON',nr=26,nt=90,rmin=1.0,rmax=1.25,r0A=r0A,win=1,titulo='EUVI-195 FBE for CR-2081',rad_range=[1.02,1.23],lat_range=[-90.,+90.]
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.284.cr2081.26x90_bf4_ri.98_ro1.025_l1.0_NODECON',nr=26,nt=90,rmin=1.0,rmax=1.25,r0A=r0A,win=2,titulo='EUVI-284 FBE for CR-2081',rad_range=[1.02,1.23],lat_range=[-90.,+90.]
+
+pro xdisplay,dir=dir,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A=r0A,mini=mini,maxi=maxi,win=win,log=log,clrtbl=clrtbl,titulo=titulo,rad_range=rad_range,lat_range=lat_range
   if not keyword_set(titulo)      then titulo      = 'Reconstruction'
   if not keyword_set(clrtbl)      then clrtbl      = 39
   if not keyword_set(np)          then np          = 2*nt
   if not keyword_set(scalefactor) then scalefactor = 4
   xread,dir=dir,file=file,nr=nr,nt=nt,np=np,map=map
-  if not keyword_set(log) then xshell,map=map,r0=r0,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,rmin=rmin,rmax=rmax,win=win,file=file,titulo=titulo
-  if     keyword_set(log) then xshell,map=map,r0=r0,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,rmin=rmin,rmax=rmax,win=win,file=file,titulo=titulo,/log
+  xhisto,map=map,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,rad_range=rad_range,lat_range=lat_range,win=0,titulo='Histogram of '+titulo
+  for ir=0,n_elements(r0A)-1 do begin
+     r0 = r0A[ir]
+     if not keyword_set(log) then xshell,map=map,r0=r0,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,rmin=rmin,rmax=rmax,win=win,file=file,titulo=titulo
+     if     keyword_set(log) then xshell,map=map,r0=r0,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,rmin=rmin,rmax=rmax,win=win,file=file,titulo=titulo,/log
+  endfor
   return
+end
+
+pro xhisto,map=map,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,rad_range=rad_range,lat_range=lat_range,win=win,titulo=titulo
+
+  drad = (rmax-rmin)/nr
+  rad  = rmin + drad/2. + drad*findgen(nr)
+
+  dlat = 180./nt
+  lat  = -90. + dlat/2. + dlat*findgen(nt)
+
+  radA = fltarr(nr,nt,np)
+  for ir=0,nr-1 do radA(ir,*,*)=rad[ir]
+
+  latA = fltarr(nr,nt,np)
+  for it=0,nt-1 do latA(*,it,*)=lat[it]
+
+  p = where(radA ge rad_range[0] and radA le rad_range[1] and latA ge lat_range[0] and latA le lat_range[1])
+  x_data = reform(map(p))
+
+  Npos = n_elements(where(x_data gt 0.))
+  Nneg = n_elements(where(x_data lt 0.))
+  Nnul = n_elements(where(x_data eq 0.))
+  if Nneg(0)eq -1 then Nneg = 0.
+  if Nnul(0)eq -1 then Nnul = 0.
+  Ntot=Npos+Nnul+Nneg
+  
+  maxdata = max(x_data)
+  histo_x_data = histogram(x_data,binsize=maxdata/50.,locations=xval)
+  window,win,ysize=800
+  plot,xval,histo_x_data,title=titulo,font=1
+  xyouts,0.6*[1,1,1,1],0.8-0.05*findgen(4),['RadMin  [Rsun] =','RadMax [Rsun] =','Latmin  [deg]  =','LatMax  [deg]  =']+strmid(string([rad_range,lat_range]),4,6),/normal
+  xyouts,0.6*[1,1,1,1],0.8-0.05*(5+findgen(4)),['% Npos = ','% Nnul = ','% Nneg = ','Total Number = ']+string([[Npos,Nnul,Nneg]*(100./Ntot),Ntot]),/normal
+  
+  return
+  
 end
 
 pro xread,dir=dir,file=file,nr=nr,nt=nt,np=np,map=map
@@ -51,6 +99,7 @@ drad = (rmax-rmin)/nr
 rad  = rmin + drad/2. + drad*findgen(nr)
 frad = abs(rad-r0)
 ir   = median(where(frad eq min(frad)))
+r0   = rad[ir]
 
 if keyword_set(interp) then $
 map2=rotate(rebin(reform(map(ir,*,*)),nt*scalefactor,np*scalefactor),4)
@@ -84,6 +133,7 @@ endif
 
 ; Default mini and maxi
 ipos = where(map2 gt 0.)
+if ipos(0) eq -1 then ipos = where(finite(map2) eq 1)  
 if not keyword_set(mini) then mini = min(map2(ipos))
 if not keyword_set(maxi) then maxi = max(map2(ipos))
 
@@ -117,14 +167,18 @@ endif
 
  if clrtbl lt 100 then loadct,clrtbl
  if clrtbl gt 100 then secchi_colors, 'EUVI', clrtbl, R, G, B,/load
-    height_string = strmid(string(r0),6,4)
+    height_string = strmid(string(r0),6,5)
     x = x0
     y = y0+DY/2
     carrmap,map=map2,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,clrtbl=clrtbl,$
             xtitle_status=1,ytitle_status=1,titulo_status=1,$
             title=titulo+' at '+height_string+' R!DSUN!N',$
             /color_scale,DX=DX,DY=DY,mini=mini,maxi=maxi,xsimage=xsimage,ysimage=ysimage
-  record_gif,'~/Pictures/',file+'_'+height_string+'_Rsun.gif','X'
+    record_gif,'~/Pictures/',file+'_'+height_string+'_Rsun.gif','X'
+
+   ; Set mini and maxi back to ZERO
+    mini = 0.
+    maxi = 0.
 return
 end
 
@@ -185,3 +239,4 @@ pro carrmap,map=map,xi=xi,yi=yi,np=np,nt=nt,scalefactor=scalefactor,clrtbl=clrtb
 
     return
  end
+
