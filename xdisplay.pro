@@ -31,11 +31,11 @@ pro xdisplay,dir=dir,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A=r0A,min
   if not keyword_set(np)          then np          = 2*nt
   if not keyword_set(scalefactor) then scalefactor = 4
   xread,dir=dir,file=file,nr=nr,nt=nt,np=np,map=map
-  xhisto,map=map,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,rad_range=rad_range,lat_range=lat_range,win=0,titulo='Histogram of '+titulo
+  xhisto,map=map,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,rad_range=rad_range,lat_range=lat_range,win=win,titulo='Histogram of '+titulo
   for ir=0,n_elements(r0A)-1 do begin
      r0 = r0A[ir]
-     if not keyword_set(log) then xshell,map=map,r0=r0,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,rmin=rmin,rmax=rmax,win=win,file=file,titulo=titulo
-     if     keyword_set(log) then xshell,map=map,r0=r0,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,rmin=rmin,rmax=rmax,win=win,file=file,titulo=titulo,/log
+     if not keyword_set(log) then xshell,map=map,r0=r0,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,rmin=rmin,rmax=rmax,win=win+1,file=file,titulo=titulo
+     if     keyword_set(log) then xshell,map=map,r0=r0,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,rmin=rmin,rmax=rmax,win=win+1,file=file,titulo=titulo,/log
   endfor
   return
 end

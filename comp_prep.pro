@@ -10,6 +10,9 @@
 ; comp_prep,data_dir='/data1/tomography/DATA/comp/1074/CR2198/',file_list='list_mean.txt',r0=[1.1,1.3],/meanfits
 ; comp_prep,data_dir='/data1/tomography/DATA/comp/1074/CR2198/',file_list='list.txt'     ,r0=[1.1,1.3],/dynamics
 ; comp_prep,data_dir='/data1/tomography/DATA/comp/1079/CR2198/',file_list='list.txt'     ,r0=[1.1,1.3],/dynamics
+
+; comp_prep,data_dir='/data1/tomography_dev/DATA/comp/research_data/2017/20171118.comp.1079.daily_dynamics.3/',file_list='list.txt',r0=[1.1,1.3],/dynamics
+
 ;
 ;---------------------------------------------------------------------
 
@@ -52,7 +55,7 @@ pro comp_prep,data_dir=data_dir,file_list=file_list,r0=r0,dynamics=dynamics,mean
         header_Imean_struct    = fitshead2struct(header_Imean   , dash2underscore=dash2underscore)
      endif
      fits_close, fcb
-
+stop
      create_output_header
      compute_line_total_intensity_image
 
@@ -332,3 +335,96 @@ fin:
 return,Df
 end
 
+
+; comp_avg_dynamics,data_dir='/data1/tomography/DATA/comp/1074/CR2198/Full_Data/20171203.comp.1074.daily_dynamics/',file_list='list.txt',window_lapse=1.,/dynamics
+pro comp_avg_dynamics,data_dir=data_dir,file_list=file_list,window_lapse=window_lapse,dynamics=dynamics,meanfits=meanfits
+  common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity,image_Imean,header_Imean_struct
+  common constants,AU,c
+  common files,filetype
+  
+  filetype=''
+  if keyword_set(dynamics) then filetype = 'dynamics'
+  if keyword_set(meanfits) then filetype = 'meanfits'
+  if filetype eq '' then begin
+     print,'Specify filetype.'
+     return
+  endif
+
+  if not keyword_set(window_lapse) then window_lapse = 1.
+  load_constants
+  N=0
+  filename=''
+  openr,1,data_dir+file_list
+  readf,1,N
+  day_of_year_array = fltarr(N)
+  hour_of_day_array = fltarr(N)
+  for i = 0,N-1 do begin
+     readf,1,filename
+     fits_open,  data_dir+filename, fcb
+     fits_read,  fcb, tmp, header_primary, /header_only, exten_no=0 ; reads primary header only
+     fits_close, fcb
+     header_primary_struct = fitshead2struct(header_primary, dash2underscore=dash2underscore)
+     date_vector = date_conv(header_primary_struct.date_obs,'V')
+     day_of_year_array[i] = date_vector[1]
+     hour_of_day_array[i] = date_vector[2] + date_vector[3]/60. + date_vector[3]/3600.
+  endfor
+  close,1
+
+;; Determine the number of images to average, and their median index.
+  p = where (day_of_year_array eq day_of_year_array[0] AND hour_of_day_array le hour_of_day_array[0]+window_lapse)
+  Nimages = n_elements(p)  
+  imedian = Nimages/2
+
+  openr,1,data_dir+file_list
+  readf,1,N
+  output_file_list = strmid(file_list,0,strlen(file_list)-4)+'_avg_files.txt'
+   openw,2,data_dir+output_file_list
+  printf,2,'Number of images used: ',Nimages
+  for i = 0,Nimages-1 do begin
+     readf,1,filename
+     fits_open,  data_dir+filename, fcb
+     fits_read,  fcb, tmp, header_primary, /header_only, exten_no=0 ; reads primary header only
+        fits_read,  fcb, image_peak,  header_peak,    extname='Intensity'
+        fits_read,  fcb, image_width, header_width,   extname='Line Width'
+        header_primary_struct = fitshead2struct(header_primary, dash2underscore=dash2underscore)
+        header_peak_struct    = fitshead2struct(header_peak   , dash2underscore=dash2underscore)
+        header_width_struct   = fitshead2struct(header_width  , dash2underscore=dash2underscore)
+     fits_close, fcb
+
+     printf,2,filename+'  Date_obs: '+header_primary_struct.date_obs
+     
+     ;; Create the output header for ith image
+     create_output_header
+     ;; Compute total_intensity_image for ith image
+     compute_line_total_intensity_image
+     
+     ;; Make Average output header and filename from the header and filename
+     ;; of the median image
+     if i eq imedian then begin
+        avg_output_header   = output_header
+        avg_output_filename = strmid(filename,0,strlen(filename)-4)+'_daily_avg_total_intensity.fts'
+     endif
+     
+     ;; Create Avg_total_intensity_image array:
+     if i eq 0 then avg_image_total_intensity = fltarr((size(image_peak))(1),(size(image_peak))(2))        
+     ;; Cumulate the Avg_total_intensity_image
+     avg_image_total_intensity = avg_image_total_intensity + image_total_intensity/float(Nimages)
+     
+     pinf = where(finite(image_total_intensity) ne 1)
+     if pinf(0) ne -1 then begin
+        print,'There are Infinite and/or NaN values in the output image.'
+        stop
+     endif
+     pneg = where(image_total_intensity lt 0.)
+     if pneg(0) ne -1 then begin
+        print,'There are negative values in the output image.'
+     endif
+     
+  endfor
+
+     mwritefits,avg_output_header,avg_image_total_intensity,outfile=data_dir+avg_output_filename
+     print,avg_output_filename
+
+  close,/all
+  return
+end
