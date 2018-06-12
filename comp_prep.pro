@@ -335,15 +335,15 @@ fin:
 return,Df
 end
 
-; comp_avg_dynamics,data_dir='/data1/tomography/DATA/comp/1074/CR2198/Full_Data/20171203.comp.1074.daily_dynamics/',file_list='list.txt',window_lapse=2.,init_hour=18.,suffix='t018-Dt2',/dynamics
+; comp_avg_dynamics,data_dir='/data1/tomography/DATA/comp/1074/CR2198/Full_Data/20171203.comp.1074.daily_dynamics/',file_list='list.txt',window_lapse=2.,init_hour=16.,suffix='t018-Dt2',/dynamics
 ; comp_avg_dynamics,data_dir='/data1/tomography/DATA/comp/1079/CR2198/Full_Data/20171203.comp.1079.daily_dynamics/',file_list='list.txt',window_lapse=2.,init_hour=18.,suffix='t018-Dt2',/dynamics
 pro comp_avg_dynamics,data_dir=data_dir,file_list=file_list,window_lapse=window_lapse,dynamics=dynamics,meanfits=meanfits,init_hour=init_hour,suffix=suffix
   common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity,image_Imean,header_Imean_struct
   common constants,AU,c
   common files,filetype
 
-  if not keyword_set(suffix) then STOP
-  
+  suffix='t0'+strmid(string(init_hour),6,4)+'-Dt'+strmid(string(window_lapse),6,4)
+
   filetype=''
   if keyword_set(dynamics) then filetype = 'dynamics'
   if keyword_set(meanfits) then filetype = 'meanfits'
@@ -462,7 +462,7 @@ end
 ; compare_avg_med,data_dir='/data1/tomography/DATA/comp/1074/CR2198/Full_Data/20171203.comp.1074.daily_dynamics/',avg_filename=avg_filename,med_filename=med_filename
 ; compare_avg_med,data_dir='/data1/tomography/DATA/comp/1079/CR2198/Full_Data/20171203.comp.1079.daily_dynamics/',avg_filename=avg_filename,med_filename=med_filename
 
-pro compare_avg_med,data_dir=data_dir,avg_filename=avg_filename,med_filename=med_filename
+pro compare_avg_med,data_dir=data_dir,avg_filename=avg_filename,med_filename=med_filename,r0=r0
   mreadfits,data_dir+avg_filename,avghdr,avgimg
   mreadfits,data_dir+med_filename,medhdr,medimg
   avgind = where(avgimg gt 0.)
@@ -477,12 +477,16 @@ pro compare_avg_med,data_dir=data_dir,avg_filename=avg_filename,med_filename=med
   medimg[0:1,0] = [mini,maxi]
   avgimg = avgimg > mini <maxi
   medimg = medimg > mini <maxi
+  computegrid,avghdr,ra,pa,x,y
   window,xs=620*2,ys=620
   loadct,39
+  dr=.005
+  p=where(ra ge r0-dr/2. and ra le r0+dr/2.)
+  avgimg(p) = mini
   tvscl,alog10(medimg>mini),0
   tvscl,alog10(avgimg>mini),1
   close,/all
-  stop
+
   return
 end
 
@@ -499,4 +503,36 @@ pro  average_images,array=array,Nimages=Nimages,ImageSize=ImageSize,average_imag
      endfor
   endfor
   return
+end
+
+pro computegrid,hdr,ra,pa,x,y
+
+ Rs=hdr.rsun              ; Sun radius in arcsec
+ px=hdr.cdelt1            ; Pixel size in arcsec                     
+ Rs=Rs/px                 ; Sun radius in pixels
+ px=1./Rs                 ; Pixel size in Rsun units
+ ix0=hdr.crpix1-1         ; Disk center x-pixel, changed to IDL convention (FITS convention starts with index=1, IDL starts with index=0). 
+ iy0=hdr.crpix2-1         ; Disk center y-pixel, changed to IDL convention
+
+ x  = px*(findgen(hdr.naxis1) - ix0)
+ y  = px*(findgen(hdr.naxis1) - iy0)
+ u  = 1. + fltarr(hdr.naxis1)
+ xa = x#u
+ ya = u#y
+ ra = sqrt(xa^2 + ya^2)
+
+ ta = fltarr(hdr.naxis1,hdr.naxis1)
+
+ p=where(xa gt 0.)
+ ta(p) = Acos( ya(p) / ra(p) )
+ p=where(xa lt 0.)
+ ta(p) = 2.*!pi-Acos( ya(p) / ra(p) )
+ p=where(xa eq 0. AND ya gt 0.)
+ if p(0) ne -1 then ta(p)=0.
+ p=where(xa eq 0. AND ya lt 0.)
+ if p(0) ne -1 then ta(p)=!pi
+ ta=2.*!pi-ta
+ PA=ta/!dtor
+
+return
 end
