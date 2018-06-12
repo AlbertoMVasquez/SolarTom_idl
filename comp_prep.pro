@@ -55,7 +55,7 @@ pro comp_prep,data_dir=data_dir,file_list=file_list,r0=r0,dynamics=dynamics,mean
         header_Imean_struct    = fitshead2struct(header_Imean   , dash2underscore=dash2underscore)
      endif
      fits_close, fcb
-stop
+
      create_output_header
      compute_line_total_intensity_image
 
@@ -335,12 +335,14 @@ fin:
 return,Df
 end
 
-
-; comp_avg_dynamics,data_dir='/data1/tomography/DATA/comp/1074/CR2198/Full_Data/20171203.comp.1074.daily_dynamics/',file_list='list.txt',window_lapse=1.,/dynamics
-pro comp_avg_dynamics,data_dir=data_dir,file_list=file_list,window_lapse=window_lapse,dynamics=dynamics,meanfits=meanfits
+; comp_avg_dynamics,data_dir='/data1/tomography/DATA/comp/1074/CR2198/Full_Data/20171203.comp.1074.daily_dynamics/',file_list='list.txt',window_lapse=2.,init_hour=18.,suffix='t018-Dt2',/dynamics
+; comp_avg_dynamics,data_dir='/data1/tomography/DATA/comp/1079/CR2198/Full_Data/20171203.comp.1079.daily_dynamics/',file_list='list.txt',window_lapse=2.,init_hour=18.,suffix='t018-Dt2',/dynamics
+pro comp_avg_dynamics,data_dir=data_dir,file_list=file_list,window_lapse=window_lapse,dynamics=dynamics,meanfits=meanfits,init_hour=init_hour,suffix=suffix
   common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity,image_Imean,header_Imean_struct
   common constants,AU,c
   common files,filetype
+
+  if not keyword_set(suffix) then STOP
   
   filetype=''
   if keyword_set(dynamics) then filetype = 'dynamics'
@@ -351,6 +353,7 @@ pro comp_avg_dynamics,data_dir=data_dir,file_list=file_list,window_lapse=window_
   endif
 
   if not keyword_set(window_lapse) then window_lapse = 1.
+  
   load_constants
   N=0
   filename=''
@@ -358,29 +361,58 @@ pro comp_avg_dynamics,data_dir=data_dir,file_list=file_list,window_lapse=window_
   readf,1,N
   day_of_year_array = fltarr(N)
   hour_of_day_array = fltarr(N)
+ ;julian_array      = fltarr(N)
   for i = 0,N-1 do begin
      readf,1,filename
      fits_open,  data_dir+filename, fcb
      fits_read,  fcb, tmp, header_primary, /header_only, exten_no=0 ; reads primary header only
+     if i eq 0 then begin
+        fits_read,  fcb, image_peak,  header_peak,    extname='Intensity'
+        ImageSize = (size(image_peak))[1]
+     endif
      fits_close, fcb
      header_primary_struct = fitshead2struct(header_primary, dash2underscore=dash2underscore)
+     header_peak_struct    = fitshead2struct(header_peak   , dash2underscore=dash2underscore)
      date_vector = date_conv(header_primary_struct.date_obs,'V')
+     date_number = date_conv(header_primary_struct.date_obs,'R')
+     date_julian = date_conv(header_primary_struct.date_obs,'J')
      day_of_year_array[i] = date_vector[1]
      hour_of_day_array[i] = date_vector[2] + date_vector[3]/60. + date_vector[3]/3600.
+    ;julian_array     [i] = date_julian
   endfor
   close,1
+  
+;; Determine indexes of the images to average, and their median index.
+  ;; Default is to start with the first image of the day:
+  if not keyword_set(init_hour) then init_hour = hour_of_day_array[0]
+  ;; Determine index of first image:
+  f  = abs(hour_of_day_array - init_hour)
+  i0 = (where(f eq min(f)))(0)
+  ;; Express the window lapse [hr] in variation of julian date:  
+ ;julian_window = window_lapse * 1.6950822e-08 ; this constant is a 1-hr-lapse in julian date variation
+ ;p = where(hour_of_day_array ge hour_of_day_array[i0] and julian_array le julian_array[i0]+julian_window)
 
-;; Determine the number of images to average, and their median index.
-  p = where (day_of_year_array eq day_of_year_array[0] AND hour_of_day_array le hour_of_day_array[0]+window_lapse)
-  Nimages = n_elements(p)  
-  imedian = Nimages/2
+  ;; Detect days of the new-day and add 24 hr to their hour_of_day values. 
+  indnewday = where(day_of_year_array eq day_of_year_array[0]+1)
+  if indnewday[0] ne -1 then $
+     hour_of_day_array(indnewday) = hour_of_day_array(indnewday) + 24.
 
-  openr,1,data_dir+file_list
-  readf,1,N
-  output_file_list = strmid(file_list,0,strlen(file_list)-4)+'_avg_files.txt'
+  ;; Determine indexes of images to use:
+  p = where(hour_of_day_array ge hour_of_day_array[i0] and hour_of_day_array le hour_of_day_array[i0] + window_lapse)
+
+  Nimages = n_elements(p)
+  ifinal  = i0 + Nimages-1
+  imedian = i0 + Nimages/2
+
+  total_intensity_image_selected_array = fltarr(Nimages,ImageSize,ImageSize)
+  
+   openr,1,data_dir+file_list
+   readf,1,N
+   output_file_list = strmid(file_list,0,strlen(file_list)-4)+'_avg_files_'+suffix+'.txt'
    openw,2,data_dir+output_file_list
-  printf,2,'Number of images used: ',Nimages
-  for i = 0,Nimages-1 do begin
+   printf,2,'Number of images used: ',Nimages
+   if i0 gt 0 then for i=0,i0-1 do readf,1,filename ; First i0 images are skipped.
+  for i = i0,ifinal do begin
      readf,1,filename
      fits_open,  data_dir+filename, fcb
      fits_read,  fcb, tmp, header_primary, /header_only, exten_no=0 ; reads primary header only
@@ -399,32 +431,72 @@ pro comp_avg_dynamics,data_dir=data_dir,file_list=file_list,window_lapse=window_
      compute_line_total_intensity_image
      
      ;; Make Average output header and filename from the header and filename
-     ;; of the median image
+     ;; of the median image. Record also median_image.
      if i eq imedian then begin
+        med_image_total_intensity = image_total_intensity
+        med_output_header   = output_header
         avg_output_header   = output_header
-        avg_output_filename = strmid(filename,0,strlen(filename)-4)+'_daily_avg_total_intensity.fts'
+        avg_output_filename = strmid(filename,0,strlen(filename)-4)+'_avg_total_intensity_'+suffix+'.fts'
+        med_output_filename = strmid(filename,0,strlen(filename)-4)+'_med_total_intensity_'+suffix+'.fts'
+        mwritefits,med_output_header,med_image_total_intensity,outfile=data_dir+med_output_filename
      endif
      
-     ;; Create Avg_total_intensity_image array:
-     if i eq 0 then avg_image_total_intensity = fltarr((size(image_peak))(1),(size(image_peak))(2))        
-     ;; Cumulate the Avg_total_intensity_image
-     avg_image_total_intensity = avg_image_total_intensity + image_total_intensity/float(Nimages)
-     
-     pinf = where(finite(image_total_intensity) ne 1)
-     if pinf(0) ne -1 then begin
-        print,'There are Infinite and/or NaN values in the output image.'
-        stop
-     endif
-     pneg = where(image_total_intensity lt 0.)
-     if pneg(0) ne -1 then begin
-        print,'There are negative values in the output image.'
-     endif
-     
+     ;; Load ith-element of total_intensity_image_selected_array:
+     total_intensity_image_selected_array(i-i0,*,*) = image_total_intensity
+
   endfor
-
-     mwritefits,avg_output_header,avg_image_total_intensity,outfile=data_dir+avg_output_filename
-     print,avg_output_filename
-
   close,/all
+
+  array = total_intensity_image_selected_array
+  average_images,array=array,Nimages=Nimages,ImageSize=ImageSize,average_image=average_image
+
+  avg_image_total_intensity = average_image
+  mwritefits,avg_output_header,avg_image_total_intensity,outfile=data_dir+avg_output_filename
+  
+  print,'Averaged file: ',avg_output_filename
+  print,'Median   file: ',med_output_filename
+
+  return
+end
+
+; compare_avg_med,data_dir='/data1/tomography/DATA/comp/1074/CR2198/Full_Data/20171203.comp.1074.daily_dynamics/',avg_filename=avg_filename,med_filename=med_filename
+; compare_avg_med,data_dir='/data1/tomography/DATA/comp/1079/CR2198/Full_Data/20171203.comp.1079.daily_dynamics/',avg_filename=avg_filename,med_filename=med_filename
+
+pro compare_avg_med,data_dir=data_dir,avg_filename=avg_filename,med_filename=med_filename
+  mreadfits,data_dir+avg_filename,avghdr,avgimg
+  mreadfits,data_dir+med_filename,medhdr,medimg
+  avgind = where(avgimg gt 0.)
+  avgmin = min(avgimg(avgind))
+  avgmax = max(avgimg(avgind))
+  medind = where(medimg gt 0.)
+  medmin = min(medimg(medind))
+  medmax = max(medimg(medind))
+  mini   = min([avgmin,medmin])
+  maxi   = max([avgmax,medmax])
+  avgimg[0:1,0] = [mini,maxi]
+  medimg[0:1,0] = [mini,maxi]
+  avgimg = avgimg > mini <maxi
+  medimg = medimg > mini <maxi
+  window,xs=620*2,ys=620
+  loadct,39
+  tvscl,alog10(medimg>mini),0
+  tvscl,alog10(avgimg>mini),1
+  close,/all
+  stop
+  return
+end
+
+pro  average_images,array=array,Nimages=Nimages,ImageSize=ImageSize,average_image=average_image
+  average_image = fltarr(ImageSize,ImageSize) - 666.
+  for ix=0,ImageSize-1 do begin
+     for iy=0,ImageSize-1 do begin
+        pixel_data_vector = reform(array(*,ix,iy))
+        ipos = where(pixel_data_vector gt 0.)
+        if ipos(0) eq -1 then goto,next_pixel
+        if n_elements(ipos) lt Nimages/2. then goto,next_pixel
+        average_image(ix,iy) = mean(pixel_data_vector(ipos))
+        next_pixel:
+     endfor
+  endfor
   return
 end
