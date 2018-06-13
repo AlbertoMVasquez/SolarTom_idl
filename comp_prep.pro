@@ -335,14 +335,13 @@ fin:
 return,Df
 end
 
-; comp_avg_dynamics,data_dir='/data1/tomography/DATA/comp/1074/CR2198/Full_Data/20171203.comp.1074.daily_dynamics/',file_list='list.txt',window_lapse=2.,init_hour=16.,suffix='t018-Dt2',/dynamics
-; comp_avg_dynamics,data_dir='/data1/tomography/DATA/comp/1079/CR2198/Full_Data/20171203.comp.1079.daily_dynamics/',file_list='list.txt',window_lapse=2.,init_hour=18.,suffix='t018-Dt2',/dynamics
-pro comp_avg_dynamics,data_dir=data_dir,file_list=file_list,window_lapse=window_lapse,dynamics=dynamics,meanfits=meanfits,init_hour=init_hour,suffix=suffix
+
+; compute_avg_dynamics,data_dir='/data1/tomography/DATA/comp/1074/CR2198/Full_Data/20171203.comp.1074.daily_dynamics/',file_list='list.txt',window_lapse=2.,init_hour=16.,/dynamics
+; compute_avg_dynamics,data_dir='/data1/tomography/DATA/comp/1079/CR2198/Full_Data/20171203.comp.1079.daily_dynamics/',file_list='list.txt',window_lapse=2.,init_hour=16.,/dynamics
+pro compute_avg_dynamics,data_dir=data_dir,file_list=file_list,window_lapse=window_lapse,dynamics=dynamics,meanfits=meanfits,init_hour=init_hour
   common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity,image_Imean,header_Imean_struct
   common constants,AU,c
   common files,filetype
-
-  suffix='t0'+strmid(string(init_hour),6,4)+'-Dt'+strmid(string(window_lapse),6,4)
 
   filetype=''
   if keyword_set(dynamics) then filetype = 'dynamics'
@@ -355,13 +354,14 @@ pro comp_avg_dynamics,data_dir=data_dir,file_list=file_list,window_lapse=window_
   if not keyword_set(window_lapse) then window_lapse = 1.
   
   load_constants
+
   N=0
-  filename=''
   openr,1,data_dir+file_list
   readf,1,N
   day_of_year_array = fltarr(N)
   hour_of_day_array = fltarr(N)
- ;julian_array      = fltarr(N)
+
+  filename=''
   for i = 0,N-1 do begin
      readf,1,filename
      fits_open,  data_dir+filename, fcb
@@ -378,7 +378,6 @@ pro comp_avg_dynamics,data_dir=data_dir,file_list=file_list,window_lapse=window_
      date_julian = date_conv(header_primary_struct.date_obs,'J')
      day_of_year_array[i] = date_vector[1]
      hour_of_day_array[i] = date_vector[2] + date_vector[3]/60. + date_vector[3]/3600.
-    ;julian_array     [i] = date_julian
   endfor
   close,1
   
@@ -388,22 +387,21 @@ pro comp_avg_dynamics,data_dir=data_dir,file_list=file_list,window_lapse=window_
   ;; Determine index of first image:
   f  = abs(hour_of_day_array - init_hour)
   i0 = (where(f eq min(f)))(0)
-  ;; Express the window lapse [hr] in variation of julian date:  
- ;julian_window = window_lapse * 1.6950822e-08 ; this constant is a 1-hr-lapse in julian date variation
- ;p = where(hour_of_day_array ge hour_of_day_array[i0] and julian_array le julian_array[i0]+julian_window)
-
-  ;; Detect days of the new-day and add 24 hr to their hour_of_day values. 
+  ;; Reset init_hour to the actual init_hour that is going to be used:
+  init_hour = hour_of_day_array[i0]
+  ;; Create suffix for various output files based on both init_hour and window_lapse:
+  suffix='t0'+strmid(string(init_hour),6,4)+'-Dt'+strmid(string(window_lapse),6,4)
+  ;; Detect days of the new-day and add 24 hr to their hour_of_day values:
   indnewday = where(day_of_year_array eq day_of_year_array[0]+1)
-  if indnewday[0] ne -1 then $
-     hour_of_day_array(indnewday) = hour_of_day_array(indnewday) + 24.
-
+  if indnewday[0] ne -1 then hour_of_day_array(indnewday) = hour_of_day_array(indnewday) + 24.
   ;; Determine indexes of images to use:
   p = where(hour_of_day_array ge hour_of_day_array[i0] and hour_of_day_array le hour_of_day_array[i0] + window_lapse)
-
+  ;; Number of images, final and median indices:
   Nimages = n_elements(p)
   ifinal  = i0 + Nimages-1
   imedian = i0 + Nimages/2
 
+  ;; Create array to stack all images:
   total_intensity_image_selected_array = fltarr(Nimages,ImageSize,ImageSize)
   
    openr,1,data_dir+file_list
@@ -436,8 +434,8 @@ pro comp_avg_dynamics,data_dir=data_dir,file_list=file_list,window_lapse=window_
         med_image_total_intensity = image_total_intensity
         med_output_header   = output_header
         avg_output_header   = output_header
-        avg_output_filename = strmid(filename,0,strlen(filename)-4)+'_avg_total_intensity_'+suffix+'.fts'
-        med_output_filename = strmid(filename,0,strlen(filename)-4)+'_med_total_intensity_'+suffix+'.fts'
+        avg_output_filename = strmid(filename,0,strlen(filename)-7)+'_avg_total_intensity_'+suffix+'.fts'
+        med_output_filename = strmid(filename,0,strlen(filename)-7)+'_med_total_intensity_'+suffix+'.fts'
         mwritefits,med_output_header,med_image_total_intensity,outfile=data_dir+med_output_filename
      endif
      
@@ -456,13 +454,16 @@ pro comp_avg_dynamics,data_dir=data_dir,file_list=file_list,window_lapse=window_
   print,'Averaged file: ',avg_output_filename
   print,'Median   file: ',med_output_filename
 
+  compare_avg_med,data_dir=data_dir,avg_filename=avg_output_filename,med_filename=med_output_filename,ImageSize=ImageSize,r0=1.06
+  record_gif,data_dir,avg_output_filename+'.gif','X'
   return
 end
 
 ; compare_avg_med,data_dir='/data1/tomography/DATA/comp/1074/CR2198/Full_Data/20171203.comp.1074.daily_dynamics/',avg_filename=avg_filename,med_filename=med_filename
 ; compare_avg_med,data_dir='/data1/tomography/DATA/comp/1079/CR2198/Full_Data/20171203.comp.1079.daily_dynamics/',avg_filename=avg_filename,med_filename=med_filename
 
-pro compare_avg_med,data_dir=data_dir,avg_filename=avg_filename,med_filename=med_filename,r0=r0
+pro compare_avg_med,data_dir=data_dir,avg_filename=avg_filename,med_filename=med_filename,ImageSize=ImageSize,r0=r0
+  if not keyword_set(r0) then r0=1.06
   mreadfits,data_dir+avg_filename,avghdr,avgimg
   mreadfits,data_dir+med_filename,medhdr,medimg
   avgind = where(avgimg gt 0.)
@@ -478,7 +479,7 @@ pro compare_avg_med,data_dir=data_dir,avg_filename=avg_filename,med_filename=med
   avgimg = avgimg > mini <maxi
   medimg = medimg > mini <maxi
   computegrid,avghdr,ra,pa,x,y
-  window,xs=620*2,ys=620
+  window,xs=2*ImageSize,ys=ImageSize
   loadct,39
   dr=.005
   p=where(ra ge r0-dr/2. and ra le r0+dr/2.)
@@ -490,7 +491,7 @@ pro compare_avg_med,data_dir=data_dir,avg_filename=avg_filename,med_filename=med
   return
 end
 
-pro  average_images,array=array,Nimages=Nimages,ImageSize=ImageSize,average_image=average_image
+pro average_images,array=array,Nimages=Nimages,ImageSize=ImageSize,average_image=average_image
   average_image = fltarr(ImageSize,ImageSize) - 666.
   for ix=0,ImageSize-1 do begin
      for iy=0,ImageSize-1 do begin
@@ -535,4 +536,35 @@ pro computegrid,hdr,ra,pa,x,y
  PA=ta/!dtor
 
 return
+end
+
+pro process,window_lapse=window_lapse,init_hour=init_hour
+  year ='2017'
+  month='12'
+  dates=['03','04','05','06','07','08','09','10','11','12','13','14','15','16']
+  Ndates=n_elements(dates)
+  for i=0,Ndates-1 do begin
+     
+     data_dir_1074 = '/data1/tomography/DATA/comp/1074/CR2198/Full_Data/'+year+month+dates[i]+'.comp.1074.daily_dynamics/'
+     CD,data_dir_1074
+     datafiles = FILE_SEARCH('*.gz')
+     openw,1,data_dir_1074+'list.txt'
+     printf,1,n_elements(datafiles)
+     for j=0,n_elements(datafiles)-1 do printf,1,datafiles[j]
+     close,1
+     
+     data_dir_1079 = '/data1/tomography/DATA/comp/1079/CR2198/Full_Data/'+year+month+dates[i]+'.comp.1079.daily_dynamics/'
+     CD,data_dir_1079
+     datafiles = FILE_SEARCH('*.gz')
+     openw,1,data_dir_1079+'list.txt'
+     printf,1,n_elements(datafiles)
+     for j=0,n_elements(datafiles)-1 do printf,1,datafiles[j]
+     close,1
+     
+     CD,'/data1/tomography/SolarTom_idl/'
+     compute_avg_dynamics,data_dir=data_dir_1079,file_list='list.txt',window_lapse=window_lapse,init_hour=init_hour,/dynamics
+     compute_avg_dynamics,data_dir=data_dir_1074,file_list='list.txt',window_lapse=window_lapse,init_hour=init_hour,/dynamics
+
+  endfor
+  return
 end
