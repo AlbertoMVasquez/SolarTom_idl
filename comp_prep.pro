@@ -335,8 +335,6 @@ fin:
 return,Df
 end
 
-
-
 pro process_data,windowlapse=windowlapse,inithour=inithour
   common time_parameters,overal_window_lapse,overal_init_hour
   overal_window_lapse = windowlapse
@@ -532,7 +530,7 @@ pro compare_avg_med,data_dir=data_dir,avg_filename=avg_filename,med_filename=med
   medimg[0:1,0] = [mini,maxi]
   avgimg = avgimg > mini <maxi
   medimg = medimg > mini <maxi
-  computegrid,avghdr,ra,pa,x,y
+  compute_image_grid,header=avghdr,ra=ra,pa=pa,x=x,y=y,instrument='comp'
   window,xs=2*ImageSize,ys=ImageSize
   loadct,39
   dr=.005
@@ -543,36 +541,4 @@ pro compare_avg_med,data_dir=data_dir,avg_filename=avg_filename,med_filename=med
   close,/all
 
   return
-end
-
-pro computegrid,hdr,ra,pa,x,y
-
- Rs=hdr.rsun              ; Sun radius in arcsec
- px=hdr.cdelt1            ; Pixel size in arcsec                     
- Rs=Rs/px                 ; Sun radius in pixels
- px=1./Rs                 ; Pixel size in Rsun units
- ix0=hdr.crpix1-1         ; Disk center x-pixel, changed to IDL convention (FITS convention starts with index=1, IDL starts with index=0). 
- iy0=hdr.crpix2-1         ; Disk center y-pixel, changed to IDL convention
-
- x  = px*(findgen(hdr.naxis1) - ix0)
- y  = px*(findgen(hdr.naxis1) - iy0)
- u  = 1. + fltarr(hdr.naxis1)
- xa = x#u
- ya = u#y
- ra = sqrt(xa^2 + ya^2)
-
- ta = fltarr(hdr.naxis1,hdr.naxis1)
-
- p=where(xa gt 0.)
- ta(p) = Acos( ya(p) / ra(p) )
- p=where(xa lt 0.)
- ta(p) = 2.*!pi-Acos( ya(p) / ra(p) )
- p=where(xa eq 0. AND ya gt 0.)
- if p(0) ne -1 then ta(p)=0.
- p=where(xa eq 0. AND ya lt 0.)
- if p(0) ne -1 then ta(p)=!pi
- ta=2.*!pi-ta
- PA=ta/!dtor
-
-return
 end
