@@ -10,15 +10,13 @@
 ; kcor_prep,data_dir='/data1/tomography/DATA/kcor/CR2198/Original_Images/',file_list='list.txt',r0=[1.05,1.5,2.0]
 ; kcor_prep,data_dir='/data1/tomography/DATA/kcor/CR2198/Nooffset_Images/',file_list='list.txt',r0=[1.09,1.5,2.0]
 ; kcor_prep,data_dir='/data1/tomography/DATA/kcor/CR2198/AvgNoOffset_Images/',file_list='list.txt',r0=[1.09,1.5,2.0]
+; kcor_prep,data_dir='/data1/tomography/DATA/kcor/CR2198/2017/12/03/',file_list='list.txt'
 ;
 ;---------------------------------------------------------------------
 
 ; Main routine:
 pro kcor_prep,data_dir=data_dir,file_list=file_list,r0=r0
-  common data,hdr,img
-  common constants,AU
   if not keyword_set(r0) then r0 = [1.1]
-  load_constants
   N=0
   filename=''
   openr,1,data_dir+file_list
@@ -30,13 +28,13 @@ pro kcor_prep,data_dir=data_dir,file_list=file_list,r0=r0
      readf,1,filename
      mreadfits,data_dir+filename,hdr,img
      new_filename = strmid(filename,0,strlen(filename)-4)+'_prep.fts'
-     expand_header
+     expand_header_kcor,hdr=hdr
     ;Make -666 all null pixels.
     ;izero = where(img eq 0.)
     ;if izero(0) ne -1. then img(izero) = -666.
      mwritefits,hdr,img,outfile=data_dir+new_filename
      printf,2,new_filename
-     kcor_inspect,r0=r0,data_dir=data_dir,filename=filename
+     kcor_inspect,hdr=hdr,img=img,r0=r0,data_dir=data_dir,filename=filename
      stop
     ;print,'Exp Time:',hdr.exptime
   endfor
@@ -45,9 +43,8 @@ pro kcor_prep,data_dir=data_dir,file_list=file_list,r0=r0
 end
 
 ; Sub-routines:
-pro expand_header
-  common data,hdr,img
-  common constants,AU  
+pro expand_header_kcor,hdr=hdr
+  AU = 149597870700. ; m
   geocentric_sun_ephemeris = get_sun(hdr.DATE_OBS)
   DSUN = geocentric_sun_ephemeris[0] * AU  ; m
   hdr  = create_struct(hdr        ,      $
@@ -59,18 +56,9 @@ pro expand_header
   return
 end
 
-pro load_constants
-  common constants,AU
-  AU = 149597870700. ; m
-return
-end
+pro kcor_inspect,hdr=hdr,img=img,r0=r0,data_dir=data_dir,filename=filename
 
-pro kcor_inspect,r0=r0,data_dir=data_dir,filename=filename
-   common data,hdr,img
-   common grid,ra,pa,x, y
-
- computegrid
-
+  compute_image_grid,hdr=hdr,ra=ra,pa=pa,x=x,y=y,instrument='kcor'
 ; Image for display:
  img2  = img
  dr=0.01
@@ -78,7 +66,7 @@ for ir=0,n_elements(r0)-1 do begin
  ring = where(ra ge r0[ir]-dr/2. and ra le r0[ir]+dr/2.)
  img2(ring) = max(img)
  ps1,data_dir+filename+'_latiudinal_profile.'+string(r0[ir])+'.eps',0
- display_latitudinal_profiles,height=r0[ir]
+ display_latitudinal_profiles,height=r0[ir],hdr=hdr,img=img,ra=ra,pa=pa,x=x,y=y
  ps2
 endfor
  
@@ -90,9 +78,7 @@ endfor
  return
 end
 
-pro display_latitudinal_profiles,height=height
-   common data,hdr,img
-   common grid,ra,pa,x, y
+pro display_latitudinal_profiles,height=height,hdr=hdr,img=img,ra=ra,pa=pa,x=x,y=y
 
 if not keyword_set(height) then begin
    print,'please specify hright.'
@@ -127,42 +113,6 @@ endfor
  
 return
 end
-
-pro computegrid
-   common data,hdr,img
-   common grid,ra,pa,x, y
-
- Rs     = hdr.RSUN        ; Sun radius in arcsec
- px     = hdr.cdelt1      ; Pixel size in arcsec
- print,'Px: ',px
- Rs=Rs/px                 ; Sun radius in pixels
- px=1./Rs                 ; Pixel size in Rsun units
- ix0=hdr.crpix1-1         ; Disk center x-pixel, changed to IDL convention (FITS convention starts with index=1, IDL starts with index=0). 
- iy0=hdr.crpix2-1         ; Disk center y-pixel, changed to IDL convention
-
- x  = px*(findgen(hdr.naxis1) - ix0)
- y  = px*(findgen(hdr.naxis1) - iy0)
- u  = 1. + fltarr(hdr.naxis1)
- xa = x#u
- ya = u#y
- ra = sqrt(xa^2 + ya^2)
-
- ta = fltarr(hdr.naxis1,hdr.naxis1)
-
- p=where(xa gt 0.)
- ta(p) = Acos( ya(p) / ra(p) )
- p=where(xa lt 0.)
- ta(p) = 2.*!pi-Acos( ya(p) / ra(p) )
- p=where(xa eq 0. AND ya gt 0.)
- if p(0) ne -1 then ta(p)=0.
- p=where(xa eq 0. AND ya lt 0.)
- if p(0) ne -1 then ta(p)=!pi
- ta=2.*!pi-ta
- PA=ta/!dtor
-
-return
-end
-
 
 function findval, ima ,ya ,za , r0, t0
 y0=-r0*sin(t0)

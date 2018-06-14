@@ -21,7 +21,7 @@
 ;
 ;;
 
-pro compute_image_grid,header=header,instrument=instrument,ra=ra,pa=pa,x=x,y=y
+pro compute_image_grid,hdr=hdr,instrument=instrument,ra=ra,pa=pa,x=x,y=y
 
   instrument_detected_flag = 0
   
