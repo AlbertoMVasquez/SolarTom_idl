@@ -336,13 +336,50 @@ return,Df
 end
 
 
+
+pro process_data,windowlapse=windowlapse,inithour=inithour
+  common time_parameters,overal_window_lapse,overal_init_hour
+  overal_window_lapse = windowlapse
+  overal_init_hour    = inithour
+  
+  year ='2017'
+  month='12'
+  dates=['03','04','05','06','07','08','09','10','11','12','13','14','15','16']
+  Ndates=n_elements(dates)
+  for i=0,Ndates-1 do begin
+     
+     data_dir_1079 = '/data1/tomography/DATA/comp/1079/CR2198/Full_Data/'+year+month+dates[i]+'.comp.1079.daily_dynamics/'
+     CD,data_dir_1079
+     datafiles = FILE_SEARCH('*.gz')
+     openw,1,data_dir_1079+'list.txt'
+     printf,1,n_elements(datafiles)
+     for j=0,n_elements(datafiles)-1 do printf,1,datafiles[j]
+     close,1
+     CD,'/data1/tomography/SolarTom_idl/'
+     compute_avg_dynamics,data_dir=data_dir_1079,file_list='list.txt',/dynamics
+
+     data_dir_1074 = '/data1/tomography/DATA/comp/1074/CR2198/Full_Data/'+year+month+dates[i]+'.comp.1074.daily_dynamics/'
+     CD,data_dir_1074
+     datafiles = FILE_SEARCH('*.gz')
+     openw,1,data_dir_1074+'list.txt'
+     printf,1,n_elements(datafiles)
+     for j=0,n_elements(datafiles)-1 do printf,1,datafiles[j]
+     close,1
+     CD,'/data1/tomography/SolarTom_idl/'
+     compute_avg_dynamics,data_dir=data_dir_1074,file_list='list.txt',/dynamics
+
+  endfor
+  return
+end
+
 ; compute_avg_dynamics,data_dir='/data1/tomography/DATA/comp/1074/CR2198/Full_Data/20171203.comp.1074.daily_dynamics/',file_list='list.txt',window_lapse=2.,init_hour=16.,/dynamics
 ; compute_avg_dynamics,data_dir='/data1/tomography/DATA/comp/1079/CR2198/Full_Data/20171203.comp.1079.daily_dynamics/',file_list='list.txt',window_lapse=2.,init_hour=16.,/dynamics
 pro compute_avg_dynamics,data_dir=data_dir,file_list=file_list,window_lapse=window_lapse,dynamics=dynamics,meanfits=meanfits,init_hour=init_hour
   common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity,image_Imean,header_Imean_struct
   common constants,AU,c
   common files,filetype
-
+  common time_parameters,overal_window_lapse,overal_init_hour
+  
   filetype=''
   if keyword_set(dynamics) then filetype = 'dynamics'
   if keyword_set(meanfits) then filetype = 'meanfits'
@@ -351,7 +388,9 @@ pro compute_avg_dynamics,data_dir=data_dir,file_list=file_list,window_lapse=wind
      return
   endif
 
-  if not keyword_set(window_lapse) then window_lapse = 1.
+  if     keyword_set(overal_window_lapse) then window_lapse = overal_window_lapse
+  if     keyword_set(overal_init_hour   ) then init_hour    = overal_init_hour   
+  if not keyword_set(window_lapse       ) then window_lapse = 1.
   
   load_constants
 
@@ -380,7 +419,7 @@ pro compute_avg_dynamics,data_dir=data_dir,file_list=file_list,window_lapse=wind
      hour_of_day_array[i] = date_vector[2] + date_vector[3]/60. + date_vector[3]/3600.
   endfor
   close,1
-  
+
 ;; Determine indexes of the images to average, and their median index.
   ;; Default is to start with the first image of the day:
   if not keyword_set(init_hour) then init_hour = hour_of_day_array[0]
@@ -459,6 +498,21 @@ pro compute_avg_dynamics,data_dir=data_dir,file_list=file_list,window_lapse=wind
   return
 end
 
+pro average_images,array=array,Nimages=Nimages,ImageSize=ImageSize,average_image=average_image
+  average_image = fltarr(ImageSize,ImageSize) - 666.
+  for ix=0,ImageSize-1 do begin
+     for iy=0,ImageSize-1 do begin
+        pixel_data_vector = reform(array(*,ix,iy))
+        ipos = where(pixel_data_vector gt 0.)
+        if ipos(0) eq -1 then goto,next_pixel
+        if n_elements(ipos) lt Nimages/2. then goto,next_pixel
+        average_image(ix,iy) = mean(pixel_data_vector(ipos))
+        next_pixel:
+     endfor
+  endfor
+  return
+end
+
 ; compare_avg_med,data_dir='/data1/tomography/DATA/comp/1074/CR2198/Full_Data/20171203.comp.1074.daily_dynamics/',avg_filename=avg_filename,med_filename=med_filename
 ; compare_avg_med,data_dir='/data1/tomography/DATA/comp/1079/CR2198/Full_Data/20171203.comp.1079.daily_dynamics/',avg_filename=avg_filename,med_filename=med_filename
 
@@ -488,21 +542,6 @@ pro compare_avg_med,data_dir=data_dir,avg_filename=avg_filename,med_filename=med
   tvscl,alog10(avgimg>mini),1
   close,/all
 
-  return
-end
-
-pro average_images,array=array,Nimages=Nimages,ImageSize=ImageSize,average_image=average_image
-  average_image = fltarr(ImageSize,ImageSize) - 666.
-  for ix=0,ImageSize-1 do begin
-     for iy=0,ImageSize-1 do begin
-        pixel_data_vector = reform(array(*,ix,iy))
-        ipos = where(pixel_data_vector gt 0.)
-        if ipos(0) eq -1 then goto,next_pixel
-        if n_elements(ipos) lt Nimages/2. then goto,next_pixel
-        average_image(ix,iy) = mean(pixel_data_vector(ipos))
-        next_pixel:
-     endfor
-  endfor
   return
 end
 
@@ -536,35 +575,4 @@ pro computegrid,hdr,ra,pa,x,y
  PA=ta/!dtor
 
 return
-end
-
-pro process,window_lapse=window_lapse,init_hour=init_hour
-  year ='2017'
-  month='12'
-  dates=['03','04','05','06','07','08','09','10','11','12','13','14','15','16']
-  Ndates=n_elements(dates)
-  for i=0,Ndates-1 do begin
-     
-     data_dir_1074 = '/data1/tomography/DATA/comp/1074/CR2198/Full_Data/'+year+month+dates[i]+'.comp.1074.daily_dynamics/'
-     CD,data_dir_1074
-     datafiles = FILE_SEARCH('*.gz')
-     openw,1,data_dir_1074+'list.txt'
-     printf,1,n_elements(datafiles)
-     for j=0,n_elements(datafiles)-1 do printf,1,datafiles[j]
-     close,1
-     
-     data_dir_1079 = '/data1/tomography/DATA/comp/1079/CR2198/Full_Data/'+year+month+dates[i]+'.comp.1079.daily_dynamics/'
-     CD,data_dir_1079
-     datafiles = FILE_SEARCH('*.gz')
-     openw,1,data_dir_1079+'list.txt'
-     printf,1,n_elements(datafiles)
-     for j=0,n_elements(datafiles)-1 do printf,1,datafiles[j]
-     close,1
-     
-     CD,'/data1/tomography/SolarTom_idl/'
-     compute_avg_dynamics,data_dir=data_dir_1079,file_list='list.txt',window_lapse=window_lapse,init_hour=init_hour,/dynamics
-     compute_avg_dynamics,data_dir=data_dir_1074,file_list='list.txt',window_lapse=window_lapse,init_hour=init_hour,/dynamics
-
-  endfor
-  return
 end

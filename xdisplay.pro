@@ -18,8 +18,18 @@
 
 ;r0A=1.07
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_comp1074.CR2198.bf2.ri1.00.ro1.50_50_90_180_meanimage_hlaplac_l1e-1',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,titulo='Mn-Peak-1074-Emissivity',mini=1.,win=0
+
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_comp1074.dynamics.CR2198.bf2.ri1.00.ro1.50_50_90_180',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=1,titulo='FeXIII-1074 Emissivity',mini=1.;,maxi=25.
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_comp1079.dynamics.CR2198.bf2.ri1.00.ro1.50_50_90_180',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=2,titulo='FeXIII-1079 Emissivity',mini=1.;,maxi=20.
+
+;xdisplay,dir='/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.50_50_90_180_hlaplac_5e-1',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=1,titulo='FeXIII-1074 Emissivity',mini=1.;,maxi=25.
+;xdisplay,dir='/data1/tomography/bindata/',file='x.comp1079.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.50_50_90_180_hlaplac_5e-1',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=2,titulo='FeXIII-1079 Emissivity',mini=1.;,maxi=20.
+
+;xdisplay,dir='/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt8_CR2198.bf2.ri1.00.ro1.50_50_90_180_hlaplac_5e-1',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=1,titulo='FeXIII-1074 Emissivity',mini=1.;,maxi=25.
+;xdisplay,dir='/data1/tomography/bindata/',file='x.comp1079.dynamics.Dt8_CR2198.bf2.ri1.00.ro1.50_50_90_180_hlaplac_5e-1',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=2,titulo='FeXIII-1079 Emissivity',mini=1.;,maxi=20.
+
+;xdisplay,dir='/data1/tomography/bindata/',file='x_comp1074.dynamics.CR2198.bf2.ri1.00.ro1.50_50_90_180_hlaplac_r1w1_V2_auto_cv',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='FeXIII-1074 Emissivity',mini=.01;,maxi=25.
+;xdisplay,dir='/data1/tomography/bindata/',file='x_comp1079.dynamics.CR2198.bf2.ri1.00.ro1.50_50_90_180_hlaplac_r1w1_V2_auto_cv',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=2,titulo='FeXIII-1079 Emissivity',mini=.01;,maxi=20.
 
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.171.cr2081.26x90_bf4_ri.98_ro1.025_l1.0_NODECON',nr=26,nt=90,rmin=1.0,rmax=1.25,r0A=r0A,win=0,titulo='EUVI-171 FBE for CR-2081',rad_range=[1.02,1.23],lat_range=[-90.,+90.]
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2081.26x90_bf4_ri.98_ro1.025_l1.0_NODECON',nr=26,nt=90,rmin=1.0,rmax=1.25,r0A=r0A,win=1,titulo='EUVI-195 FBE for CR-2081',rad_range=[1.02,1.23],lat_range=[-90.,+90.]
@@ -30,6 +40,10 @@ pro xdisplay,dir=dir,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A=r0A,min
   if not keyword_set(clrtbl)      then clrtbl      = 39
   if not keyword_set(np)          then np          = 2*nt
   if not keyword_set(scalefactor) then scalefactor = 4
+  if not keyword_set(lat_range)   then lat_range   = [-90.,+90.]
+  if not keyword_set(rad_range)   then rad_range   = [1.02,1.23]
+  if not keyword_set(r0A      )   then r0A         = [1.10,1.15,1.20]
+  
   xread,dir=dir,file=file,nr=nr,nt=nt,np=np,map=map
   xhisto,map=map,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,rad_range=rad_range,lat_range=lat_range,win=win,titulo='Histogram of '+titulo
   for ir=0,n_elements(r0A)-1 do begin
