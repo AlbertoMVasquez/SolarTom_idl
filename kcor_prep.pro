@@ -151,7 +151,7 @@ pro process_and_average_kcor_data,windowlapse=windowlapse,inithour=inithour
   month='12/'
   dates=['03','04','05','06','07','08','09','10','11','12','13','14','15','16']+'/'
   Ndates=n_elements(dates)
-  for i=0,Ndates-1 do begin
+  for i=0,0 do begin
      data_dir = '/data1/tomography/DATA/kcor/CR2198/'+year+month+dates[i]
      kcor_prep,data_dir=data_dir,file_list='list.txt'
      compute_avg_kcor,data_dir=data_dir,file_list='list_prep.txt'
