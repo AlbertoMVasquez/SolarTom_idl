@@ -489,7 +489,7 @@ pro compute_avg_dynamics,data_dir=data_dir,file_list=file_list,window_lapse=wind
   print,'Averaged file: ',avg_output_filename
   print,'Median   file: ',med_output_filename
 
-  compare_two_images,data_dir=data_dir,imgq_filename=avg_output_filename,img2_filename=med_output_filename,ImageSize=ImageSize,r0=1.06,instrument='comp'
+  compare_two_images,data_dir=data_dir,imgq_filename=avg_output_filename,img2_filename=med_output_filename,r0=1.06,instrument='comp'
   record_gif,data_dir,avg_output_filename+'.gif','X'
 
   return

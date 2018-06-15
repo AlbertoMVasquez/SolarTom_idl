@@ -246,7 +246,7 @@ pro compute_avg_kcor,data_dir=data_dir,file_list=file_list,window_lapse=window_l
   print,'Averaged file: ',avg_output_filename
   print,'Median   file: ',med_output_filename
 
-  compare_two_images,data_dir=data_dir,img1_filename=avg_output_filename,img2_filename=med_output_filename,ImageSize=ImageSize,r0=1.06,instrument='kcor'
+  compare_two_images,data_dir=data_dir,img1_filename=avg_output_filename,img2_filename=med_output_filename,r0=1.06,instrument='kcor'
 
   record_gif,data_dir,avg_output_filename+'.gif','X'
   
