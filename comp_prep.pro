@@ -411,8 +411,6 @@ pro compute_avg_dynamics,data_dir=data_dir,file_list=file_list,window_lapse=wind
      header_primary_struct = fitshead2struct(header_primary, dash2underscore=dash2underscore)
      header_peak_struct    = fitshead2struct(header_peak   , dash2underscore=dash2underscore)
      date_vector = date_conv(header_primary_struct.date_obs,'V')
-     date_number = date_conv(header_primary_struct.date_obs,'R')
-     date_julian = date_conv(header_primary_struct.date_obs,'J')
      day_of_year_array[i] = date_vector[1]
      hour_of_day_array[i] = date_vector[2] + date_vector[3]/60. + date_vector[3]/3600.
   endfor
@@ -438,7 +436,7 @@ pro compute_avg_dynamics,data_dir=data_dir,file_list=file_list,window_lapse=wind
   ifinal  = i0 + Nimages-1
   imedian = i0 + Nimages/2
 
-  ;; Create array to stack all images:
+;; Create array to stack all images:
   total_intensity_image_selected_array = fltarr(Nimages,ImageSize,ImageSize)
   
    openr,1,data_dir+file_list
@@ -491,54 +489,8 @@ pro compute_avg_dynamics,data_dir=data_dir,file_list=file_list,window_lapse=wind
   print,'Averaged file: ',avg_output_filename
   print,'Median   file: ',med_output_filename
 
-  compare_avg_med,data_dir=data_dir,avg_filename=avg_output_filename,med_filename=med_output_filename,ImageSize=ImageSize,r0=1.06
+  compare_two_images,data_dir=data_dir,imgq_filename=avg_output_filename,img2_filename=med_output_filename,ImageSize=ImageSize,r0=1.06,instrument='comp'
   record_gif,data_dir,avg_output_filename+'.gif','X'
-  return
-end
-
-pro average_images,array=array,Nimages=Nimages,ImageSize=ImageSize,average_image=average_image
-  average_image = fltarr(ImageSize,ImageSize) - 666.
-  for ix=0,ImageSize-1 do begin
-     for iy=0,ImageSize-1 do begin
-        pixel_data_vector = reform(array(*,ix,iy))
-        ipos = where(pixel_data_vector gt 0.)
-        if ipos(0) eq -1 then goto,next_pixel
-        if n_elements(ipos) lt Nimages/2. then goto,next_pixel
-        average_image(ix,iy) = mean(pixel_data_vector(ipos))
-        next_pixel:
-     endfor
-  endfor
-  return
-end
-
-; compare_avg_med,data_dir='/data1/tomography/DATA/comp/1074/CR2198/Full_Data/20171203.comp.1074.daily_dynamics/',avg_filename=avg_filename,med_filename=med_filename
-; compare_avg_med,data_dir='/data1/tomography/DATA/comp/1079/CR2198/Full_Data/20171203.comp.1079.daily_dynamics/',avg_filename=avg_filename,med_filename=med_filename
-
-pro compare_avg_med,data_dir=data_dir,avg_filename=avg_filename,med_filename=med_filename,ImageSize=ImageSize,r0=r0
-  if not keyword_set(r0) then r0=1.06
-  mreadfits,data_dir+avg_filename,avghdr,avgimg
-  mreadfits,data_dir+med_filename,medhdr,medimg
-  avgind = where(avgimg gt 0.)
-  avgmin = min(avgimg(avgind))
-  avgmax = max(avgimg(avgind))
-  medind = where(medimg gt 0.)
-  medmin = min(medimg(medind))
-  medmax = max(medimg(medind))
-  mini   = min([avgmin,medmin])
-  maxi   = max([avgmax,medmax])
-  avgimg[0:1,0] = [mini,maxi]
-  medimg[0:1,0] = [mini,maxi]
-  avgimg = avgimg > mini <maxi
-  medimg = medimg > mini <maxi
-  compute_image_grid,header=avghdr,ra=ra,pa=pa,x=x,y=y,instrument='comp'
-  window,xs=2*ImageSize,ys=ImageSize
-  loadct,39
-  dr=.005
-  p=where(ra ge r0-dr/2. and ra le r0+dr/2.)
-  avgimg(p) = mini
-  tvscl,alog10(medimg>mini),0
-  tvscl,alog10(avgimg>mini),1
-  close,/all
 
   return
 end

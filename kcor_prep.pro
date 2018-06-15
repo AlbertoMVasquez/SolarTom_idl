@@ -16,7 +16,7 @@
 
 ; Main routine:
 pro kcor_prep,data_dir=data_dir,file_list=file_list,r0=r0
-  if not keyword_set(r0) then r0 = [1.1]
+  if not keyword_set(r0) then r0 = [1.5]
   N=0
   filename=''
   openr,1,data_dir+file_list
@@ -35,7 +35,7 @@ pro kcor_prep,data_dir=data_dir,file_list=file_list,r0=r0
      mwritefits,hdr,img,outfile=data_dir+new_filename
      printf,2,new_filename
      kcor_inspect,hdr=hdr,img=img,r0=r0,data_dir=data_dir,filename=filename
-     stop
+    ;stop
     ;print,'Exp Time:',hdr.exptime
   endfor
   close,/all
@@ -139,5 +139,117 @@ if iyA eq iyB AND izA lt izB then Df=D1+(D4-D1)*(z0-zA(izA))/(zA(izB)-zA(izA))
 if iyA eq iyB AND izA eq izB then Df=D1
 fin:
 return,Df
+end
+
+
+pro process_and_average_kcor_data,windowlapse=windowlapse,inithour=inithour
+  common time_parameters,overal_window_lapse,overal_init_hour
+  overal_window_lapse = windowlapse
+  overal_init_hour    = inithour
+  
+  year ='2017/'
+  month='12/'
+  dates=['03','04','05','06','07','08','09','10','11','12','13','14','15','16']+'/'
+  Ndates=n_elements(dates)
+  for i=0,Ndates-1 do begin
+     data_dir = '/data1/tomography/DATA/kcor/CR2198/'+year+month+dates[i]
+     kcor_prep,data_dir=data_dir,file_list='list.txt'
+     compute_avg_kcor,data_dir=data_dir,file_list='list_prep.txt'
+  endfor
+  return
+end
+
+; 
+
+pro compute_avg_kcor,data_dir=data_dir,file_list=file_list,window_lapse=window_lapse,init_hour=init_hour
+
+  common time_parameters,overal_window_lapse,overal_init_hour
+
+  if     keyword_set(overal_window_lapse) then window_lapse = overal_window_lapse
+  if     keyword_set(overal_init_hour   ) then init_hour    = overal_init_hour   
+  if not keyword_set(window_lapse       ) then window_lapse = 1.
+
+  N=0
+  openr,1,data_dir+file_list
+  readf,1,N
+  day_of_year_array = fltarr(N)
+  hour_of_day_array = fltarr(N)
+
+  filename=''
+  for i = 0,N-1 do begin
+     readf,1,filename
+     mreadfits,data_dir+filename,header,image
+     if i eq 0 then ImageSize = header.naxis1
+     date_vector = date_conv(header.date_obs,'V')
+     day_of_year_array[i] = date_vector[1]
+     hour_of_day_array[i] = date_vector[2] + date_vector[3]/60. + date_vector[3]/3600.
+  endfor
+  close,1
+
+;; Determine indexes of the images to average, and their median index.
+  ;; Default is to start with the first image of the day:
+  if not keyword_set(init_hour) then init_hour = hour_of_day_array[0]
+  ;; Determine index of first image:
+  f  = abs(hour_of_day_array - init_hour)
+  i0 = (where(f eq min(f)))(0)
+  ;; Reset init_hour to the actual init_hour that is going to be used:
+  init_hour = hour_of_day_array[i0]
+  ;; Create suffix for various output files based on both init_hour and window_lapse:
+  suffix='t0'+strmid(string(init_hour),6,4)+'-Dt'+strmid(string(window_lapse),6,4)
+  ;; Detect days of the new-day and add 24 hr to their hour_of_day values:
+  indnewday = where(day_of_year_array eq day_of_year_array[0]+1)
+  if indnewday[0] ne -1 then hour_of_day_array(indnewday) = hour_of_day_array(indnewday) + 24.
+  ;; Determine indexes of images to use:
+  p = where(hour_of_day_array ge hour_of_day_array[i0] and hour_of_day_array le hour_of_day_array[i0] + window_lapse)
+  ;; Number of images, final and median indices:
+  Nimages = n_elements(p)
+  ifinal  = i0 + Nimages-1
+  imedian = i0 + Nimages/2
+
+;; Create array to stack all images:
+  image_selected_array = fltarr(Nimages,ImageSize,ImageSize)
+
+   openr,1,data_dir+file_list
+   readf,1,N
+   output_file_list = strmid(file_list,0,strlen(file_list)-4)+'_avg_files_'+suffix+'.txt'
+   openw,2,data_dir+output_file_list
+   printf,2,'Number of images used: ',Nimages
+   if i0 gt 0 then for i=0,i0-1 do readf,1,filename ; First i0 images are skipped.
+  for i = i0,ifinal do begin
+     readf,1,filename
+     mreadfits,  data_dir+filename, header, image
+     printf,2,filename+'  Date_obs: '+header.date_obs
+          
+     ;; Make Average output header and filename from the header and filename
+     ;; of the median image. Record also median_image.
+     if i eq imedian then begin
+        med_image           = image
+        med_output_header   = header
+        avg_output_header   = header
+        avg_output_filename = strmid(filename,0,strlen(filename)-4)+'_avg_image_'+suffix+'.fts'
+        med_output_filename = strmid(filename,0,strlen(filename)-4)+'_med_image_'+suffix+'.fts'
+        mwritefits,med_output_header,med_image,outfile=data_dir+med_output_filename
+     endif
+     
+     ;; Load ith-element of total_intensity_image_selected_array:
+     image_selected_array(i-i0,*,*) = image
+
+  endfor
+  close,/all
+
+  array = image_selected_array
+  average_images,array=array,Nimages=Nimages,ImageSize=ImageSize,average_image=average_image
+
+  avg_image = average_image
+  mwritefits,avg_output_header,avg_image,outfile=data_dir+avg_output_filename
+  
+  print,'Averaged file: ',avg_output_filename
+  print,'Median   file: ',med_output_filename
+
+  compare_two_images,data_dir=data_dir,img1_filename=avg_output_filename,img2_filename=med_output_filename,ImageSize=ImageSize,r0=1.06,instrument='kcor'
+
+  record_gif,data_dir,avg_output_filename+'.gif','X'
+  
+  return
 end
 

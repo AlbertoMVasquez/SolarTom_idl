@@ -1,17 +1,15 @@
-pro average_images,dir=dir,list=list
-  common mean_data,img_mean,hdr_mean
-  N=0
-  filename=''
-  openrf,1,dir+file
-  readf,1,N
-  indmedian = median(indgen(N))
-  for i=0,N-1 do begin
-     readf,1,filename
-     mreadfits,dir+filename,hdr,img
-     if i eq 0         then img_mean = img
-     if i gt 0         then img_mean = img_mean + img
-     if i eq indmedian then hdr_mean = hdr
+
+pro average_images,array=array,Nimages=Nimages,ImageSize=ImageSize,average_image=average_image
+  average_image = fltarr(ImageSize,ImageSize) - 666.
+  for ix=0,ImageSize-1 do begin
+     for iy=0,ImageSize-1 do begin
+        pixel_data_vector = reform(array(*,ix,iy))
+        ipos = where(pixel_data_vector gt 0.)
+        if ipos(0) eq -1 then goto,next_pixel
+        if n_elements(ipos) lt Nimages/2. then goto,next_pixel
+        average_image(ix,iy) = mean(pixel_data_vector(ipos))
+        next_pixel:
+     endfor
   endfor
-  img_mean = img_mean / float(N)
   return
 end
