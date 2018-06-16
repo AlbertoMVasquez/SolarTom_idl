@@ -53,6 +53,9 @@ pro expand_header_kcor,hdr=hdr
                       'HAEY_OBS'  ,0.   ,$
                       'HAEZ_OBS'  ,0.   )
 
+  hdr.BSCALE = 1.
+  print, 'NOTE: BSCALE has been set to 1, because the IMAGE is now a FLOAT ARRAY.'
+  
   return
 end
 
@@ -178,7 +181,7 @@ pro compute_avg_kcor,data_dir=data_dir,file_list=file_list,window_lapse=window_l
   filename=''
   for i = 0,N-1 do begin
      readf,1,filename
-     mreadfits,data_dir+filename,header,image
+     mreadfits,data_dir+filename,header,image;, /noscale
      if i eq 0 then ImageSize = header.naxis1
      date_vector = date_conv(header.date_obs,'V')
      day_of_year_array[i] = date_vector[1]
@@ -217,7 +220,7 @@ pro compute_avg_kcor,data_dir=data_dir,file_list=file_list,window_lapse=window_l
    if i0 gt 0 then for i=0,i0-1 do readf,1,filename ; First i0 images are skipped.
   for i = i0,ifinal do begin
      readf,1,filename
-     mreadfits,  data_dir+filename, header, image
+     mreadfits,  data_dir+filename, header, image;, /noscale
      printf,2,filename+'  Date_obs: '+header.date_obs
           
      ;; Make Average output header and filename from the header and filename
@@ -230,7 +233,7 @@ pro compute_avg_kcor,data_dir=data_dir,file_list=file_list,window_lapse=window_l
         med_output_filename = strmid(filename,0,strlen(filename)-4)+'_med_image_'+suffix+'.fts'
         mwritefits,med_output_header,med_image,outfile=data_dir+med_output_filename
      endif
-     
+
      ;; Load ith-element of total_intensity_image_selected_array:
      image_selected_array(i-i0,*,*) = image
 

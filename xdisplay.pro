@@ -10,6 +10,7 @@
 ;r0A=1.1 
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_keepneg_hlaplac_l5e-5',nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=r0A,win=0,titulo='KCOR-KeepNeg-hlaplac Ne [cm!U-3!N]',rad_range=[1.1,2.0],lat_range=[-90.,+90.]
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_keepneg_hlaplac-d2r_l5e-5',nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=r0A,win=1,titulo='KCOR-KeepNeg-hlaplac+d2r Ne [cm!U-3!N]',rad_range=[1.1,2.0],lat_range=[-90.,+90.]
+
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_dropneg_hlaplac_l5e-5',nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=r0A,win=0,titulo='KCOR-DropNeg-hlaplac Ne [cm!U-3!N]',rad_range=[1.1,2.0],lat_range=[-90.,+90.]
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_dropneg_hlaplac-d2r_l5e-5',nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=r0A,win=1,titulo='KCOR-DropNeg-hlaplac+d2r Ne [cm!U-3!N]',rad_range=[1.1,2.0],lat_range=[-90.,+90.]
 

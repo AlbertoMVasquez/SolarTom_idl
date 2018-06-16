@@ -14,8 +14,9 @@
 ;
 ;;
 
-pro compare_two_images,data_dir=data_dir,img1_filename=img1_filename,img2_filename=img2_filename,r0=r0,instrument=instrument
+pro compare_two_images,data_dir=data_dir,img1_filename=img1_filename,img2_filename=img2_filename,r0=r0,instrument=instrument,win=win
   if not keyword_set(r0) then r0=1.0
+  if not keyword_set(win) then win=0
   mreadfits,data_dir+img1_filename,hdr1,img1
   mreadfits,data_dir+img2_filename,hdr2,img2
   ImageSize = (size(img1))[1]
@@ -34,14 +35,15 @@ pro compare_two_images,data_dir=data_dir,img1_filename=img1_filename,img2_filena
   dr=.005
   compute_image_grid,hdr=hdr1,ra=ra,pa=pa,x=x,y=y,instrument=instrument
   p=where(ra ge r0-dr/2. and ra le r0+dr/2.)
-  img1(p) = mini
+  img1(p) = maxi
   compute_image_grid,hdr=hdr2,ra=ra,pa=pa,x=x,y=y,instrument=instrument
   p=where(ra ge r0-dr/2. and ra le r0+dr/2.)
-  img2(p) = mini
-  window,xs=2*ImageSize,ys=ImageSize
+  img2(p) = maxi
+  window,win,xs=2*ImageSize,ys=ImageSize
   loadct,39
   tvscl,alog10(img1>mini),0
   tvscl,alog10(img2>mini),1
   close,/all
+ ;stop
   return
 end
