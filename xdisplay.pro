@@ -1,4 +1,6 @@
 
+; xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.171.cr2082.26x90_bf4_ri.98_ro1.02_l.75_DECON',nr=50,nt=90,rmin=1.0,rmax=1.50,r0A=1.1,win=0
+
 ; xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.295_90_180_l1e-5_hlaplac_CORRECTED_3',nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=1.1,win=0
 ; xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.295_90_180_l1e-6_hlaplac_CORRECTED_3',nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=1.1,win=1
 ; xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.295_90_180_NoOffSet_l1e-6_hlaplac'   ,nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=1.1,win=2

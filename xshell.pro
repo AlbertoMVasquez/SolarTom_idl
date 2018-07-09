@@ -82,8 +82,8 @@ endif
   loadct,27
   tvscl,fltarr(xsimage+DX,(ysimage+DY)*Npanels)
 
- if clrtbl lt 100 then loadct,clrtbl
- if clrtbl gt 100 then secchi_colors, 'EUVI', clrtbl, R, G, B,/load
+ if clrtbl le 40 then loadct,clrtbl
+ if clrtbl gt 40 then secchi_colors, 'EUVI', clrtbl, R, G, B,/load
     height_string = strmid(string(r0),6,5)
     x = x0
     y = y0+DY/2

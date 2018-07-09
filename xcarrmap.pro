@@ -6,7 +6,8 @@ pro xcarrmap,map=map,xi=xi,yi=yi,np=np,nt=nt,scalefactor=scalefactor,clrtbl=clrt
   
     x=xi
     y=yi
-    loadct,clrtbl
+    if clrtbl le 40 then loadct,clrtbl
+    if clrtbl gt 40 then secchi_colors, 'EUVI', clrtbl, R, G, B,/load
     tvscl,map,x,y
     nlon=np*scalefactor
     nlat=nt*scalefactor
@@ -42,7 +43,8 @@ pro xcarrmap,map=map,xi=xi,yi=yi,np=np,nt=nt,scalefactor=scalefactor,clrtbl=clrt
       ys0 = y
       loadct,0
       tvscl,black,xs0-frame/2,ys0-frame/2
-      loadct,clrtbl
+      if clrtbl le 40 then loadct,clrtbl
+      if clrtbl gt 40 then secchi_colors, 'EUVI', clrtbl, R, G, B,/load
       tvscl,scale,xs0,ys0
 
       loadct,0
