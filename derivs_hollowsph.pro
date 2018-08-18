@@ -13,8 +13,13 @@
 ; /hlaplac:  Angular derivatives. Output in one matrix.
 ; /laplac3:  3D derivatives. Output in three matrices.
 ; /identity: Identity NBINS^2 as regularization matrix.
+; /r3:       Angular derivatives (hlaplac) and radial derivatives
+;            (d2r) stacked in a single matrix.
 ;
 ; Examples of calling sequence:
+;
+; derivs_hollowsph,nrad=200,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='200_90_180',/laplac3
+; derivs_hollowsph,nrad=200,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='200_90_180',/hlaplac
 ;
 ; derivs_hollowsph,nrad=295,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='295_90_180',/hlaplac
 ; derivs_hollowsph,nrad=295,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='295_90_180',/identity
@@ -49,7 +54,7 @@ pro derivs_hollowsph,nrad=nrad,ntheta=ntheta,nphi=nphi,directory=directory,fname
 
   row_d2theta = lonarr(3*nbins)
   col_d2theta = lonarr(3*nbins)
-  val_d2theta = fltarr(3*nbins)
+val_d2theta = fltarr(3*nbins)
 
 ; vectors of starting indices for each row
   nd2r      = lonarr(nbins+1)

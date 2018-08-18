@@ -1,5 +1,6 @@
 
-; xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.171.cr2082.26x90_bf4_ri.98_ro1.02_l.75_DECON',nr=50,nt=90,rmin=1.0,rmax=1.50,r0A=1.1,win=0
+; xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.171.cr2082.26x90_bf4_ri.98_ro1.02_l.75_DECON'    ,nr=50,nt=90,rmin=1.0,rmax=1.50,r0A=1.1,win=0,titulo='FBE-171-CR2082-FullDisk-hlaplac-L0.75'    ,/log
+; xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.171.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON.d2r',nr=50,nt=90,rmin=1.0,rmax=1.50,r0A=1.1,win=0,titulo='FBE-171-CR2082-FullDisk-hlaplac-d2r-L0.75',/log
 
 ; xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.295_90_180_l1e-5_hlaplac_CORRECTED_3',nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=1.1,win=0
 ; xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.295_90_180_l1e-6_hlaplac_CORRECTED_3',nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=1.1,win=1
@@ -15,6 +16,12 @@
 
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_dropneg_hlaplac_l5e-5',nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=r0A,win=0,titulo='KCOR-DropNeg-hlaplac Ne [cm!U-3!N]',rad_range=[1.1,2.0],lat_range=[-90.,+90.]
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_dropneg_hlaplac-d2r_l5e-5',nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=r0A,win=1,titulo='KCOR-DropNeg-hlaplac+d2r Ne [cm!U-3!N]',rad_range=[1.1,2.0],lat_range=[-90.,+90.]
+
+;xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_dropneg_hlaplac_l5e-5',nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=r0A,win=0,titulo='KCOR-DropNeg-hlaplac Ne [cm!U-3!N]',rad_range=[1.1,2.0],lat_range=[-90.,+90.]
+;xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_dropneg_hlaplac-d2r_l5e-5',nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=r0A,win=1,titulo='KCOR-DropNeg-hlaplac+d2r Ne [cm!U-3!N]',rad_range=[1.1,2.0],lat_range=[-90.,+90.]
+
+;xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_dropneg_hlaplac_l9.6e-5'    ,nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=r0A,win=0,titulo='KCOR-DropNeg-hlaplac     l9.6e-5 Ne [cm!U-3!N]',rad_range=[1.09,1.5,2.0]
+;xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_dropneg_hlaplac-d2r_l1.3e-4',nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=r0A,win=1,titulo='KCOR-DropNeg-hlaplac+d2r l1.3e-4 Ne [cm!U-3!N]',rad_range=[1.09,1.5,2.0]
 
 
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.295_90_180_AvgNoOffSet_l1e-6_hlaplac',nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=1.1,win=3
@@ -37,6 +44,10 @@
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.171.cr2081.26x90_bf4_ri.98_ro1.025_l1.0_NODECON',nr=26,nt=90,rmin=1.0,rmax=1.25,r0A=r0A,win=0,titulo='EUVI-171 FBE for CR-2081',rad_range=[1.02,1.23],lat_range=[-90.,+90.]
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2081.26x90_bf4_ri.98_ro1.025_l1.0_NODECON',nr=26,nt=90,rmin=1.0,rmax=1.25,r0A=r0A,win=1,titulo='EUVI-195 FBE for CR-2081',rad_range=[1.02,1.23],lat_range=[-90.,+90.]
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.284.cr2081.26x90_bf4_ri.98_ro1.025_l1.0_NODECON',nr=26,nt=90,rmin=1.0,rmax=1.25,r0A=r0A,win=2,titulo='EUVI-284 FBE for CR-2081',rad_range=[1.02,1.23],lat_range=[-90.,+90.]
+
+;xdisplay,dir='/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.50_50_90_180_hlaplac_1.89',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='FeXIII-1074 Emissivity hlap L-1.89'
+;xdisplay,dir='/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.50_50_90_180_hlaplac-d2r_1.89',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='FeXIII-1074 Emissivity hlap+d2r L-1.89',mini=mini,maxi=maxi
+;xdisplay,dir='/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.50_50_90_180_hlaplac-d2r_2.65',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='FeXIII-1074 Emissivity hlap+d2r L-2.65'
 
 pro xdisplay,dir=dir,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A=r0A,mini=mini,maxi=maxi,win=win,log=log,clrtbl=clrtbl,titulo=titulo,rad_range=rad_range,lat_range=lat_range
   if not keyword_set(titulo)      then titulo      = 'Reconstruction'
