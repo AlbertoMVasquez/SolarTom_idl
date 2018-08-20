@@ -215,8 +215,8 @@ endfor
 
 val_r3 = [val_r3, val_d2theta(0:count)];
 col_r3 = [col_r3, col_d2theta(0:count)];
-  n_r3 = [nd2r(0:r_row_count+1), nd2r(r_row_count+1) + nd2theta(1:t_row_count+1)] ;
- ;n_r3 = [nd2r(0:r_row_count  ), nd2r(r_row_count+1) + nd2theta(1:t_row_count  )] ;
+ ;n_r3 = [nd2r(0:r_row_count+1), nd2r(r_row_count+1) + nd2theta(1:t_row_count+1)] ;
+  n_r3 = [nd2r(0:r_row_count  ), nd2r(r_row_count+1) + nd2theta(0:t_row_count  )] ;
 
 val_hlaplac = val_d2theta(0:count);
 col_hlaplac = col_d2theta(0:count);
@@ -321,9 +321,9 @@ print,'                   Its number of values is:       count + 1 =',      coun
 
 val_r3 = [val_r3, val_d2phi(0:count)];
 col_r3 = [col_r3, col_d2phi(0:count)];
-  n_r3 = [nd2r(0:r_row_count+1), nd2r(r_row_count+1) + nd2theta(1:t_row_count+1), nd2r(r_row_count+1) + nd2theta(t_row_count+1) + nd2phi(1:p_row_count+1)] ;
-; n_r3 = [nd2r(0:r_row_count  ), nd2r(r_row_count+1) + nd2theta(1:t_row_count  ), nd2r(r_row_count+1) + nd2theta(t_row_count+1) + nd2phi(1:p_row_count  )] ;
-
+; n_r3 = [nd2r(0:r_row_count+1), nd2r(r_row_count+1) + nd2theta(1:t_row_count+1), nd2r(r_row_count+1) + nd2theta(t_row_count+1) + nd2phi(1:p_row_count+1)] ;
+  n_r3 = [nd2r(0:r_row_count  ), nd2r(r_row_count+1) + nd2theta(0:t_row_count  ), nd2r(r_row_count+1) + nd2theta(t_row_count+1) + nd2phi(0:p_row_count  )] ;
+  
 val_hlaplac = [val_hlaplac, val_d2phi(0:count)];
 col_hlaplac = [col_hlaplac, col_d2phi(0:count)];
   n_hlaplac = [nd2theta(0:t_row_count+1), nd2theta(t_row_count+1) + nd2phi(1:p_row_count+1)]; 
