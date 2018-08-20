@@ -4,35 +4,36 @@
 ; by Alberto M. Vásquez. CLaSP, Fall-2017.
 ;
 ; IMPORTANT NOTE: Note that while in this IDL version all indices values are
-; "1" less than in the MATLAB code, the VALUES contained in the arrays:
-; n2d* and col_d2* are the SAME than in the MATLAB version, as it should.
+; "1" less than in the MATLAB code, while VALUES contained in the arrays:
+; n2d* and col_d2* are the SAME as in the MATLAB version.
+;
 ; The ONLY acceptable test to evaluate the correctness is to obtain EQUAL
 ; md5sum of the outputs of the IDL and MATLAB versions, which had been
-; succesfully achieved by Albert on Dec-19-2017 at 22:30 Ann Arbor time :).
+; succesfully achieved by Albert on Dec-19-2017.
 ;
 ; /hlaplac:  Angular derivatives. Output in one matrix.
 ; /laplac3:  3D derivatives. Output in three matrices.
 ; /identity: Identity NBINS^2 as regularization matrix.
-; /r3:       Angular derivatives (hlaplac) and radial derivatives
-;            (d2r) stacked in a single matrix.
+; /r3:       Angular derivatives (hlaplac) and radial derivatives (2dr)
+;            stacked in a single matrix. Added Aug-20-2018.
 ;
 ; Examples of calling sequence:
 ;
 ; derivs_hollowsph,nrad=200,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='200_90_180',/laplac3
 ; derivs_hollowsph,nrad=200,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='200_90_180',/hlaplac
-;
 ; derivs_hollowsph,nrad=295,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='295_90_180',/hlaplac
 ; derivs_hollowsph,nrad=295,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='295_90_180',/identity
 ; derivs_hollowsph,nrad=295,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='295_90_180',/laplac3
 ; derivs_hollowsph,nrad=295,ntheta=45,nphi= 90,directory='/data1/tomography/bindata/',fname_ext='295_45_90',/hlaplac
 ; derivs_hollowsph,nrad=100,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='100_90_180_Idl',/hlaplac
-; derivs_hollowsph,nrad=100,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='100_90_180',/laplac3
+; derivs_hollowsph,nrad=100,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='100_90_180',/laplac
+; derivs_hollowsph,nrad=100,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='100_90_180',/r3
 ; derivs_hollowsph,nrad= 26,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext= '26_90_180',/hlaplac
 ; derivs_hollowsph,nrad=100,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='100_90_180_test',/identity
 ;
 ;;
 
-pro derivs_hollowsph,nrad=nrad,ntheta=ntheta,nphi=nphi,directory=directory,fname_ext=fname_ext,hlaplac=hlaplac,laplac3=laplac3,identity=identity
+pro derivs_hollowsph,nrad=nrad,ntheta=ntheta,nphi=nphi,directory=directory,fname_ext=fname_ext,hlaplac=hlaplac,laplac3=laplac3,identity=identity,r3=r3
 
   nrad        = long(nrad)
   ntheta      = long(ntheta)
@@ -54,7 +55,7 @@ pro derivs_hollowsph,nrad=nrad,ntheta=ntheta,nphi=nphi,directory=directory,fname
 
   row_d2theta = lonarr(3*nbins)
   col_d2theta = lonarr(3*nbins)
-val_d2theta = fltarr(3*nbins)
+  val_d2theta = fltarr(3*nbins)
 
 ; vectors of starting indices for each row
   nd2r      = lonarr(nbins+1)
@@ -152,11 +153,13 @@ for k = 0L,nphi-1 do begin;
             val_d2r(count) = 1.0              ; store val of element
             
             nd2r(r_row_count+1) = count+1 ; store starting index of each row.
-                                          ; First element is 0, second is 3.
- 
+                                          ; First element is 0, second is 3. 
       endfor
    endfor
 endfor
+
+val_r3 = val_d2r(0:count);
+col_r3 = col_d2r(0:count);
 
 print,'Done with d2r.     Its number of rows   is: r_row_count + 1 =',r_row_count + 1
 print,'                   Its number of values is:       count + 1 =',      count + 1
@@ -198,6 +201,10 @@ for k = 0L,nphi-1 do begin
       endfor
    endfor
 endfor
+
+val_r3 = [val_r3, val_d2theta(0:count)];
+col_r3 = [col_r3, col_d2theta(0:count)];
+  n_r3 = [nd2r(0:r_row_count+1), nd2r(r_row_count+1) + nd2theta(1:t_row_count+1)] ;
 
 val_hlaplac = val_d2theta(0:count);
 col_hlaplac = col_d2theta(0:count);
@@ -300,9 +307,51 @@ k = 0; Matlab said "k=1"
 print,'Done with d2phi.   Its number of rows   is: p_row_count + 1 =',p_row_count + 1
 print,'                   Its number of values is:       count + 1 =',      count + 1
 
+val_r3 = [val_r3, val_d2phi(0:count)];
+col_r3 = [col_r3, col_d2phi(0:count)];
+  n_r3 = [nd2r(0:r_row_count+1), nd2r(r_row_count+1) + nd2theta(1:t_row_count+1), nd2r(r_row_count+1) + nd2theta(t_row_count+1) + nd2phi(1:p_row_count+1)] ;
+
 val_hlaplac = [val_hlaplac, val_d2phi(0:count)];
 col_hlaplac = [col_hlaplac, col_d2phi(0:count)];
   n_hlaplac = [nd2theta(0:t_row_count+1), nd2theta(t_row_count+1) + nd2phi(1:p_row_count+1)]; 
+
+if keyword_set(r3) then begin
+
+   fname_r3 = 'r3_'+fname_ext;
+   print,'The filename extension is '+ fname_r3
+
+   y = fltarr(r_row_count+1 + t_row_count+1 + p_row_count+1) ;
+   
+   filename_n = directory+'n'     +fname_r3
+   filename_i = directory+'i'     +fname_r3
+   filename_v = directory+'v'     +fname_r3
+   filename_y = directory+'y'     +fname_r3
+   filename_d = directory+'delta_'+fname_r3
+
+   print,filename_n
+   print,filename_i
+   print,filename_v
+   print,filename_y
+   print,filename_d
+   
+   openw,1,filename_n
+   openw,2,filename_i
+   openw,3,filename_v
+   openw,4,filename_y
+   openw,5,filename_d
+
+   writeu,1,  n_r3   ; Matlab would write   "n_r3"
+   writeu,2,col_r3-1 ; Matlab would write "col_r3-1"
+   writeu,3,val_r3
+   writeu,4,y
+   writeu,5,y
+   
+;  print,'h_laplac has',string(n_elements(VAL_HLAPLAC)/3)+' rows and '+string(nbins)+' columns'
+   print,'r3 has'+string(r_row_count+1 + t_row_count+1 + p_row_count+1)+' rows and '+string(nbins)+' columns'
+   
+   close,/all
+      
+endif
 
 if keyword_set(hlaplac) then begin
 
