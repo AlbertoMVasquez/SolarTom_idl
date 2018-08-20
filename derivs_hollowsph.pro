@@ -1,21 +1,31 @@
 ;;
 ;
-; Regularization Matrix Generator in IDL.
+; Regularization Matrix Generator.
 ; by Alberto M. Vásquez. CLaSP, Fall-2017.
 ;
 ; IMPORTANT NOTE: Note that while in this IDL version all indices values are
 ; "1" less than in the MATLAB code, while VALUES contained in the arrays:
 ; n2d* and col_d2* are the SAME as in the MATLAB version.
 ;
-; The ONLY acceptable test to evaluate the correctness is to obtain EQUAL
-; md5sum of the outputs of the IDL and MATLAB versions, which had been
-; succesfully achieved by Albert on Dec-19-2017.
+; The test to the code Albert verified that its outputs have EQUAL
+; md5sum than the original MATLAB tool output. Dec-19-2017.
 ;
+; INPUTS:
+;
+; nrad, ntheta, nphi: three integers specifying the number of elements
+;                     in each dimension (spherical coorinates).
+;
+; fname_ext: a string specifying the filename extension of the output
+;            files, naming the size of the three dimensions. The
+;            extension for the type of regularization matrix is automatically
+;            added by selecting any of the OPTIONS listed below.
+;
+; OPTIONS:
 ; /hlaplac:  Angular derivatives. Output in one matrix.
-; /laplac3:  3D derivatives. Output in three matrices.
-; /identity: Identity NBINS^2 as regularization matrix.
-; /r3:       Angular derivatives (hlaplac) and radial derivatives (2dr)
-;            stacked in a single matrix. Added Aug-20-2018.
+; /laplac3:  Individual angular and radial derivatives. Output in three matrices.
+; /identity: Identity NBINS^2 to be used as regularization matrix.
+; /r3:       Radial derivatives (d2r) and angular derivatives (hlaplac)
+;            stacked in a single matrix. Aug-20-2018.
 ;
 ; Examples of calling sequence:
 ;
@@ -28,6 +38,7 @@
 ; derivs_hollowsph,nrad=100,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='100_90_180_Idl',/hlaplac
 ; derivs_hollowsph,nrad=100,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='100_90_180',/laplac
 ; derivs_hollowsph,nrad=100,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='100_90_180',/r3
+; derivs_hollowsph,nrad=100,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='50_90_180',/r3
 ; derivs_hollowsph,nrad= 26,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext= '26_90_180',/hlaplac
 ; derivs_hollowsph,nrad=100,ntheta=90,nphi=180,directory='/data1/tomography/bindata/',fname_ext='100_90_180_test',/identity
 ;
@@ -82,7 +93,7 @@ for k = 0L,nphi-1 do begin;
    endfor
 endfor
 
-print,'Done with Identity. Its number of rows   is: r_row_count + 1 =',i_row_count + 1
+print,'Done with Identity. Its number of rows   is: i_row_count + 1 =',i_row_count + 1
 print,'                    Its number of values is:       count + 1 =',      count + 1
 
    fname_identity = 'identity_'+fname_ext
@@ -179,8 +190,8 @@ for k = 0L,nphi-1 do begin
 ; the tom codes objective function will not be modified.
 ;----------------------------------------------------------------
         count = count + 1                ;
-        n = lindex3D(j,i,k,nrad,ntheta); 
-        row_d2theta(count) = t_row_count; 
+        n = lindex3D(j,i,k,nrad,ntheta)  ; 
+        row_d2theta(count) = t_row_count ; 
         col_d2theta(count) = n;
         val_d2theta(count) = -2.0;
 
@@ -205,6 +216,7 @@ endfor
 val_r3 = [val_r3, val_d2theta(0:count)];
 col_r3 = [col_r3, col_d2theta(0:count)];
   n_r3 = [nd2r(0:r_row_count+1), nd2r(r_row_count+1) + nd2theta(1:t_row_count+1)] ;
+ ;n_r3 = [nd2r(0:r_row_count  ), nd2r(r_row_count+1) + nd2theta(1:t_row_count  )] ;
 
 val_hlaplac = val_d2theta(0:count);
 col_hlaplac = col_d2theta(0:count);
@@ -310,6 +322,7 @@ print,'                   Its number of values is:       count + 1 =',      coun
 val_r3 = [val_r3, val_d2phi(0:count)];
 col_r3 = [col_r3, col_d2phi(0:count)];
   n_r3 = [nd2r(0:r_row_count+1), nd2r(r_row_count+1) + nd2theta(1:t_row_count+1), nd2r(r_row_count+1) + nd2theta(t_row_count+1) + nd2phi(1:p_row_count+1)] ;
+; n_r3 = [nd2r(0:r_row_count  ), nd2r(r_row_count+1) + nd2theta(1:t_row_count  ), nd2r(r_row_count+1) + nd2theta(t_row_count+1) + nd2phi(1:p_row_count  )] ;
 
 val_hlaplac = [val_hlaplac, val_d2phi(0:count)];
 col_hlaplac = [col_hlaplac, col_d2phi(0:count)];
@@ -352,6 +365,7 @@ if keyword_set(r3) then begin
    close,/all
       
 endif
+
 
 if keyword_set(hlaplac) then begin
 
