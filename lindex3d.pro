@@ -3,6 +3,8 @@ function lindex3d,row,col,block,nrows,ncols
 ;  this gives the 1D index of the (row,col,block) element
 ;    of a 3D matrix with nrows and ncols
 ;
+; by Alberto M. Vásquez. CLaSP, Fall-2017.
+;
 ;   see also vecdex3D.m
 ; index = (block - 1)*nrows*ncols + (col - 1)*nrows + row   MATLAB
 
