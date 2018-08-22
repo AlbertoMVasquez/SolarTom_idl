@@ -1,17 +1,6 @@
 pro wrapper_compare
 
-compare_reconstruction_model,orbit=01,ir=00,filename='Orb_01_UnifLong_02Rs.gif',/UniformLong  
-compare_reconstruction_model,orbit= 1,ir=03,filename='Orb_01_UnifLong_03Rs.gif',/UniformLong
-compare_reconstruction_model,orbit= 1,ir=07,filename='Orb_01_UnifLong_05Rs.gif',/UniformLong
-compare_reconstruction_model,orbit= 1,ir=15,filename='Orb_01_UnifLong_10Rs.gif',/UniformLong
-compare_reconstruction_model,orbit= 1,ir=20,filename='Orb_01_UnifLong_15Rs.gif',/UniformLong
-compare_reconstruction_model,orbit= 1,ir=25,filename='Orb_01_UnifLong_20Rs.gif',/UniformLong
-compare_reconstruction_model,orbit= 1,ir=32,filename='Orb_01_UnifLong_30Rs.gif',/UniformLong
-compare_reconstruction_model,orbit= 1,ir=39,filename='Orb_01_UnifLong_40Rs.gif',/UniformLong
-compare_reconstruction_model,orbit= 1,ir=44,filename='Orb_01_UnifLong_50Rs.gif',/UniformLong
-compare_reconstruction_model,orbit= 1,ir=49,filename='Orb_01_UnifLong_60Rs.gif',/UniformLong
-compare_reconstruction_model,orbit= 1,ir=54,filename='Orb_01_UnifLong_70Rs.gif',/UniformLong
-compare_reconstruction_model,orbit= 1,ir=58,filename='Orb_01_UnifLong_80Rs.gif',/UniformLong
+compare_reconstruction_model,orbit=24,ir=03,filename='Orb_24_UnifLong_03Rs.gif',/UniformLong
 
 return
 
@@ -30,6 +19,35 @@ compare_reconstruction_model,orbit= 1,ir=54,filename='Orb_01_UnifLong_70Rs_'+suf
 compare_reconstruction_model,orbit= 1,ir=58,filename='Orb_01_UnifLong_80Rs_'+suffix_model+'.gif',/UniformLong,/CR2082
 
 return
+
+compare_reconstruction_model,orbit=24,ir=00,filename='Orb_24_UnifLong_02Rs.gif',/UniformLong
+compare_reconstruction_model,orbit=24,ir=03,filename='Orb_24_UnifLong_03Rs.gif',/UniformLong
+compare_reconstruction_model,orbit=24,ir=05,filename='Orb_24_UnifLong_04Rs.gif',/UniformLong
+compare_reconstruction_model,orbit=24,ir=07,filename='Orb_24_UnifLong_05Rs.gif',/UniformLong
+compare_reconstruction_model,orbit=24,ir=09,filename='Orb_24_UnifLong_06Rs.gif',/UniformLong
+compare_reconstruction_model,orbit=24,ir=11,filename='Orb_24_UnifLong_07Rs.gif',/UniformLong
+compare_reconstruction_model,orbit=24,ir=12,filename='Orb_24_UnifLong_08Rs.gif',/UniformLong
+compare_reconstruction_model,orbit=24,ir=15,filename='Orb_24_UnifLong_10Rs.gif',/UniformLong
+compare_reconstruction_model,orbit=24,ir=17,filename='Orb_24_UnifLong_12Rs.gif',/UniformLong
+compare_reconstruction_model,orbit=24,ir=20,filename='Orb_24_UnifLong_15Rs.gif',/UniformLong
+
+return
+
+compare_reconstruction_model,orbit=01,ir=00,filename='Orb_01_UnifLong_02Rs.gif',/UniformLong  
+compare_reconstruction_model,orbit= 1,ir=03,filename='Orb_01_UnifLong_03Rs.gif',/UniformLong
+compare_reconstruction_model,orbit= 1,ir=07,filename='Orb_01_UnifLong_05Rs.gif',/UniformLong
+compare_reconstruction_model,orbit= 1,ir=15,filename='Orb_01_UnifLong_10Rs.gif',/UniformLong
+compare_reconstruction_model,orbit= 1,ir=20,filename='Orb_01_UnifLong_15Rs.gif',/UniformLong
+compare_reconstruction_model,orbit= 1,ir=25,filename='Orb_01_UnifLong_20Rs.gif',/UniformLong
+compare_reconstruction_model,orbit= 1,ir=32,filename='Orb_01_UnifLong_30Rs.gif',/UniformLong
+compare_reconstruction_model,orbit= 1,ir=39,filename='Orb_01_UnifLong_40Rs.gif',/UniformLong
+compare_reconstruction_model,orbit= 1,ir=44,filename='Orb_01_UnifLong_50Rs.gif',/UniformLong
+compare_reconstruction_model,orbit= 1,ir=49,filename='Orb_01_UnifLong_60Rs.gif',/UniformLong
+compare_reconstruction_model,orbit= 1,ir=54,filename='Orb_01_UnifLong_70Rs.gif',/UniformLong
+compare_reconstruction_model,orbit= 1,ir=58,filename='Orb_01_UnifLong_80Rs.gif',/UniformLong
+
+return
+
 
 suffix_model='CR2082'
 compare_reconstruction_model,orbit= 1,ir=00,filename='Orbit_CircularEquat_2.1Rs_'+suffix_model+'.gif',/circular_eq,/CR2082
@@ -61,21 +79,6 @@ compare_reconstruction_model,orbit=12,ir=54,filename='Orb_12_UnifLong_70Rs.gif',
 compare_reconstruction_model,orbit=12,ir=58,filename='Orb_12_UnifLong_80Rs.gif',/UniformLong
 
 stop
-
-compare_reconstruction_model,orbit=24,ir=00,filename='Orb_24_UnifLong_02Rs.gif',/UniformLong
-compare_reconstruction_model,orbit=24,ir=03,filename='Orb_24_UnifLong_03Rs.gif',/UniformLong
-compare_reconstruction_model,orbit=24,ir=07,filename='Orb_24_UnifLong_05Rs.gif',/UniformLong
-compare_reconstruction_model,orbit=24,ir=15,filename='Orb_24_UnifLong_10Rs.gif',/UniformLong
-compare_reconstruction_model,orbit=24,ir=20,filename='Orb_24_UnifLong_15Rs.gif',/UniformLong
-compare_reconstruction_model,orbit=24,ir=25,filename='Orb_24_UnifLong_20Rs.gif',/UniformLong
-compare_reconstruction_model,orbit=24,ir=32,filename='Orb_24_UnifLong_30Rs.gif',/UniformLong
-compare_reconstruction_model,orbit=24,ir=39,filename='Orb_24_UnifLong_40Rs.gif',/UniformLong
-compare_reconstruction_model,orbit=24,ir=44,filename='Orb_24_UnifLong_50Rs.gif',/UniformLong
-compare_reconstruction_model,orbit=24,ir=49,filename='Orb_24_UnifLong_60Rs.gif',/UniformLong
-compare_reconstruction_model,orbit=24,ir=54,filename='Orb_24_UnifLong_70Rs.gif',/UniformLong
-compare_reconstruction_model,orbit=24,ir=58,filename='Orb_24_UnifLong_80Rs.gif',/UniformLong
-
-return
 
 compare_reconstruction_model,orbit= 1,ir=15,filename='Orbit_01_10Rs.gif'
 compare_reconstruction_model,orbit= 1,ir=25,filename='Orbit_01_20Rs.gif'
@@ -427,7 +430,7 @@ endif
 
  rot         = 4
  scalefactor = 4
- Npanels     = 3
+ Npanels     = 2
  if keyword_set(circular_eq) OR keyword_set(circular_offeq) then Npanels = 2
 
  ;---create over-sized window with white background----------------
@@ -455,17 +458,20 @@ endif
             /color_scale,DX=DX,DY=DY,mini=mini,maxi=maxi,xsimage=xsimage,ysimage=ysimage
 
  if orbit eq  1 then begin
+
     y = (ysimage+DY)*(Npanels-2)+DY*2./3
+    goto,skip_extended_01
     map=alog10(rotate(congrid(map36,nt*scalefactor,np*scalefactor),rot))
-    map=alog10(rotate(congrid(map42,nt*scalefactor,np*scalefactor),rot))
+   ;map=alog10(rotate(congrid(map42,nt*scalefactor,np*scalefactor),rot))
     carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=0,ytitle_status=1,titulo_status=1,title='Reconstruction with Extended Orbit 01'
 ;map36= reform(Ne_wIO_UnifLong_ExtOrb01_bf4_hlaplac_l1e6(ir,*,*))
 ;map42= reform(Ne_wIO_UnifLong_ExtOrb01_bf4_hlaplac_l1e6_2(ir,*,*))
     
     y = (ysimage+DY)*(Npanels-3)+DY*4./5
+    skip_extended_01:
     map=alog10(rotate(congrid(map39,nt*scalefactor,np*scalefactor),rot))
-    map=alog10(rotate(congrid(map45,nt*scalefactor,np*scalefactor),rot))
-    carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=1,ytitle_status=1,titulo_status=1,title='Reconstruction with Science Orbit 01'
+   ;map=alog10(rotate(congrid(map45,nt*scalefactor,np*scalefactor),rot))
+    carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=1,ytitle_status=1,titulo_status=1,title='Reconstruction with Orbit 01'
 ;map39= reform(Ne_wIO_UnifLong_SciOrb01_bf4_hlaplac_l1e6(ir,*,*))
 ;map45= reform(Ne_wIO_UnifLong_SciOrb01_bf4_hlaplac_l1e6_2(ir,*,*))
  endif
@@ -488,6 +494,7 @@ endif
  
  if orbit eq 24 then begin
     y = (ysimage+DY)*(Npanels-2)+DY*2./3
+    goto,skip_extended_24
     map=alog10(rotate(congrid(map38,nt*scalefactor,np*scalefactor),rot))
 ;   map=alog10(rotate(congrid(map44,nt*scalefactor,np*scalefactor),rot))
     carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=0,ytitle_status=1,titulo_status=1,title='Reconstruction with Extended Orbit 24'
@@ -495,9 +502,10 @@ endif
 ;map44= reform(Ne_wIO_UnifLong_ExtOrb24_bf4_hlaplac_l1e6_2(ir,*,*))
 
     y = (ysimage+DY)*(Npanels-3)+DY*4./5
+    skip_extended_24:
     map=alog10(rotate(congrid(map41,nt*scalefactor,np*scalefactor),rot))
 ;   map=alog10(rotate(congrid(map47,nt*scalefactor,np*scalefactor),rot))
-    carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=1,ytitle_status=1,titulo_status=1,title='Reconstruction with Science Orbit 24'
+    carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=1,ytitle_status=1,titulo_status=1,title='Reconstruction with Orbit 24'
 ;map41= reform(Ne_wIO_UnifLong_SciOrb24_bf4_hlaplac_l1e6(ir,*,*))
 ;map47= reform(Ne_wIO_UnifLong_SciOrb24_bf4_hlaplac_l1e6_2(ir,*,*))
  endif
