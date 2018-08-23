@@ -49,8 +49,11 @@
 ;xdisplay,dir='/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.50_50_90_180_hlaplac-d2r_1.89',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='FeXIII-1074 Emissivity hlap+d2r L-1.89',mini=mini,maxi=maxi
 
 ;xdisplay,dir='/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.50_50_90_180_hlaplac-d2r_2.65',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='FeXIII-1074 Emissivity hlap+d2r L-2.65'
-;xdisplay,dir='/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.50_50_90_180_r3_2.65',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='FeXIII-1074 Emissivity r3 L-2.65'
-;xdisplay,dir='/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.50_50_90_180_hlaplac_2.65_NEW',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='FeXIII-1074 Emissivity hlaplac L-2.65'
+;xdisplay,dir='/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.50_50_90_180_r3_2.65',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,         titulo='FeXIII-1074 Emissivity r3D L-2.65'
+;xdisplay,dir='/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.50_50_90_180_hlaplac_2.65_NEW',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='FeXIII-1074 Emissivity r2D L-2.65'
+
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.00_ro1.02_l.225_DECON.H1_NewSet'    ,nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='EUVI-CR2082 FBE-195 L-0.225 r2D'
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.00_ro1.02_l.225_DECON.H1_NewSet.d2r',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='EUVI-CR2082 FBE-195 L-0.225 r3D'
 
 pro xdisplay,dir=dir,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A=r0A,mini=mini,maxi=maxi,win=win,log=log,clrtbl=clrtbl,titulo=titulo,rad_range=rad_range,lat_range=lat_range
   if not keyword_set(titulo)      then titulo      = 'Reconstruction'
@@ -58,15 +61,18 @@ pro xdisplay,dir=dir,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A=r0A,min
   if not keyword_set(np)          then np          = 2*nt
   if not keyword_set(scalefactor) then scalefactor = 4
   if not keyword_set(lat_range)   then lat_range   = [-90.,+90.]
-  if not keyword_set(rad_range)   then rad_range   = [1.02,1.23]
+  if not keyword_set(rad_range)   then rad_range   = [min(r0A),max(r0A)]
   if not keyword_set(r0A      )   then r0A         = [1.10,1.15,1.20]
-  
-  xread,dir=dir,file=file,nr=nr,nt=nt,np=np,map=map
-  xhisto,map=map,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,rad_range=rad_range,lat_range=lat_range,win=win,titulo='Histogram of '+titulo
+
+     xread,dir=dir,file=file,nr=nr,nt=nt,np=np,map=map
+;    xhisto,map=map,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,rad_range=rad_range,lat_range=lat_range,win=win,titulo='Histogram of '+titulo,file=file
   for ir=0,n_elements(r0A)-1 do begin
      r0 = r0A[ir]
+     print,r0
      if not keyword_set(log) then xshell,map=map,r0=r0,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,rmin=rmin,rmax=rmax,win=win+1,file=file,titulo=titulo
      if     keyword_set(log) then xshell,map=map,r0=r0,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,rmin=rmin,rmax=rmax,win=win+1,file=file,titulo=titulo,/log
+     print,r0
+     xhisto,map=map,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,rad_range=[r0,r0],lat_range=lat_range,win=win,titulo='Histogram of '+titulo,file=file
   endfor
   return
 end

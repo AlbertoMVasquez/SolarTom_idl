@@ -50,7 +50,7 @@ endif
 
 ; Default mini and maxi
 ipos = where(map2 gt 0.)
-if ipos(0) eq -1 then ipos = where(finite(map2) eq 1)  
+if ipos(0) eq -1 then ipos = where(finite(map2) eq 1 )
 if not keyword_set(mini) then mini = min(map2(ipos))
 if not keyword_set(maxi) then maxi = max(map2(ipos))
 
@@ -59,7 +59,8 @@ print,'---------------------------'
 print,'mini = ',mini
 print,'maxi = ',maxi
 print,'---------------------------'
-; Force mini and maxi
+
+; Force mini and maxi on map2
 map2(0,0)=mini
 map2(0,1)=maxi
 map2=map2>mini<maxi
@@ -91,7 +92,7 @@ endif
             xtitle_status=1,ytitle_status=1,titulo_status=1,$
             title=titulo+' at '+height_string+' R!DSUN!N',$
             /color_scale,DX=DX,DY=DY,mini=mini,maxi=maxi,xsimage=xsimage,ysimage=ysimage
-    record_gif,'~/Pictures/',file+'_'+height_string+'_Rsun.gif','X'
+    record_gif,'~/Pictures/','map_'+file+'_'+height_string+'_Rsun.gif','X'
 
    ; Set mini and maxi back to ZERO
     mini = 0.
