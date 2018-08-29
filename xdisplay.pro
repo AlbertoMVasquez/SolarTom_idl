@@ -52,35 +52,66 @@
 ;xdisplay,dir='/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.50_50_90_180_r3_2.65',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='FeXIII-1074 Emissivity r3 L-2.65'
 ;xdisplay,dir='/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.50_50_90_180_hlaplac_2.65_NEW',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='FeXIII-1074 Emissivity hlaplac L-2.65'
 
+;------------CR2082 DIEGO----------------------------------------------                                                                                                                                                                                                                                                      
+; Half Hollow1:
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.171.cr2082.50x90_bf4_ri.00_ro1.02_l.225_DECON.H1_NewSet.d2r',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='EUVI-CR2082-Hollow FBE-171 L-0.225 r3D'
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.171.cr2082.50x90_bf4_ri.00_ro1.02_l.225_DECON.H1_NewSet',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='EUVI-CR2082-Hollow FBE-171 L-0.225 r2D'
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.00_ro1.02_l.225_DECON.H1_NewSet.d2r',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='EUVI-CR2082-Hollow FBE-195 L-0.225 r3D' (1)
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.00_ro1.02_l.225_DECON.H1_NewSet',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='EUVI-CR2082-Hollow FBE-195 L-0.225 r2D' (2)
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.284.cr2082.50x90_bf4_ri.00_ro1.02_l.225_DECON.H1_NewSet.d2r',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='EUVI-CR2082-Hollow FBE-284 L-0.225 r3D'
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.284.cr2082.50x90_bf4_ri.00_ro1.02_l.225_DECON.H1_NewSet',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='EUVI-CR2082-Hollow FBE-284 L-0.225 r2D'
+
+; FullDisk:
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.171.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON.d2r_NewSet',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-171 L-0.75 r3D'
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.171.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON_NewSet',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-171 L-0.75 r2D'
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON.d2r_NewSet',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-195 L-0.75 r3D' (1)
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON_NewSet',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-195 L-0.75 r2D'     (2)
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.284.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON.d2r_NewSet',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-284 L-0.75 r3D'
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.284.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON_NewSet'    ,nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-284 L-0.75 r2D'                                                                                                             
+
+;------------CR2082 ALBERT---------------------------------------------                                                                                                                                                                                                                                                      
+; Half Hollow1:                                                                                                                                                                                                                                                                                                              
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.00_ro1.02_l.225_DECON.H1_NewSet_r3D.Albert',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='EUVI-CR2082-Hollow FBE-195 L-0.225 r3D' (1)
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.00_ro1.02_l.225_DECON.H1_NewSet_r2D.Albert',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='EUVI-CR2082-Hollow FBE-195 L-0.225 r2D' (2)
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.00_ro1.02_l.225_DECON.H1_OldSet_r3D.Albert',nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='EUVI-CR2082-Hollow FBE-195 L-0.225 r3D'
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.00_ro1.02_l.225_DECON.H1_OldSet_r2D.Albert',nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='EUVI-CR2082-Hollow FBE-195 L-0.225 r2D'
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.00_ro1.02_l.225-l.0225_DECON.H1_OldSet_hlpalac-d2r.Albert',nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='EUVI-CR2082-Hollow FBE-195 L-0.225/0.0225 r3D'
+
+; FullDisk:
+
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON_NewSet_r3D.Albert',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-195 L-0.75 r3D' (1)
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON_NewSet_r2D.Albert',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-195 L-0.75 r2D' (2)
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON_OldSet_r3D.Albert',nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-195 L-0.75 r3D'
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON_OldSet_r2D.Albert',nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-195 L-0.75 r2D'
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75-l.075_DECON_OldSet_hlpalac-d2r.Albert',nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-195 L-0.75/0.075 r3D'
+
 pro xdisplay,dir=dir,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A=r0A,mini=mini,maxi=maxi,win=win,log=log,clrtbl=clrtbl,titulo=titulo,rad_range=rad_range,lat_range=lat_range,scalefactor=scalefactor
   if not keyword_set(titulo)      then titulo      = 'Reconstruction'
   if not keyword_set(clrtbl)      then clrtbl      = 39
   if not keyword_set(np)          then np          = 2*nt
   if not keyword_set(scalefactor) then scalefactor = 3
   if not keyword_set(lat_range)   then lat_range   = [-90.,+90.]
-;  if not keyword_set(rad_range)   then rad_range   = [1.02,1.23]
+  if not keyword_set(rad_range)   then rad_range   = [1.0 , 1.3]
   if not keyword_set(r0A      )   then r0A         = [1.10,1.15,1.20]
   
   xread,dir=dir,file=file,nr=nr,nt=nt,np=np,map=map
   if keyword_set(rad_range) then  begin
-     sufijo = strmid(string(rad_range[0]),6,5)+'-'+strmid(string(rad_range[1]),6,5)+'Rsun'
-     xhisto,map=map,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,rad_range=rad_range,lat_range=lat_range,win=0,dir=dir,file=file,titulo='Histogram of '+titulo+strmid(string(rad_range[0]),6,5)+'-'+strmid(string(rad_range[1]),6,5),/eps,sufijo=sufijo,scalefactor=scalefactor
+     sufijo = strmid(string(rad_range[0]),6,5)+'-'+strmid(string(rad_range[1]),6,5)+'_Rsun'
+     xhisto,map=map,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,rad_range=rad_range,lat_range=lat_range,win=0,dir=dir,file=file,titulo='Histogram of '+titulo,sufijo=sufijo
   endif
   
   for i=0,n_elements(r0A)-1 do begin
-;     r0 = r0A[ir]
      drad = (rmax-rmin)/nr
      rad  = rmin + drad/2. + drad*findgen(nr)
      frad = abs(rad-r0A[i])
      ir   = median(where(frad eq min(frad)))
      r0   = rad[ir]
      rad_range=[r0,r0]
-     sufijo = strmid(string(r0),6,5)+'Rsun'
+     sufijo = strmid(string(r0),6,5)+'_Rsun'
      win=i
-     xhisto,map=map,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,rad_range=rad_range,lat_range=lat_range,win=win,dir=dir,file=file,titulo='Histogram of '+titulo,/eps,sufijo=sufijo,scalefactor=scalefactor
+     xhisto,map=map,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,rad_range=rad_range,lat_range=lat_range,win=win,dir=dir,file=file,titulo='Histogram of '+titulo,sufijo=sufijo
      if not keyword_set(log) then xshell,map=map,r0=r0,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,rmin=rmin,rmax=rmax,win=win+2,file=file,titulo=titulo
-     if     keyword_set(log) then xshell,map=map,r0=r0,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,rmin=rmin,rmax=rmax,win=win+2,file=file,titulo=titulo,/log
-  
+     if     keyword_set(log) then xshell,map=map,r0=r0,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,rmin=rmin,rmax=rmax,win=win+2,file=file,titulo=titulo,/log  
   endfor
   return
 end
