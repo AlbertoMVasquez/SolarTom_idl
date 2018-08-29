@@ -216,7 +216,7 @@ endfor
 val_r3 = [val_r3, val_d2theta(0:count)];
 col_r3 = [col_r3, col_d2theta(0:count)];
   n_r3 = [nd2r(0:r_row_count+1), nd2r(r_row_count+1) + nd2theta(1:t_row_count+1)] ;
-stop
+
 val_hlaplac = val_d2theta(0:count);
 col_hlaplac = col_d2theta(0:count);
 

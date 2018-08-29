@@ -50,7 +50,7 @@ endif
 
 ; Default mini and maxi
 ipos = where(map2 gt 0.)
-if ipos(0) eq -1 then ipos = where(finite(map2) eq 1 )
+if ipos(0) eq -1 then ipos = where(finite(map2) eq 1)  
 if not keyword_set(mini) then mini = min(map2(ipos))
 if not keyword_set(maxi) then maxi = max(map2(ipos))
 
@@ -59,8 +59,7 @@ print,'---------------------------'
 print,'mini = ',mini
 print,'maxi = ',maxi
 print,'---------------------------'
-
-; Force mini and maxi on map2
+; Force mini and maxi
 map2(0,0)=mini
 map2(0,1)=maxi
 map2=map2>mini<maxi

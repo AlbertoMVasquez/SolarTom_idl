@@ -25,7 +25,7 @@ pro xcarrmap,map=map,xi=xi,yi=yi,np=np,nt=nt,scalefactor=scalefactor,clrtbl=clrt
     if titulo_status eq 1 then titulo=title
     loadct,40
     contour,map,lon,lat,pos=[X,Y,X+nlon,Y+nlat],/noerase,/nodata,$
-        /device,color=255,xstyle=1,ystyle=1,charsize=4.,$
+        /device,color=255,xstyle=1,ystyle=1,charsize=scalefactor,$
         xtitle=xtitle,$
         ytitle=ytitle,$
         title=titulo,$
@@ -51,7 +51,7 @@ pro xcarrmap,map=map,xi=xi,yi=yi,np=np,nt=nt,scalefactor=scalefactor,clrtbl=clrt
       contour,scale,findgen(nsx),reform(scale(0,*)),$
               pos=[xs0,ys0,xs0+nsx,ys0+nsy],/device,color=0,/noerase,$
               yticklen=.2,/nodata,ythick=2,xthick=2,charthick=4,$
-              xstyle=5,ystyle=1,charsize=5,font=1
+              xstyle=5,ystyle=1,charsize=scalefactor,font=1
     endif
 
     return
