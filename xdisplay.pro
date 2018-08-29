@@ -76,14 +76,16 @@
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.00_ro1.02_l.225_DECON.H1_OldSet_r3D.Albert',nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='EUVI-CR2082-Hollow FBE-195 L-0.225 r3D'
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.00_ro1.02_l.225_DECON.H1_OldSet_r2D.Albert',nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='EUVI-CR2082-Hollow FBE-195 L-0.225 r2D'
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.00_ro1.02_l.225-l.0225_DECON.H1_OldSet_hlpalac-d2r.Albert',nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='EUVI-CR2082-Hollow FBE-195 L-0.225/0.0225 r3D'
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.00_ro1.02_l.225_DECON_NewSet2_hlaplac',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='EUVI-CR2082-Hollow FBE-195 L-0.225 r2D NewSet2'
 
 ; FullDisk:
 
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON_NewSet_r3D.Albert',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-195 L-0.75 r3D' (1)
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON_NewSet_r2D.Albert',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-195 L-0.75 r2D' (2)
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON_OldSet_r3D.Albert',nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-195 L-0.75 r3D'
-;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON_OldSet_r2D.Albert',nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-195 L-0.75 r2D'
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON_OldSet_r2D.Albert',nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-195 L-0.75 r2D OldSet'
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75-l.075_DECON_OldSet_hlpalac-d2r.Albert',nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-195 L-0.75/0.075 r3D'
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON_NewSet2_hlaplac',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-195 L-0.75 r2D NewSet2'
 
 pro xdisplay,dir=dir,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A=r0A,mini=mini,maxi=maxi,win=win,log=log,clrtbl=clrtbl,titulo=titulo,rad_range=rad_range,lat_range=lat_range,scalefactor=scalefactor
   if not keyword_set(titulo)      then titulo      = 'Reconstruction'

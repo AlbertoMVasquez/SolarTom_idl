@@ -56,6 +56,7 @@ if not keyword_set(maxi) then maxi = max(map2(ipos))
 
 ; Inform mini and maxi in terminal
 print,'---------------------------'
+print,'r0A  = ['+string(r0)+']'
 print,'mini = ',mini
 print,'maxi = ',maxi
 print,'---------------------------'
