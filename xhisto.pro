@@ -28,7 +28,7 @@ pro xhisto,map=map,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,rad_range=rad_range,lat
   maxdata = max(x_data)
   histo_x_data = histogram(x_data,binsize=maxdata/50.,locations=xval)
   
-     ps1,'~/Pictures/'+'histo_'+file+'_'+sufijo+'.eps',0
+     ps1,'/data1/tomography/SolarTom_idl/Figures/'+'histo_'+file+'_'+sufijo+'.eps',0
      plot,xval,histo_x_data,title=titulo,font=0,charsize=1
      xyouts,0.6*[1,1,1,1],0.8-0.05*findgen(4),['RadMin  [Rsun] =','RadMax [Rsun] =','Latmin  [deg]  =','LatMax  [deg]  =']+strmid(string([rad_range,lat_range]),4,6),/normal,Font=0
      xyouts,0.6*[1,1,1,1],0.8-0.05*(5+findgen(4)),['% Npos = ','% Nnul = ','% Nneg = ','Tot. Num= ']+string([[Npos,Nnul,Nneg]*(100./Ntot),Ntot]),/normal,Font=0

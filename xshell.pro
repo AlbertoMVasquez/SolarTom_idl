@@ -92,7 +92,7 @@ endif
             xtitle_status=1,ytitle_status=1,titulo_status=1,$
             title=titulo+' at '+height_string+' R!DSUN!N',$
             /color_scale,DX=DX,DY=DY,mini=mini,maxi=maxi,xsimage=xsimage,ysimage=ysimage
-    record_gif,'~/Pictures/','map_'+file+'_'+height_string+'_Rsun.gif','X'
+    record_gif,'/data1/tomography/SolarTom_idl/Figures/','map_'+file+'_'+height_string+'_Rsun.gif','X'
 
    ; Set mini and maxi back to ZERO
     mini = 0.
