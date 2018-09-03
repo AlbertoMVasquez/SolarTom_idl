@@ -85,14 +85,16 @@
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON_OldSet_r3D.Albert',nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-195 L-0.75 r3D OldSet'
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75-l.075_DECON_OldSet_hlpalac-d2r.Albert',nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-195 L-0.75/0.075 r3D'
 
-;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON_OldSet_r2D.Albert',nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-195 L-0.75 r2D OldSet'
-;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON_NewSet_r2D.Albert' ,nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-195 L-0.75 r2D NewSet' (2)
-;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON_NewSet2_r2D.Albert',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-195 L-0.75 r2D NewSet2'
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON_OldSet_r2D.Albert' ,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-195 L-0.75 r2D OldSet'
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON_NewSet_r2D.Albert' ,nr=50,nt=90,rmin=1.0,rmax=1.5, r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-195 L-0.75 r2D NewSet' (2)
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON_NewSet2_r2D.Albert',nr=50,nt=90,rmin=1.0,rmax=1.5, r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-195 L-0.75 r2D NewSet2'
+                                                 x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON_NewSet2_r2D.Albert
 
 ;-------------------------------------
 
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON_OldSet_r2D.Albert',nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='EUVI-CR2082-FD-Decon FBE-195 L-0.75 r2D OldSet'
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2081.26x90_bf4_ri.98_ro1.025_l0.75_DECON',nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='EUVI-CR2081-FD-Decon FBE-195 L-0.75 r2D OldSet'
+
 
 
 x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.26_26_90_180_r2D_2.65
