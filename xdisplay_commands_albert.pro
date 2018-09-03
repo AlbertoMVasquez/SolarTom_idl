@@ -48,9 +48,11 @@
 ;xdisplay,dir='/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.50_50_90_180_hlaplac_1.89',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='FeXIII-1074 Emissivity hlap L-1.89'
 ;xdisplay,dir='/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.50_50_90_180_hlaplac-d2r_1.89',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='FeXIII-1074 Emissivity hlap+d2r L-1.89',mini=mini,maxi=maxi
 
-;xdisplay,dir='/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.50_50_90_180_hlaplac-d2r_2.65',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='FeXIII-1074 Emissivity hlap+d2r L-2.65'
-;xdisplay,dir='/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.50_50_90_180_r3_2.65',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='FeXIII-1074 Emissivity r3 L-2.65'
-;xdisplay,dir='/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.50_50_90_180_hlaplac_2.65_NEW',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='FeXIII-1074 Emissivity hlaplac L-2.65'
+;xdisplay,dir='/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.50_50_90_180_hlaplac-d2r_2.65',nr=50,nt=90,rmin=1.0,rmax=1.50,r0A=r0A,win=0,titulo='FeXIII-1074 Emissivity L-2.65 r2D+d2r NewSet'
+;xdisplay,dir='/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.50_50_90_180_r3_2.65'         ,nr=50,nt=90,rmin=1.0,rmax=1.50,r0A=r0A,win=0,titulo='FeXIII-1074 Emissivity L-2.65 r3D NewSet'
+;xdisplay,dir='/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.50_50_90_180_hlaplac_2.65_NEW',nr=50,nt=90,rmin=1.0,rmax=1.50,r0A=r0A,win=0,titulo='FeXIII-1074 Emissivity L-2.65 r2D NewSet'
+;xdisplay,dir='/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.26_26_90_180_r2D_2.65'        ,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='FeXIII-1074 Emissivity L-2.65 r2D OldSet'
+;xdisplay,dir='/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.26_26_90_180_r3D_2.65'        ,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='FeXIII-1074 Emissivity L-2.65 r3D OldSet'
 
 ;------------CR2082 DIEGO----------------------------------------------                                                                                                                                                                                                                                                      
 ; Half Hollow1:
@@ -71,7 +73,7 @@
 
 ;------------CR2082 ALBERT---------------------------------------------                                                                                                                                                                                                                                                      
 ; Half Hollow1:                                                                                                                                                                                                                                                                                                              
-;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.00_ro1.02_l.225_DECON.H1_NewSet_r3D.Albert',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='EUVI-CR2082-Hollow FBE-195 L-0.225 r3D' (1)
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.00_ro1.02_l.225_DECON.H1_NewSet_r3D.Albert',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='EUVI-CR2082-Hollow FBE-195 L-0.225 r3D NewSet' (1)
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.00_ro1.02_l.225_DECON.H1_OldSet_r3D.Albert',nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='EUVI-CR2082-Hollow FBE-195 L-0.225 r3D OldSet'
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.00_ro1.02_l.225-l.0225_DECON.H1_OldSet_hlpalac-d2r.Albert',nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='EUVI-CR2082-Hollow FBE-195 L-0.225/0.0225 r3D'
 
@@ -81,7 +83,7 @@
 
 ; FullDisk:
 
-;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON_NewSet_r3D.Albert',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-195 L-0.75 r3D' (1)
+;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON_NewSet_r3D.Albert',nr=50,nt=90,rmin=1.0,rmax=1.5,r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-195 L-0.75 r3D NewSet' (1)
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON_OldSet_r3D.Albert',nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-195 L-0.75 r3D OldSet'
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75-l.075_DECON_OldSet_hlpalac-d2r.Albert',nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='EUVI-CR2082-FullDisk FBE-195 L-0.75/0.075 r3D'
 
@@ -96,6 +98,3 @@
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2081.26x90_bf4_ri.98_ro1.025_l0.75_DECON',nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='EUVI-CR2081-FD-Decon FBE-195 L-0.75 r2D OldSet'
 
 
-
-x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.26_26_90_180_r2D_2.65
-x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.26_26_90_180_r3D_2.65
