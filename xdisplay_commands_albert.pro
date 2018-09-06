@@ -98,3 +98,11 @@
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2081.26x90_bf4_ri.98_ro1.025_l0.75_DECON',nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='EUVI-CR2081-FD-Decon FBE-195 L-0.75 r2D OldSet'
 
 
+
+r0A=[1.1,1.2,1.3,1.4,1.5]
+                                                 
+xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_keepneg_hlaplac_l1e-4',nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=r0A,win=0,titulo='KCOR-KeepNeg: Ne [cm!U-3!N]'
+xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_dropneg_hlaplac_l1e-4',nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=r0A,win=1,titulo='KCOR-DropNeg: Ne [cm!U-3!N]'
+
+xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_keepneg_hlaplac_l1e-4_V2',nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=r0A,win=0,titulo='KCOR-KeepNeg-V2: Ne [cm!U-3!N]'
+xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_dropneg_hlaplac_l1e-4_V2',nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=r0A,win=1,titulo='KCOR-DropNeg-V2: Ne [cm!U-3!N]'
