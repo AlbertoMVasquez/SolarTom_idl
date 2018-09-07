@@ -1,4 +1,4 @@
-pro xhisto,map=map,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,rad_range=rad_range,lat_range=lat_range,win=win,titulo=titulo,dir=dir,file=file,sufijo=sufijo
+pro xhisto,map=map,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,rad_range=rad_range,lat_range=lat_range,win=win,titulo=titulo,dir=dir,file=file,sufijo=sufijo,mini=mini,maxi=maxi
 
   if not keyword_set(sufijo) then sufijo =''
   
@@ -24,6 +24,9 @@ pro xhisto,map=map,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,rad_range=rad_range,lat
   if Nneg(0)eq -1 then Nneg = 0.
   if Nnul(0)eq -1 then Nnul = 0.
   Ntot=Npos+Nnul+Nneg
+
+  if keyword_set(mini) then x_data = x_data > mini
+  if keyword_set(maxi) then x_data = x_data < maxi
   
   maxdata = max(x_data)
   histo_x_data = histogram(x_data,binsize=maxdata/50.,locations=xval)
