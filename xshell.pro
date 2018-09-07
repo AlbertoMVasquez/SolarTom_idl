@@ -49,21 +49,15 @@ map2=rotate(map2,4)
 endif
 
 ; Default mini and maxi
-ipos = where(map2 gt 0.)
-if ipos(0) eq -1 then ipos = where(finite(map2) eq 1)  
-if not keyword_set(mini) then mini = min(map2(ipos))
-if not keyword_set(maxi) then maxi = max(map2(ipos))
+  ipos = where(map2 gt 0.)
+  if ipos(0) eq -1 then ipos = where(finite(map2) eq 1)  
+  if not keyword_set(mini) then mini = min(map2(ipos))
+  if not keyword_set(maxi) then maxi = max(map2(ipos))
 
-; Inform mini and maxi in terminal
-print,'---------------------------'
-print,'r0A  = ['+string(r0)+']'
-print,'mini = ',mini
-print,'maxi = ',maxi
-print,'---------------------------'
 ; Force mini and maxi
-map2(0,0)=mini
-map2(0,1)=maxi
-map2=map2>mini<maxi
+  map2(0,0)=mini
+  map2(0,1)=maxi
+  map2=map2>mini<maxi
 
 if keyword_set(log) then begin
    map2=alog10(map2)
@@ -94,8 +88,10 @@ endif
             /color_scale,DX=DX,DY=DY,mini=mini,maxi=maxi,xsimage=xsimage,ysimage=ysimage
     record_gif,'/data1/tomography/SolarTom_idl/Figures/','map_'+file+'_'+height_string+'_Rsun.gif','X'
 
-   ; Set mini and maxi back to ZERO
-    mini = 0.
-    maxi = 0.
+   if keyword_set(log) then begin
+      mini=10.^mini
+      maxi=10.^maxi
+   endif
+
 return
 end
