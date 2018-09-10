@@ -14,7 +14,7 @@ pro xhisto,map=map,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,rad_range=rad_range,lat
   latA = fltarr(nr,nt,np)
   for it=0,nt-1 do latA(*,it,*)=lat[it]
 
-  p = where(radA ge rad_range[0] and radA le rad_range[1] and latA ge lat_range[0] and latA le lat_range[1])
+  p = where(radA ge rad_range[0] and radA le rad_range[1] and latA ge lat_range[0] and latA le lat_range[1] and finite(map) eq 1 )
   if (size(p))(1) eq -1 then stop
   x_data = reform(map(p))
 
