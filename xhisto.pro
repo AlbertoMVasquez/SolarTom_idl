@@ -1,15 +1,12 @@
-pro xhisto,map=map,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,rad_range=rad_range,lat_range=lat_range,win=win,titulo=titulo,dir=dir,file=file,sufijo=sufijo,mini=mini,maxi=maxi
+pro xhisto,map=map,nr=nr,nt=nt,np=np,radii=radii,rad_range=rad_range,lat_range=lat_range,win=win,titulo=titulo,dir=dir,file=file,sufijo=sufijo,mini=mini,maxi=maxi
 
   if not keyword_set(sufijo) then sufijo =''
-  
-  drad = (rmax-rmin)/nr
-  rad  = rmin + drad/2. + drad*findgen(nr)
 
   dlat = 180./nt
   lat  = -90. + dlat/2. + dlat*findgen(nt)
 
   radA = fltarr(nr,nt,np)
-  for ir=0,nr-1 do radA(ir,*,*)=rad[ir]
+  for ir=0,nr-1 do radA(ir,*,*)=radii[ir]
 
   latA = fltarr(nr,nt,np)
   for it=0,nt-1 do latA(*,it,*)=lat[it]

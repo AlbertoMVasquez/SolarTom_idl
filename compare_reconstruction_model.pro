@@ -1,6 +1,10 @@
 pro wrapper_compare
 
+compare_reconstruction_model,orbit=24,ir=00,filename='Orb_24_UnifLong_02Rs.gif',/UniformLong
 compare_reconstruction_model,orbit=24,ir=03,filename='Orb_24_UnifLong_03Rs.gif',/UniformLong
+compare_reconstruction_model,orbit=24,ir=05,filename='Orb_24_UnifLong_04Rs.gif',/UniformLong
+compare_reconstruction_model,orbit=24,ir=07,filename='Orb_24_UnifLong_05Rs.gif',/UniformLong
+compare_reconstruction_model,orbit=24,ir=09,filename='Orb_24_UnifLong_06Rs.gif',/UniformLong
 
 return
 
@@ -285,7 +289,8 @@ files11=[$
 'x_wisprIO.512.CR2081.UnifLong.ExtOrb24.bf4_hlaplac_l1e-6_2',$
 'x_wisprIO.512.CR2081.UnifLong.SciOrb01.bf4_hlaplac_l1e-6_2',$
 'x_wisprIO.512.CR2081.UnifLong.SciOrb12.bf4_hlaplac_l1e-6_2',$
-'x_wisprIO.512.CR2081.UnifLong.SciOrb24.bf4_hlaplac_l1e-6_2']
+;'x_wisprIO.512.CR2081.UnifLong.SciOrb24.bf4_r3_l1e-6']
+'x_wisprIO.512.CR2081.UnifLong.SciOrb24.bf4_hlaplac_l1e-6_LATEST']
 
 readtom_sph,input_dir,files11[0],nr,nt,rmin,rmax,Ne_wIO_UnifLong_ExtOrb01_bf4_hlaplac_l1e6_2
 readtom_sph,input_dir,files11[1],nr,nt,rmin,rmax,Ne_wIO_UnifLong_ExtOrb12_bf4_hlaplac_l1e6_2
@@ -496,7 +501,7 @@ endif
     y = (ysimage+DY)*(Npanels-2)+DY*2./3
     goto,skip_extended_24
     map=alog10(rotate(congrid(map38,nt*scalefactor,np*scalefactor),rot))
-;   map=alog10(rotate(congrid(map44,nt*scalefactor,np*scalefactor),rot))
+    map=alog10(rotate(congrid(map44,nt*scalefactor,np*scalefactor),rot))
     carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=0,ytitle_status=1,titulo_status=1,title='Reconstruction with Extended Orbit 24'
 ;map38= reform(Ne_wIO_UnifLong_ExtOrb24_bf4_hlaplac_l1e6(ir,*,*))
 ;map44= reform(Ne_wIO_UnifLong_ExtOrb24_bf4_hlaplac_l1e6_2(ir,*,*))
@@ -504,7 +509,7 @@ endif
     y = (ysimage+DY)*(Npanels-3)+DY*4./5
     skip_extended_24:
     map=alog10(rotate(congrid(map41,nt*scalefactor,np*scalefactor),rot))
-;   map=alog10(rotate(congrid(map47,nt*scalefactor,np*scalefactor),rot))
+    map=alog10(rotate(congrid(map47,nt*scalefactor,np*scalefactor),rot))
     carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=1,ytitle_status=1,titulo_status=1,title='Reconstruction with Orbit 24'
 ;map41= reform(Ne_wIO_UnifLong_SciOrb24_bf4_hlaplac_l1e6(ir,*,*))
 ;map47= reform(Ne_wIO_UnifLong_SciOrb24_bf4_hlaplac_l1e6_2(ir,*,*))

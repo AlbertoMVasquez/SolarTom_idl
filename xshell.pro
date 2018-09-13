@@ -1,4 +1,4 @@
-pro xshell,map=map,r0=r0,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,rmin=rmin,rmax=rmax,log=log,interp=interp,win=win,file=file,titulo=titulo
+pro xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,log=log,interp=interp,win=win,file=file,titulo=titulo
 
 ; set graph stuff
 device, retain     = 2
@@ -10,13 +10,6 @@ if not keyword_set(pos) then pos=0
 nr=fix((size(map))(1))
 nt=fix((size(map))(2))
 np=fix((size(map))(3))
-
-; Determine radial index for shell
-drad = (rmax-rmin)/nr
-rad  = rmin + drad/2. + drad*findgen(nr)
-frad = abs(rad-r0)
-ir   = median(where(frad eq min(frad)))
-r0   = rad[ir]
 
 if keyword_set(interp) then $
 map2=rotate(rebin(reform(map(ir,*,*)),nt*scalefactor,np*scalefactor),4)
