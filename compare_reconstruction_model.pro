@@ -1,11 +1,13 @@
 pro wrapper_compare
 
-compare_reconstruction_model,orbit=24,ir=00,filename='Orb_24_UnifLong_02Rs.gif',/UniformLong
-compare_reconstruction_model,orbit=24,ir=03,filename='Orb_24_UnifLong_03Rs.gif',/UniformLong
-compare_reconstruction_model,orbit=24,ir=05,filename='Orb_24_UnifLong_04Rs.gif',/UniformLong
-compare_reconstruction_model,orbit=24,ir=07,filename='Orb_24_UnifLong_05Rs.gif',/UniformLong
-compare_reconstruction_model,orbit=24,ir=09,filename='Orb_24_UnifLong_06Rs.gif',/UniformLong
+radial_grid_file='radial_grid_sphere_wedge_WISPR.dat'
 
+nrads=15
+r0A=2.+findgen(nrads)
+for i=0,nrads-1 do compare_reconstruction_model,orbit=24,r0=r0A[i],filename='Ne-WISPR-Tom_Orb-24_reg2for do begin
+
+endfor
+D_',/UniformLong,radial_grid_file=radial_grid_file
 return
 
 suffix_model='CR2082'
@@ -21,19 +23,6 @@ compare_reconstruction_model,orbit= 1,ir=44,filename='Orb_01_UnifLong_50Rs_'+suf
 compare_reconstruction_model,orbit= 1,ir=49,filename='Orb_01_UnifLong_60Rs_'+suffix_model+'.gif',/UniformLong,/CR2082
 compare_reconstruction_model,orbit= 1,ir=54,filename='Orb_01_UnifLong_70Rs_'+suffix_model+'.gif',/UniformLong,/CR2082
 compare_reconstruction_model,orbit= 1,ir=58,filename='Orb_01_UnifLong_80Rs_'+suffix_model+'.gif',/UniformLong,/CR2082
-
-return
-
-compare_reconstruction_model,orbit=24,ir=00,filename='Orb_24_UnifLong_02Rs.gif',/UniformLong
-compare_reconstruction_model,orbit=24,ir=03,filename='Orb_24_UnifLong_03Rs.gif',/UniformLong
-compare_reconstruction_model,orbit=24,ir=05,filename='Orb_24_UnifLong_04Rs.gif',/UniformLong
-compare_reconstruction_model,orbit=24,ir=07,filename='Orb_24_UnifLong_05Rs.gif',/UniformLong
-compare_reconstruction_model,orbit=24,ir=09,filename='Orb_24_UnifLong_06Rs.gif',/UniformLong
-compare_reconstruction_model,orbit=24,ir=11,filename='Orb_24_UnifLong_07Rs.gif',/UniformLong
-compare_reconstruction_model,orbit=24,ir=12,filename='Orb_24_UnifLong_08Rs.gif',/UniformLong
-compare_reconstruction_model,orbit=24,ir=15,filename='Orb_24_UnifLong_10Rs.gif',/UniformLong
-compare_reconstruction_model,orbit=24,ir=17,filename='Orb_24_UnifLong_12Rs.gif',/UniformLong
-compare_reconstruction_model,orbit=24,ir=20,filename='Orb_24_UnifLong_15Rs.gif',/UniformLong
 
 return
 
@@ -130,7 +119,7 @@ return
 
 end
 
-pro compare_reconstruction_model,ir=ir,filename=filename,orbit=orbit,circular_eq=circular_eq,circular_offeq=circular_offeq,UniformLong=UniformLong,CR2082=CR2082
+pro compare_reconstruction_model,r0=r0,filename=filename,orbit=orbit,circular_eq=circular_eq,circular_offeq=circular_offeq,UniformLong=UniformLong,CR2082=CR2082,radial_grid_file=radial_grid_file
 
 input_dir = '/data1/tomography/bindata/'
   
@@ -181,11 +170,18 @@ files6=['x_wisprIO.512.Orbit01.60images_identityNEW_l1e-5',$
 files7=['x_wisprIO.512.CircularOrbit01.60images_l1e-4',$
         'x_wisprIO.512.CircularOrbit01.60images_3regmat_l1e-4']
 
- nr = 100
+
  nt =  90
  np = 180
- rmin =   2.0
- rmax = 214.5
+ readcol,'./DATA/'+radial_grid_file,index,rad,drad,format='U,F,F',skipline=3,/quick
+ nr = n_elements(rad)
+ rmin = min(rad)
+ rmax = max(rad)
+ frad = abs(rad-r0)
+ ir   = median(where(frad eq min(frad)))
+ r0   = rad[ir]
+ sufijo = strmid(string(r0),6,5)+'_Rsun'
+ filename = filename + '_' + sufijo + '.gif'
 
  readtom_sph,input_dir,files[0],nr,nt,rmin,rmax,Ne_model
  readtom_sph,input_dir,files[1],nr,nt,rmin,rmax,Ne_wI_O01
@@ -434,7 +430,7 @@ endif
  device, decomposed =  0
 
  rot         = 4
- scalefactor = 4
+ scalefactor = 2
  Npanels     = 2
  if keyword_set(circular_eq) OR keyword_set(circular_offeq) then Npanels = 2
 
@@ -453,7 +449,7 @@ endif
 
  loadct,39
  if keyword_set(UniformLong) then begin
-    height_string = strmid(filename,16,2)
+    height_string = strmid(sufijo,0,5)
     x = x0
     y = y0+DY/2
     map = alog10(rotate(congrid(map1 ,nt*scalefactor,np*scalefactor),rot))
@@ -638,11 +634,11 @@ pro carrmap,map=map,xi=xi,yi=yi,np=np,nt=nt,scalefactor=scalefactor,$
     if ytitle_status eq 1 then ytitle='Latitude [deg]'
     if titulo_status eq 1 then titulo=title
     contour,map,lon,lat,pos=[X,Y,X+nlon,Y+nlat],/noerase,/nodata,$
-        /device,color=255,xstyle=1,ystyle=1,charsize=4.,$
+        /device,color=255,xstyle=1,ystyle=1,charsize=scalefactor,$
         xtitle=xtitle,$
         ytitle=ytitle,$
         title=titulo,$
-        yticklen=.02,xticklen=.03,ythick=2,xthick=2,charthick=4,font=1
+        yticklen=.02,xticklen=.03,ythick=2,xthick=2,charthick=1,font=1
 
    if keyword_set(color_scale) then begin
       nsy = ysimage
@@ -662,8 +658,8 @@ pro carrmap,map=map,xi=xi,yi=yi,np=np,nt=nt,scalefactor=scalefactor,$
       loadct,0
       contour,scale,findgen(nsx),reform(scale(0,*)),$
               pos=[xs0,ys0,xs0+nsx,ys0+nsy],/device,color=0,/noerase,$
-              yticklen=.2,/nodata,ythick=2,xthick=2,charthick=4,$
-              xstyle=5,ystyle=1,charsize=5,font=1
+              yticklen=.2,/nodata,ythick=2,xthick=2,charthick=1,$
+              xstyle=5,ystyle=1,charsize=scalefactor,font=1
 
 ;       xyouts,[xs0-Dx/10],[ys0+ysimage+DY/10],['Log!d10!N(N!De!N [cm!U-3!N])'],$
 ;         color=0,charsize=5,charthick=4,font=1,/device
