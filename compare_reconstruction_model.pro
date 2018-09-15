@@ -4,10 +4,7 @@ radial_grid_file='radial_grid_sphere_wedge_WISPR.dat'
 
 nrads=15
 r0A=2.+findgen(nrads)
-for i=0,nrads-1 do compare_reconstruction_model,orbit=24,r0=r0A[i],filename='Ne-WISPR-Tom_Orb-24_reg2for do begin
-
-endfor
-D_',/UniformLong,radial_grid_file=radial_grid_file
+for i=0,nrads-1 do compare_reconstruction_model,orbit=24,r0=r0A[i],filename='Ne-WISPR-Tom_Orb-24_reg2D_',/UniformLong,radial_grid_file=radial_grid_file
 return
 
 suffix_model='CR2082'
