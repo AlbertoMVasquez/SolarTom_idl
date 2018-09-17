@@ -2,7 +2,7 @@ pro xdisplay,dir=dir,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A=r0A,min
              titulo=titulo,rad_range=rad_range,lat_range=lat_range,scalefactor=scalefactor,minA=minA,maxA=maxA,minima=minima,maxima=maxima,map=map,$
              radial_grid_file=radial_grid_file
 
-  if not keyword_set(dir)         then dir         = '/data1/tomohgraphy/bindata/'
+  if not keyword_set(dir)         then dir         = '/data1/tomography/bindata/'
   if not keyword_set(titulo)      then titulo      = 'Reconstruction'
   if not keyword_set(clrtbl)      then clrtbl      = 39
   if not keyword_set(np)          then np          = 2*nt
