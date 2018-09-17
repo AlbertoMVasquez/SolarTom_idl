@@ -96,9 +96,9 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
      ps1,'/data1/tomography/SolarTom_idl/Figures/'+'comparison_'+comp_suffix+'_'+sufijo+'.eps',0
      device,/inches,xsize=12,ysize=5
      !p.multi = [0,2,1]
-     plot,values_A,values_B,font=0,psym=4,xtitle=x_tit,ytitle=y_tit,title=tit
+     plot,values_A,values_B,font=0,psym=4,xtitle=x_tit,ytitle=y_tit,title=tit+' at r = '+strmid(sufijo,0,5)+' R!DSUN!N'
      plot,xval,histo_ratio ,font=0,xtitle=histo_x_tit,title='Frequency Histogram'
-     multi = 0
+     !p.multi = 0
      ps2
   endfor
   
