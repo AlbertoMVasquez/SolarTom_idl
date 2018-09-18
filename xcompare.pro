@@ -1,8 +1,8 @@
 pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB=ntB,npB=npB,rminA=rminA,rmaxA=rmaxA,rminB=rminB,rmaxB=rmaxB,$
              radial_grid_file_A=radial_grid_file_A,radial_grid_file_B=radial_grid_file_B,$
-             r0A=r0A,lat_range=lat_range,lon_range=lon_range,rad_range=rad_range,$
+             r0A=r0A,lat_range=lat_range,lon_range=lon_range,rad_range_A=rad_range_A,rad_range_B=rad_range_B,$
              clrtbl=clrtbl,scalefactor=scalefactor,comp_suffix=comp_suffix,$
-             tit=tit,x_tit=x_tit,y_tit=y_tit,histo_x_tit=histo_x_tit,max_ratio=max_ratio,min_ratio=min_ratio
+             tit=tit,x_tit=x_tit,y_tit=y_tit,histo_x_tit=histo_x_tit,max_ratio=max_ratio,min_ratio=min_ratio,rad_y_tit=rad_y_tit
 
   EPS=1.e-4                     ; fractional tolerance for evaluating same height is being compared.
   
@@ -101,6 +101,35 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
      !p.multi = 0
      ps2
   endfor
+
+;Compute average radial profile of x_A(r) in selected lat/lon range.
+  x_A_avg = fltarr(NrA)
+  for irA=0,nrA-1 do begin
+     map_A = reform(mapA(irA,*,*))     
+     index = where(map_A gt 0. and $
+                   mapA_lat ge lat_range[0] and mapA_lat le lat_range[1] and $
+                   mapA_lon ge lon_range[0] and mapA_lon le lon_range[1] )
+     x_A_avg[irA] = mean(map_A)
+  endfor
+;Compute average radial profile of x_B(r) in selected lat/lon range.
+  x_B_avg = fltarr(NrA)
+  for irB=0,nrB-1 do begin
+     map_B = reform(mapB(irB,*,*))     
+     index = where(map_B gt 0. and $
+                   mapB_lat ge lat_range[0] and mapB_lat le lat_range[1] and $
+                   mapB_lon ge lon_range[0] and mapB_lon le lon_range[1] )
+     x_B_avg[irB] = mean(map_B)
+  endfor
+;Plot average radial profiles of x_A(r) abd x_B(r) in selected lat/lon/rad ranges.
+  iA = where(radA ge rad_range_A[0] and radA le rad_range_A[1])
+  iB = where(radB ge rad_range_B[0] and radB le rad_range_B[1])
+  ps1,'/data1/tomography/SolarTom_idl/Figures/'+'Average_Radial_Profiles_'+comp_suffix+'.eps',0
+  device,/inches,xsize=8,ysize=5
+  plot,radA,x_A_avg,font=0,xr=[1,max([radA(iA),radB(iB)])],xstyle=1,yr=[0,max([x_A_avg(iA),x_B_avg(iB)])],/nodata,$     
+       title='Average Radial Profiles. '+tit,xtitle='r [R!DSUN!N]',ytitle=rad_y_tit
+  oplot,radA(iA),x_A_avg(iA)
+  oplot,radB(iB),x_B_avg(iB)
+  ps2
   
   return
 end
