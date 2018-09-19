@@ -123,12 +123,13 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
 ;Plot average radial profiles of x_A(r) abd x_B(r) in selected lat/lon/rad ranges.
   iA = where(radA ge rad_range_A[0] and radA le rad_range_A[1])
   iB = where(radB ge rad_range_B[0] and radB le rad_range_B[1])
-  ps1,'/data1/tomography/SolarTom_idl/Figures/'+'Average_Radial_Profiles_'+comp_suffix+'.eps',0
+  ps1,'/data1/tomography/SolarTom_idl/Figures/'+'Average_Radial_Profiles_'+comp_suffix+'.eps',5
   device,/inches,xsize=8,ysize=5
   plot,radA,x_A_avg,font=0,xr=[1,max([radA(iA),radB(iB)])],xstyle=1,yr=[0,max([x_A_avg(iA),x_B_avg(iB)])],/nodata,$     
        title='Average Radial Profiles. '+tit,xtitle='r [R!DSUN!N]',ytitle=rad_y_tit
-  oplot,radA(iA),x_A_avg(iA)
-  oplot,radB(iB),x_B_avg(iB)
+  oplot,radA(iA),x_A_avg(iA),color=100
+  oplot,radB(iB),x_B_avg(iB),color=150
+  xyouts,0.89-[.01,.01],0.83-[0.,0.05],['KCOR','DEMT'],/normal,color=[100,150],charthick=3
   ps2
   
   return
