@@ -51,7 +51,7 @@ pro xldem,dir=dir,file=file,r0A=r0A,tmmin=tmmin,tmmax=tmmax,nmin=nmin,nmax=nmax,
   R(*,0,0) = 0
   R(*,0,1) = 0.25
 ;esta parte no es correcta, ver el xshell o xcarrmap.
-  stop
+  
   if keyword_set (default) or keyword_set (tmmax) or keyword_set (nmax) then begin
      xdisplay,map=R         ,dir=dir,file='R_'+file ,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,minA=slv ,maxA=shv  ,clrtbl=12,titulo='R ' 
      xdisplay,map=Nesat/1.e8,dir=dir,file='Ne_'+file,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,minA=nmin,maxA=nmax, clrtbl= 4,titulo='Ne [10!U8!Ncm!U-3!N]'
@@ -59,10 +59,11 @@ pro xldem,dir=dir,file=file,r0A=r0A,tmmin=tmmin,tmmax=tmmax,nmin=nmin,nmax=nmax,
 stop
   endif
   xdisplay,map=R         ,dir=dir,file='R_'+file ,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,clrtbl=12,titulo='R '
-  xdisplay,map=Nesat/1.e8,dir=dir,file='Ne_'+file,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,clrtbl= 4,titulo='Ne [10!U8!Ncm!U-3!N]'
-  stop 
-  xdisplay,map=Tmsat/1.e6,dir=dir,file='Tm_'+file,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,clrtbl= 5,titulo='Tm [MK]'
-
+stop
+  xdisplay,map=Nesat/1.e8,dir=dir,file='Ne_'+file,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,clrtbl= 4,titulo='Ne [10!U8!Ncm!U-3!N]',maxA=[2.5,1.4]
+stop
+  xdisplay,map=Tmsat/1.e6,dir=dir,file='Tm_'+file,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,clrtbl= 5,titulo='Tm [MK]',maxA=[2.5,2.5]
+stop
 
   return
 end

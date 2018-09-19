@@ -4,6 +4,7 @@ r0A=[1.105,1.155,1.205]
 
 fileA='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_dropneg_r3D_l1e-4'
 ;fileB='Ne_CR2198_DEMT-AIA_FD-L0.75_r3D'
+;suff='FD'
 fileB='Ne_CR2198_DEMT-AIA_H1-L0.225_r3D'
 suff='Hh'
 xcompare,fileA=fileA,fileB=fileB,nrA=295,ntA=90,rminA=1.05,rmaxA=4.0,nrB=26,rminB=1.0,rmaxB=1.26,$

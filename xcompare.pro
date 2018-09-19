@@ -109,7 +109,11 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
      index = where(map_A gt 0. and $
                    mapA_lat ge lat_range[0] and mapA_lat le lat_range[1] and $
                    mapA_lon ge lon_range[0] and mapA_lon le lon_range[1] )
-     x_A_avg[irA] = mean(map_A)
+     if index(0) ne -1 then begin  
+        x_A_avg[irA] = mean(map_A(index))
+     endif else begin
+        x_A_avg[irA] = 0.
+     endelse
   endfor
 ;Compute average radial profile of x_B(r) in selected lat/lon range.
   x_B_avg = fltarr(NrA)
@@ -118,7 +122,11 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
      index = where(map_B gt 0. and $
                    mapB_lat ge lat_range[0] and mapB_lat le lat_range[1] and $
                    mapB_lon ge lon_range[0] and mapB_lon le lon_range[1] )
-     x_B_avg[irB] = mean(map_B)
+     if index(0) ne -1 then begin
+        x_B_avg[irB] = mean(map_B(index))
+     endif else begin
+        x_B_avg[irB] = 0.
+     endelse
   endfor
 ;Plot average radial profiles of x_A(r) abd x_B(r) in selected lat/lon/rad ranges.
   iA = where(radA ge rad_range_A[0] and radA le rad_range_A[1])
