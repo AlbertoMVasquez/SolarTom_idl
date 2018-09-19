@@ -205,6 +205,8 @@ end
 
 ; CR2082:
 
+; movie,input_file='list.wisprI.Blank.CR2082.UnifLong.SciOrb01.txt',data_dir='wisprI/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.SciOrbit.01.UPDATED-POINTINGS.txt',/BK
+
 ; movie,input_file='list.wisprI.Blank.CR2082.UnifLong.ExtOrb01.txt',data_dir='wisprI/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.ExtOrbit.01.UPDATED-POINTINGS.txt',/BK
 ; movie,input_file='list.wisprO.Blank.CR2082.UnifLong.ExtOrb01.txt',data_dir='wisprO/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.ExtOrbit.01.UPDATED-POINTINGS.txt',/BK
 
@@ -263,6 +265,7 @@ common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOW
      readf,2,orig_image
      if keyword_set(BK) then compare_wispr,orig_image=orig_image,data_dir=data_dir,model_file=model_file,/BK
      if keyword_set(pB) then compare_wispr,orig_image=orig_image,data_dir=data_dir,model_file=model_file,/pB
+     stop
   endfor
   close,/all
 end
@@ -571,7 +574,7 @@ if NOT keyword_set(compare3) then begin
          color=0,charsize=4,charthick=4,font=1,/device
   
   xyouts,[x0],[y0-DY/4],$
-         ['East: '+East_rs+' R!DS!N            UT: '+UT+'             West: '+West_rs+'R!DS!N'],$
+         ['East: '+East_rs+' R!DS!N            UT: '+UT+'             West: '+West_rs+' R!DS!N'],$
          color=0,charsize=4,charthick=4,font=1,/device
 
   if keyword_set(BK) then $
