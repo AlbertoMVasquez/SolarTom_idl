@@ -92,12 +92,18 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
      Nvals       = 50.
      histo_ratio = histogram(ratio,binsize=(max(ratio)-min(ratio))/Nvals,locations=xval)
      histo_ratio = float(histo_ratio) / float(n_elements(ratio))
+     
+     avg        =   mean(ratio)
+     med        = median(ratio)
+     stdev_frac =  stdev(ratio)/abs(avg)
+     cant       = long(n_elements(ratio))
 
      ps1,'/data1/tomography/SolarTom_idl/Figures/'+'comparison_'+comp_suffix+'_'+sufijo+'.eps',0
      device,/inches,xsize=12,ysize=5
      !p.multi = [0,2,1]
      plot,values_A,values_B,font=0,psym=4,xtitle=x_tit,ytitle=y_tit,title=tit+' at r = '+strmid(sufijo,0,5)+' R!DSUN!N'
      plot,xval,histo_ratio ,font=0,xtitle=histo_x_tit,title='Frequency Histogram'
+     xyouts,0.85*[1,1,1,1],1-[0.18,0.25,0.32,0.38],['m='+strmid(string(med),4,6),'!9m!3='+strmid(string(avg),4,6),'!9s!3/!9m!3='+strmid(string(stdev_frac),4,6),'N='+strmid(string(cant),7,7)],/normal,charthick=1,Font=0
      !p.multi = 0
      ps2
   endfor
