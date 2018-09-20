@@ -92,12 +92,18 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
      Nvals       = 50.
      histo_ratio = histogram(ratio,binsize=(max(ratio)-min(ratio))/Nvals,locations=xval)
      histo_ratio = float(histo_ratio) / float(n_elements(ratio))
+     
+     avg        =   mean(ratio)
+     med        = median(ratio)
+     stdev_frac =  stdev(ratio)/abs(avg)
+     cant       = long(n_elements(ratio))
 
      ps1,'/data1/tomography/SolarTom_idl/Figures/'+'comparison_'+comp_suffix+'_'+sufijo+'.eps',0
      device,/inches,xsize=12,ysize=5
      !p.multi = [0,2,1]
      plot,values_A,values_B,font=0,psym=4,xtitle=x_tit,ytitle=y_tit,title=tit+' at r = '+strmid(sufijo,0,5)+' R!DSUN!N'
      plot,xval,histo_ratio ,font=0,xtitle=histo_x_tit,title='Frequency Histogram'
+     xyouts,0.85*[1,1,1,1],1-[0.18,0.25,0.32,0.38],['m='+strmid(string(med),4,6),'!9m!3='+strmid(string(avg),4,6),'!9s!3/!9m!3='+strmid(string(stdev_frac),4,6),'N='+strmid(string(cant),7,7)],/normal,charthick=1,Font=0
      !p.multi = 0
      ps2
   endfor
@@ -109,7 +115,11 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
      index = where(map_A gt 0. and $
                    mapA_lat ge lat_range[0] and mapA_lat le lat_range[1] and $
                    mapA_lon ge lon_range[0] and mapA_lon le lon_range[1] )
-     x_A_avg[irA] = mean(map_A)
+     if index(0) ne -1 then begin  
+        x_A_avg[irA] = mean(map_A(index))
+     endif else begin
+        x_A_avg[irA] = 0.
+     endelse
   endfor
 ;Compute average radial profile of x_B(r) in selected lat/lon range.
   x_B_avg = fltarr(NrA)
@@ -118,17 +128,22 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
      index = where(map_B gt 0. and $
                    mapB_lat ge lat_range[0] and mapB_lat le lat_range[1] and $
                    mapB_lon ge lon_range[0] and mapB_lon le lon_range[1] )
-     x_B_avg[irB] = mean(map_B)
+     if index(0) ne -1 then begin
+        x_B_avg[irB] = mean(map_B(index))
+     endif else begin
+        x_B_avg[irB] = 0.
+     endelse
   endfor
 ;Plot average radial profiles of x_A(r) abd x_B(r) in selected lat/lon/rad ranges.
   iA = where(radA ge rad_range_A[0] and radA le rad_range_A[1])
   iB = where(radB ge rad_range_B[0] and radB le rad_range_B[1])
-  ps1,'/data1/tomography/SolarTom_idl/Figures/'+'Average_Radial_Profiles_'+comp_suffix+'.eps',0
+  ps1,'/data1/tomography/SolarTom_idl/Figures/'+'Average_Radial_Profiles_'+comp_suffix+'.eps',5
   device,/inches,xsize=8,ysize=5
   plot,radA,x_A_avg,font=0,xr=[1,max([radA(iA),radB(iB)])],xstyle=1,yr=[0,max([x_A_avg(iA),x_B_avg(iB)])],/nodata,$     
        title='Average Radial Profiles. '+tit,xtitle='r [R!DSUN!N]',ytitle=rad_y_tit
-  oplot,radA(iA),x_A_avg(iA)
-  oplot,radB(iB),x_B_avg(iB)
+  oplot,radA(iA),x_A_avg(iA),color=100
+  oplot,radB(iB),x_B_avg(iB),color=150
+  xyouts,0.89-[.01,.01],0.83-[0.,0.05],['KCOR','DEMT'],/normal,color=[100,150],charthick=3
   ps2
   
   return
