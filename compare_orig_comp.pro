@@ -205,11 +205,13 @@ end
 
 ; CR2082:
 
+; movie,input_file='list.wisprI.Blank.CR2082.UnifLong.SciOrb01.txt',data_dir='wisprI/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.SciOrbit.01.UPDATED-POINTINGS.txt',/BK
+
 ; movie,input_file='list.wisprI.Blank.CR2082.UnifLong.ExtOrb01.txt',data_dir='wisprI/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.ExtOrbit.01.UPDATED-POINTINGS.txt',/BK
 ; movie,input_file='list.wisprO.Blank.CR2082.UnifLong.ExtOrb01.txt',data_dir='wisprO/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.ExtOrbit.01.UPDATED-POINTINGS.txt',/BK
 
-; movie,input_file='list.wisprI.circular.txt',data_dir='wisprI/Circular_CR2082/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.CircularOrbit01.short.UPDATED-POINTINGS.txt',/BK
-; movie,input_file='list.wisprO.circular.txt',data_dir='wisprO/Circular_CR2082/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.CircularOrbit01.short.UPDATED-POINTINGS.txt',/BK
+; movie,input_file='list.wisprI.circular.txt',data_dir='wisprI/Circular_CR2082/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.CircularOrbit01.short.UPDATED-POINTINGS.txt',/BK,figures_title='Equatorial plane circular orbit. AWSoM model A.' 
+; movie,input_file='list.wisprO.circular.txt',data_dir='wisprO/Circular_CR2082/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.CircularOrbit01.short.UPDATED-POINTINGS.txt',/BK,figures_title='Equatorial plane circular orbit. AWSoM model A.' 
 
 ; movie,input_file='list.wisprI.Blank.CR2082.UnifLong.ExtOrb24.txt',data_dir='wisprI/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.ExtOrbit.24.UPDATED-POINTINGS.txt',/BK
 ; movie,input_file='list.wisprO.Blank.CR2082.UnifLong.ExtOrb24.txt',data_dir='wisprO/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.ExtOrbit.24.UPDATED-POINTINGS.txt',/BK
@@ -236,8 +238,9 @@ end
 ; which is located in $tomroot/bindata/
 ;
 ;;
-pro movie,input_file=input_file,data_dir=data_dir,table_file=table_file,model_file=model_file,pB=pB,BK=BK
-common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOWHH,data_string
+pro movie,input_file=input_file,data_dir=data_dir,table_file=table_file,model_file=model_file,pB=pB,BK=BK,figures_title=figures_title
+  common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOWHH,data_string
+  if not keyword_set(figures_title) then figures_title=''
   openr,3,'/data1/work/SPP/SORBET_VIZZER_WISPR_RevA/'+table_file
   x=''
   data_string=''
@@ -261,13 +264,14 @@ common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOW
 ;    readf,3,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOWHH
      readf,3,data_string
      readf,2,orig_image
-     if keyword_set(BK) then compare_wispr,orig_image=orig_image,data_dir=data_dir,model_file=model_file,/BK
-     if keyword_set(pB) then compare_wispr,orig_image=orig_image,data_dir=data_dir,model_file=model_file,/pB
+     if keyword_set(BK) then compare_wispr,orig_image=orig_image,data_dir=data_dir,model_file=model_file,figures_title=figures_title,/BK
+     if keyword_set(pB) then compare_wispr,orig_image=orig_image,data_dir=data_dir,model_file=model_file,figures_title=figures_title,/pB
+     stop
   endfor
   close,/all
 end
 
-pro compare_wispr,orig_image=orig_image,data_dir=data_dir,model_file=model_file,pB=pB,BK=BK
+pro compare_wispr,orig_image=orig_image,data_dir=data_dir,model_file=model_file,pB=pB,BK=BK,figures_title=figures_title
 
   model     = model_file
  ;model     = 'x_AWSOM_CR2081run5_WISPR_sphere_2.dat'
@@ -287,14 +291,14 @@ pro compare_wispr,orig_image=orig_image,data_dir=data_dir,model_file=model_file,
  ;Nx=2048 & Ny=2048 & Delta=128 & factor_image = 2.
 
   if keyword_set(BK) then $
-  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,Delta=Delta,/record,comp_gif=comp_gif,/create_FITS_for_tom,data_dir=data_dir,/BK,/log,/wispr
+  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,Delta=Delta,/record,comp_gif=comp_gif,/create_FITS_for_tom,data_dir=data_dir,/BK,/log,/wispr,figures_title
 
   if keyword_set(pB) then $
-  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,Delta=Delta,/record,/crop,comp_gif=comp_gif,/create_FITS_for_tom,data_dir=data_dir,/pB,/log
+  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,Delta=Delta,/record,/crop,comp_gif=comp_gif,/create_FITS_for_tom,data_dir=data_dir,/pB,/log,figures_title
   
 end
 
-pro compare_orig_comp,tomroot=tomroot,data_dir=data_dir,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,factor_unit=factor_unit,crop_image=crop_image,compare3=compare3,winn=winn,Delta=Delta,record=record,comp_gif=comp_gif,create_FITS_for_tom=create_FITS_for_tom,BK=BK,pB=pB,euv=euv,kcor=kcor,lasco_awsom=lasco_awsom,wispr=wispr,log=log
+pro compare_orig_comp,tomroot=tomroot,data_dir=data_dir,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,factor_unit=factor_unit,crop_image=crop_image,compare3=compare3,winn=winn,Delta=Delta,record=record,comp_gif=comp_gif,create_FITS_for_tom=create_FITS_for_tom,BK=BK,pB=pB,euv=euv,kcor=kcor,lasco_awsom=lasco_awsom,wispr=wispr,log=log,figures_title
 
 common ephemeris,orbit,date,time,dsun_rsun,dsun_au,lon,lat,WIEHH,WIWHH,WOEHH,WOWHH,data_string
 common euv_stuff,model
@@ -561,8 +565,8 @@ if NOT keyword_set(compare3) then begin
   endif
 
   device, set_font = 'Helvetica',/TT_FONT
-  
-  xyouts,[x0],[y0+ysimage+DY/3],['WISPR-'+instrument_string+', Orbit #'+Orb+'.  AWSoM Model for CR-2081.'],$
+
+  xyouts,[x0],[y0+ysimage+DY/3],['WISPR-'+instrument_string+'. '+figures_title],$
          color=0,charsize=4,charthick=4,font=1,/device
   
   xyouts,[x0],[y0+ysimage+DY/10],$
@@ -571,7 +575,7 @@ if NOT keyword_set(compare3) then begin
          color=0,charsize=4,charthick=4,font=1,/device
   
   xyouts,[x0],[y0-DY/4],$
-         ['East: '+East_rs+' R!DS!N            UT: '+UT+'             West: '+West_rs+'R!DS!N'],$
+         ['East: '+East_rs+' R!DS!N            UT: '+UT+'             West: '+West_rs+' R!DS!N'],$
          color=0,charsize=4,charthick=4,font=1,/device
 
   if keyword_set(BK) then $
