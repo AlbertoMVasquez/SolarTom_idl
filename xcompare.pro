@@ -2,7 +2,8 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
              radial_grid_file_A=radial_grid_file_A,radial_grid_file_B=radial_grid_file_B,$
              r0A=r0A,lat_range=lat_range,lon_range=lon_range,rad_range_A=rad_range_A,rad_range_B=rad_range_B,$
              clrtbl=clrtbl,scalefactor=scalefactor,comp_suffix=comp_suffix,$
-             tit=tit,x_tit=x_tit,y_tit=y_tit,histo_x_tit=histo_x_tit,max_ratio=max_ratio,min_ratio=min_ratio,rad_y_tit=rad_y_tit
+             tit=tit,x_tit=x_tit,y_tit=y_tit,histo_x_tit=histo_x_tit,max_ratio=max_ratio,min_ratio=min_ratio,rad_y_tit=rad_y_tit,radd_range=rad_range
+
 
   EPS=1.e-4                     ; fractional tolerance for evaluating same height is being compared.
   
@@ -65,7 +66,21 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
   mapB_lon = fltarr(ntB,npB)
   for itA=0,ntA-1 do mapA_lon(itA,*) = lonA
   for itB=0,ntB-1 do mapB_lon(itB,*) = lonb
-  
+
+  ; 3D rat lat and lon maps
+  mapB_lon3d = fltarr(nrB,ntB,npB)
+  mapA_lon3d = fltarr(nrA,ntA,npA)
+  for ipA=0,npA-1 do mapA_lon3d(*,*,ipA) = lonA[ipA]
+  for ipB=0,npB-1 do mapB_lon3d(*,*,ipB) = lonB[ipB]
+  mapA_lat3d = fltarr(nrA,ntA,npA)
+  mapB_lat3d = fltarr(nrB,ntB,npB)
+  for itA=0,ntA-1 do mapA_lat3d(*,itA,*) = latA[itA]
+  for itB=0,ntB-1 do mapB_lat3d(*,itB,*) = latb[itB]
+  mapA_rad3d = fltarr(nrA,ntA,npA)
+  mapB_rad3d = fltarr(nrB,ntB,npB)
+  for irA=0,nrA-1 do mapA_rad3d(irA,*,*) = radA[irA]
+  for irB=0,nrB-1 do mapB_rad3d(irB,*,*) = radB[irB]
+
   ; Statistical comparison at each height for the specified lat and lon ranges.
   ; For the momento this only works when A and B have the same
   ; lat and lon grids. In the future I will put above a bi-linear interpolator
@@ -73,13 +88,10 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
   for i=0,n_elements(r0A)-1 do begin
      frad = abs(radA-r0A[i]) & irA  = median(where(frad eq min(frad))) & r0_A = radA[irA]
      frad = abs(radB-r0A[i]) & irB  = median(where(frad eq min(frad))) & r0_B = radB[irB]
-     if abs(r0_A-r0_B)/mean([r0_A,r0_B]) gt EPS then STOP
-     
+     if abs(r0_A-r0_B)/mean([r0_A,r0_B]) gt EPS then STOP    
      map_A = reform(mapA(irA,*,*))
      map_B = reform(mapB(irB,*,*))
-
      sufijo = strmid(string(r0_A),6,5)+'_Rsun'
-     
      index = where(map_A gt 0. and map_B gt 0. and $
                    mapA_lat ge lat_range[0] and mapA_lat le lat_range[1] and $
                    mapB_lat ge lat_range[0] and mapB_lat le lat_range[1] and $
@@ -89,24 +101,24 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
      values_A    = reform(map_A(index))
      values_B    = reform(map_B(index))
      ratio       = values_A/values_B > min_ratio < max_ratio
-     Nvals       = 50.
-     histo_ratio = histogram(ratio,binsize=(max(ratio)-min(ratio))/Nvals,locations=xval)
-     histo_ratio = float(histo_ratio) / float(n_elements(ratio))
-     
-     avg        =   mean(ratio)
-     med        = median(ratio)
-     stdev_frac =  stdev(ratio)/abs(avg)
-     cant       = long(n_elements(ratio))
 
-     ps1,'/data1/tomography/SolarTom_idl/Figures/'+'comparison_'+comp_suffix+'_'+sufijo+'.eps',0
-     device,/inches,xsize=12,ysize=5
-     !p.multi = [0,2,1]
-     plot,values_A,values_B,font=0,psym=4,xtitle=x_tit,ytitle=y_tit,title=tit+' at r = '+strmid(sufijo,0,5)+' R!DSUN!N'
-     plot,xval,histo_ratio ,font=0,xtitle=histo_x_tit,title='Frequency Histogram'
-     xyouts,0.85*[1,1,1,1],1-[0.18,0.25,0.32,0.38],['m='+strmid(string(med),4,6),'!9m!3='+strmid(string(avg),4,6),'!9s!3/!9m!3='+strmid(string(stdev_frac),4,6),'N='+strmid(string(cant),7,7)],/normal,charthick=1,Font=0
-     !p.multi = 0
-     ps2
+     tit1=tit+' at r = '+strmid(sufijo,0,5)+' R!DSUN!N'
+     graphs,ratio,values_A,values_B,comp_suffix=comp_suffix,sufijo=sufijo,x_tit=x_tit,y_tit=y_tit,tit=tit1,histo_x_tit=histo_x_tit
   endfor
+
+;compute comparison at all heights
+
+  pA = where(mapA_rad3d ge rad_range[0] and mapA_rad3d le rad_range[1] and mapA_lat3d ge lat_range[0] and mapA_lat3d le lat_range[1] and mapA_lon3d ge lon_range[0] and mapA_lon3d le lon_range[1] and mapA gt 0.)
+  if (size(pA))(0) eq -1 then stop
+  x_dataA = reform(mapA(pA))
+  pB = where(mapB_rad3d ge rad_range[0] and mapB_rad3d le rad_range[1] and mapB_lat3d ge lat_range[0] and mapB_lat3d le lat_range[1] and mapB_lon3d ge lon_range[0] and mapB_lon3d le lon_range[1] and mapB gt 0.)
+  if (size(pB))(0) eq -1 then stop
+  x_dataB = reform(mapB(pB)) 
+  ratio       = x_dataA/x_dataB > min_ratio < max_ratio
+  sss='range'+strmid(string(rad_range[0]),6,5)+'-'+strmid(string(rad_range[1]),6,5)+'_Rsun'
+  tit2=tit+' at r = '+strmid(string(rad_range[0]),6,5)+'-'+strmid(string(rad_range[1]),6,5)+' R!DSUN!N'
+  graphs,ratio,x_dataA,x_dataB,comp_suffix=comp_suffix,sufijo=sss,x_tit=x_tit,y_tit=y_tit,tit=tit2,histo_x_tit=histo_x_tit
+
 
 ;Compute average radial profile of x_A(r) in selected lat/lon range.
   x_A_avg = fltarr(NrA)
@@ -147,4 +159,30 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
   ps2
   
   return
+end
+
+pro graphs,ratio,values_A,values_B,comp_suffix=comp_suffix,sufijo=sufijo,x_tit=x_tit,y_tit=y_tit,tit=tit,histo_x_tit=histo_x_tit
+
+  Nvals       = 50.
+  histo_ratio = histogram(ratio,binsize=(max(ratio)-min(ratio))/Nvals,locations=xval)
+  histo_ratio = float(histo_ratio) / float(n_elements(ratio))
+  
+  avg        =   mean(ratio)
+  med        = median(ratio)
+  stdev_frac =  stdev(ratio)/abs(avg)
+  cant       = long(n_elements(ratio))
+  
+  ps1,'/data1/tomography/SolarTom_idl/Figures/'+'comparison_'+comp_suffix+'_'+sufijo+'.eps',0
+  device,/inches,xsize=12,ysize=5
+  !p.multi = [0,2,1]
+  plot,values_A,values_B,font=0,psym=4,xtitle=x_tit,ytitle=y_tit,title=tit
+  plot,xval,histo_ratio ,font=0,xtitle=histo_x_tit,title='Frequency Histogram'
+  xyouts,0.85*[1,1,1,1],1-[0.18,0.25,0.32,0.38],['m='+strmid(string(med),4,6),'!9m!3='+strmid(string(avg),4,6),'!9s!3/!9m!3='+strmid(string(stdev_frac),4,6),'N='+strmid(string(cant),7,7)],/normal,charthick=1,Font=0
+  !p.multi = 0
+
+
+
+
+
+return
 end
