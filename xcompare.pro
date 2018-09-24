@@ -104,6 +104,7 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
      ratio       = values_A/values_B > min_ratio < max_ratio
 
      tit1=tit+' at r = '+strmid(sufijo,0,5)+' R!DSUN!N'
+     PRINT, CORRELATE(values_A, values_B)
      graphs,ratio,values_A,values_B,comp_suffix=comp_suffix,sufijo=sufijo,x_tit=x_tit,y_tit=y_tit,tit=tit1,histo_x_tit=histo_x_tit,Nvals=Nvals
   endfor
 
