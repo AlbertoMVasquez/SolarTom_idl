@@ -1,6 +1,6 @@
 pro xdisplay,dir=dir,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A=r0A,mini=mini,maxi=maxi,win=win,log=log,clrtbl=clrtbl,$
              titulo=titulo,rad_range=rad_range,lat_range=lat_range,scalefactor=scalefactor,minA=minA,maxA=maxA,minima=minima,maxima=maxima,map=map,$
-             radial_grid_file=radial_grid_file
+             radial_grid_file=radial_grid_file,box_lat=box_lat,box_lon=box_lon
 
   if not keyword_set(dir)         then dir         = '/data1/tomography/bindata/'
   if not keyword_set(titulo)      then titulo      = 'Reconstruction'
@@ -10,7 +10,8 @@ pro xdisplay,dir=dir,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A=r0A,min
   if not keyword_set(lat_range)   then lat_range   = [-90.,+90.]
   if not keyword_set(rad_range)   then rad_range   = [1.02 , 1.255]
   if not keyword_set(r0A      )   then r0A         = [1.10,1.15,1.20]
-  
+  if not keyword_set(box_lat )    then box_lat     = 0.
+  if not keyword_set(box_lon )    then box_lon     = 0.
   if not keyword_set (map) then  xread,dir=dir,file=file,nr=nr,nt=nt,np=np,map=map
 
   if not keyword_set(radial_grid_file) then begin
@@ -39,10 +40,11 @@ pro xdisplay,dir=dir,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A=r0A,min
      win=i
      if keyword_set(minA) then mini = minA[i]
      if keyword_set(maxA) then maxi = maxA[i]
-     if not keyword_set(log) then xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+2,file=file,titulo=titulo
+     
+     if not keyword_set(log) then xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+2,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon
      if     keyword_set(log) then xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+2,file=file,titulo=titulo,/log
     
-   xhisto,map=map,nr=nr,nt=nt,np=np,radii=rad,rad_range=rad_range,lat_range=lat_range,win=win+3,dir=dir,file=file,titulo='Histogram of '+titulo,sufijo=sufijo,mini=mini,maxi=maxi
+     xhisto,map=map,nr=nr,nt=nt,np=np,radii=rad,rad_range=rad_range,lat_range=lat_range,win=win+3,dir=dir,file=file,titulo='Histogram of '+titulo,sufijo=sufijo,mini=mini,maxi=maxi
      ; Store mini and maxi for a final report.
      minima[i] = mini
      maxima[i] = maxi

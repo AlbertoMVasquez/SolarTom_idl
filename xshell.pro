@@ -1,4 +1,5 @@
-pro xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,log=log,interp=interp,win=win,file=file,titulo=titulo
+pro xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,log=log,interp=interp,win=win,file=file,titulo=titulo,$
+           box_lat=box_lat,box_lon=box_lon
 
 ; set graph stuff
 device, retain     = 2
@@ -57,6 +58,30 @@ if keyword_set(log) then begin
    mini=alog10(mini)
    maxi=alog10(maxi)
 endif
+if n_elements (box_lat) gt 1. then begin
+   map_lat = fltarr(np2,nt2)
+   map_lon = fltarr(np2,nt2)
+   for it2=0,nt2-1 do map_lon(*,it2) = p2
+   for ip2=0,np2-1 do map_lat(ip2,*) = t2
+   
+   for i=0,n_elements(box_lat)-1 do begin
+      near1=Min(Abs(t2 - box_lat(i  )), ind1) & w1 = t2(ind1)
+      near2=Min(Abs(t2 - box_lat(i+1)), ind2) & w2 = t2(ind2)
+      near3=Min(Abs(p2 - box_lon(i  )), ind3) & w3 = p2(ind3)
+      near4=Min(Abs(p2 - box_lon(i+1)), ind4) & w4 = p2(ind4)
+      
+      index1 = where(map_lat eq w1 and map_lon ge box_lon(i) and map_lon le box_lon(i+1)  )
+      index2 = where(map_lat eq w2 and map_lon ge box_lon(i) and map_lon le box_lon(i+1)  )
+      index3 = where(map_lon eq w3 and map_lat ge box_lat(i) and map_lat le box_lat(i+1)  )
+      index4 = where(map_lon eq w4 and map_lat ge box_lat(i) and map_lat le box_lat(i+1)  )
+      map2(index1)=maxi
+      map2(index2)=maxi
+      map2(index3)=maxi
+      map2(index4)=maxi
+      i=i+1
+   endfor
+endif
+
 
  ;---create over-sized window with white background----------------
   Npanels = 1

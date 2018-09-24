@@ -2,7 +2,8 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
              radial_grid_file_A=radial_grid_file_A,radial_grid_file_B=radial_grid_file_B,$
              r0A=r0A,lat_range=lat_range,lon_range=lon_range,rad_range_A=rad_range_A,rad_range_B=rad_range_B,$
              clrtbl=clrtbl,scalefactor=scalefactor,comp_suffix=comp_suffix,$
-             tit=tit,x_tit=x_tit,y_tit=y_tit,histo_x_tit=histo_x_tit,max_ratio=max_ratio,min_ratio=min_ratio,rad_y_tit=rad_y_tit,radd_range=rad_range
+             tit=tit,x_tit=x_tit,y_tit=y_tit,histo_x_tit=histo_x_tit,max_ratio=max_ratio,min_ratio=min_ratio,rad_y_tit=rad_y_tit,$
+             radd_range=rad_range,Nvals=Nvals
 
 
   EPS=1.e-4                     ; fractional tolerance for evaluating same height is being compared.
@@ -26,7 +27,7 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
   if not keyword_set(r0A      )   then r0A         = [1.10,1.15,1.20]
   if not keyword_set(min_ratio)   then min_ratio   = 0.
   if not keyword_set(max_ratio)   then max_ratio   = 5.
-
+  if not keyword_set(nvals)       then Nvals       = 50.
   xread,dir=dir,file=fileA,nr=nrA,nt=ntA,np=npA,map=mapA
   xread,dir=dir,file=fileB,nr=nrB,nt=ntB,np=npB,map=mapB
 
@@ -103,7 +104,7 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
      ratio       = values_A/values_B > min_ratio < max_ratio
 
      tit1=tit+' at r = '+strmid(sufijo,0,5)+' R!DSUN!N'
-     graphs,ratio,values_A,values_B,comp_suffix=comp_suffix,sufijo=sufijo,x_tit=x_tit,y_tit=y_tit,tit=tit1,histo_x_tit=histo_x_tit
+     graphs,ratio,values_A,values_B,comp_suffix=comp_suffix,sufijo=sufijo,x_tit=x_tit,y_tit=y_tit,tit=tit1,histo_x_tit=histo_x_tit,Nvals=Nvals
   endfor
 
 ;compute comparison at all heights
@@ -117,7 +118,7 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
   ratio       = x_dataA/x_dataB > min_ratio < max_ratio
   sss='range'+strmid(string(rad_range[0]),6,5)+'-'+strmid(string(rad_range[1]),6,5)+'_Rsun'
   tit2=tit+' at r = '+strmid(string(rad_range[0]),6,5)+'-'+strmid(string(rad_range[1]),6,5)+' R!DSUN!N'
-  graphs,ratio,x_dataA,x_dataB,comp_suffix=comp_suffix,sufijo=sss,x_tit=x_tit,y_tit=y_tit,tit=tit2,histo_x_tit=histo_x_tit
+  graphs,ratio,x_dataA,x_dataB,comp_suffix=comp_suffix,sufijo=sss,x_tit=x_tit,y_tit=y_tit,tit=tit2,histo_x_tit=histo_x_tit,Nvals=Nvals
 
 
 ;Compute average radial profile of x_A(r) in selected lat/lon range.
@@ -149,21 +150,20 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
 ;Plot average radial profiles of x_A(r) abd x_B(r) in selected lat/lon/rad ranges.
   iA = where(radA ge rad_range_A[0] and radA le rad_range_A[1])
   iB = where(radB ge rad_range_B[0] and radB le rad_range_B[1])
-  ps1,'/data1/tomography/SolarTom_idl/Figures/'+'Average_Radial_Profiles_'+comp_suffix+'.eps',5
+  ps1,'/data1/tomography/SolarTom_idl/Figures/'+'Average_Radial_Profiles_'+comp_suffix+'.eps',12
   device,/inches,xsize=8,ysize=5
   plot,radA,x_A_avg,font=0,xr=[1,max([radA(iA),radB(iB)])],xstyle=1,yr=[0,max([x_A_avg(iA),x_B_avg(iB)])],/nodata,$     
-       title='Average Radial Profiles. '+tit,xtitle='r [R!DSUN!N]',ytitle=rad_y_tit
-  oplot,radA(iA),x_A_avg(iA),color=100
-  oplot,radB(iB),x_B_avg(iB),color=150
-  xyouts,0.89-[.01,.01],0.83-[0.,0.05],['KCOR','DEMT'],/normal,color=[100,150],charthick=3
+       title='Average Radial Profiles. '+tit,xtitle='r [R!DSUN!N]',ytitle=rad_y_tit,charsize=1.3
+  oplot,radA(iA),x_A_avg(iA),color=100,thick=4
+  oplot,radB(iB),x_B_avg(iB),color=200,thick=4
+  xyouts,0.89-[.01,.01],0.83-[0.,0.05],['KCOR','DEMT'],/normal,color=[100,200],charthick=4,charsize=1.3
   ps2
   
   return
 end
 
-pro graphs,ratio,values_A,values_B,comp_suffix=comp_suffix,sufijo=sufijo,x_tit=x_tit,y_tit=y_tit,tit=tit,histo_x_tit=histo_x_tit
+pro graphs,ratio,values_A,values_B,comp_suffix=comp_suffix,sufijo=sufijo,x_tit=x_tit,y_tit=y_tit,tit=tit,histo_x_tit=histo_x_tit,Nvals=Nvals
 
-  Nvals       = 50.
   histo_ratio = histogram(ratio,binsize=(max(ratio)-min(ratio))/Nvals,locations=xval)
   histo_ratio = float(histo_ratio) / float(n_elements(ratio))
   
@@ -176,7 +176,7 @@ pro graphs,ratio,values_A,values_B,comp_suffix=comp_suffix,sufijo=sufijo,x_tit=x
   device,/inches,xsize=12,ysize=5
   !p.multi = [0,2,1]
   plot,values_A,values_B,font=0,psym=4,xtitle=x_tit,ytitle=y_tit,title=tit
-  plot,xval,histo_ratio ,font=0,xtitle=histo_x_tit,title='Frequency Histogram'
+  plot,xval,histo_ratio ,font=0,xtitle=histo_x_tit,title='Frequency Histogram',linestyle=8
   xyouts,0.85*[1,1,1,1],1-[0.18,0.25,0.32,0.38],['m='+strmid(string(med),4,6),'!9m!3='+strmid(string(avg),4,6),'!9s!3/!9m!3='+strmid(string(stdev_frac),4,6),'N='+strmid(string(cant),7,7)],/normal,charthick=1,Font=0
   !p.multi = 0
 
