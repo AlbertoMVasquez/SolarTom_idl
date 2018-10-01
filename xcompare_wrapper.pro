@@ -1,11 +1,13 @@
 pro xcompare_wrapper
 
   r0A=[1.105,1.155,1.205,1.125,1.165]
-  fileA='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_dropneg_r3D_l1e-4'
-  fileB='Ne_CR2198_DEMT-AIA_FD-L0.75_r3D'
-  suff='FD'
+;  fileA='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_dropneg_r3D_l1e-4'
+  fileA='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_dropneg_r3D_l1e-5'
+;  fileB='Ne_CR2198_DEMT-AIA_FD-L0.75_r3D'
+;  suff='FD'
 ;fileB='Ne_CR2198_DEMT-AIA_H1-L0.225_r3D'
-;suff='Hh'
+suff='Hh_reduced_overreg'
+fileB='Ne_CR2198_DEMT-AIA_H1_reduced-L.1_r3D'
 goto,salt
   xcompare,fileA=fileA,fileB=fileB,nrA=295,ntA=90,rminA=1.05,rmaxA=4.0,nrB=26,rminB=1.0,rmaxB=1.26,$
            comp_suffix='KCOR-Tom_vs_DEMT_CR2198_'+suff+'-All-Latitudes',x_tit='KCOR-Tom Ne [cm!U-3!N]',y_tit='AIA DEMT Ne [cm!U-3!N]',$
