@@ -1,4 +1,3 @@
-
 pro comp_euvi,b171=b171,b195=b195,b284=b284,solution=solution
   common euv_stuff,model
   
@@ -205,19 +204,38 @@ end
 
 ; CR2082:
 
-; movie,input_file='list.wisprI.Blank.CR2082.UnifLong.SciOrb01.txt',data_dir='wisprI/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.SciOrbit.01.UPDATED-POINTINGS.txt',/BK
-
 ; movie,input_file='list.wisprI.Blank.CR2082.UnifLong.ExtOrb01.txt',data_dir='wisprI/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.ExtOrbit.01.UPDATED-POINTINGS.txt',/BK
 ; movie,input_file='list.wisprO.Blank.CR2082.UnifLong.ExtOrb01.txt',data_dir='wisprO/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.ExtOrbit.01.UPDATED-POINTINGS.txt',/BK
 
-; movie,input_file='list.wisprI.circular.txt',data_dir='wisprI/Circular_CR2082/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.CircularOrbit01.short.UPDATED-POINTINGS.txt',/BK,figures_title='Equatorial plane circular orbit. AWSoM model A.' 
-; movie,input_file='list.wisprO.circular.txt',data_dir='wisprO/Circular_CR2082/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.CircularOrbit01.short.UPDATED-POINTINGS.txt',/BK,figures_title='Equatorial plane circular orbit. AWSoM model A.' 
 
 ; movie,input_file='list.wisprI.Blank.CR2082.UnifLong.ExtOrb24.txt',data_dir='wisprI/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.ExtOrbit.24.UPDATED-POINTINGS.txt',/BK
 ; movie,input_file='list.wisprO.Blank.CR2082.UnifLong.ExtOrb24.txt',data_dir='wisprO/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.ExtOrbit.24.UPDATED-POINTINGS.txt',/BK
 
 ; movie,input_file='list.wisprO.circular.TEST.txt',data_dir='wisprO/Circular_CR2082/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.CircularOrbit01.short.UPDATED-POINTINGS.TEST.txt',/BK
 ; movie,input_file='list.wisprI.TEST.txt',data_dir='wisprI/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.ExtOrbit.01.UPDATED-POINTINGS.TEST.txt',/BK
+
+
+; WISPR-Tom PAPER:
+
+; Fig Circular / CR 2082
+; movie,input_file='list.wisprI.circular.txt',data_dir='wisprI/Circular_CR2082/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.CircularOrbit01.short.UPDATED-POINTINGS.txt',/BK,figures_title='Equatorial plane circular orbit. AWSoM model CR-2082.' 
+; movie,input_file='list.wisprO.circular.txt',data_dir='wisprO/Circular_CR2082/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.CircularOrbit01.short.UPDATED-POINTINGS.txt',/BK,figures_title='Equatorial plane circular orbit. AWSoM model CR-2082.' 
+
+; Fig Sci Orb 01 / CR 2082
+; movie,input_file='list.wisprI.Blank.CR2082.UnifLong.SciOrb01.txt',data_dir='wisprI/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.SciOrbit.01.UPDATED-POINTINGS.txt',/BK,figures_title='Orbit # 01. AWSoM model CR-2082.'
+; movie,input_file='list.wisprO.Blank.CR2082.UnifLong.SciOrb01.txt',data_dir='wisprO/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.SciOrbit.01.UPDATED-POINTINGS.txt',/BK,figures_title='Orbit # 01. AWSoM model CR-2082.'
+
+; Fig Sci Orb 24 / CR 2082
+; movie,input_file='list.wisprI.Blank.CR2082.UnifLong.SciOrb24.txt',data_dir='wisprI/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.SciOrbit.24.UPDATED-POINTINGS.txt',/BK,figures_title='Orbit # 24. AWSoM model CR-2082.'
+; movie,input_file='list.wisprO.Blank.CR2082.UnifLong.SciOrb24.txt',data_dir='wisprO/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.SciOrbit.24.UPDATED-POINTINGS.txt',/BK,figures_title='Orbit # 24. AWSoM model CR-2082.'
+
+; Fig Sci Orb 12 / CR 2082
+; movie,input_file='list.wisprI.Blank.CR2082.UnifLong.SciOrb12.txt',data_dir='wisprI/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.SciOrbit.12.UPDATED-POINTINGS.txt',/BK,figures_title='Orbit # 12. AWSoM model CR-2082.'
+; movie,input_file='list.wisprO.Blank.CR2082.UnifLong.SciOrb12.txt',data_dir='wisprO/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.SciOrbit.12.UPDATED-POINTINGS.txt',/BK,figures_title='Orbit # 12. AWSoM model CR-2082.'
+
+; Fig Sci Orb 24 / CR 2081
+; movie,input_file='list.wisprI.Blank.CR2081.UnifLong.SciOrb24.txt',data_dir='wisprI/CR2081_UnifLong/',model_file='x_AWSOM_CR2081run5_WISPR_sphere_2.dat',table_file='table.UnifLong.SciOrbit.24.UPDATED-POINTINGS.txt',/BK,figures_title='Orbit # 24. AWSoM model B.'
+; movie,input_file='list.wisprO.Blank.CR2081.UnifLong.SciOrb24.txt',data_dir='wisprO/CR2081_UnifLong/',model_file='x_AWSOM_CR2081run5_WISPR_sphere_2.dat',table_file='table.UnifLong.SciOrbit.24.UPDATED-POINTINGS.txt',/BK,figures_title='Orbit # 24. AWSoM model B.'
 
 ;;
 ; IMPORTANT NOTES on the "movie" tool:
@@ -266,7 +284,7 @@ pro movie,input_file=input_file,data_dir=data_dir,table_file=table_file,model_fi
      readf,2,orig_image
      if keyword_set(BK) then compare_wispr,orig_image=orig_image,data_dir=data_dir,model_file=model_file,figures_title=figures_title,/BK
      if keyword_set(pB) then compare_wispr,orig_image=orig_image,data_dir=data_dir,model_file=model_file,figures_title=figures_title,/pB
-     stop
+;    stop
   endfor
   close,/all
 end
@@ -291,7 +309,7 @@ pro compare_wispr,orig_image=orig_image,data_dir=data_dir,model_file=model_file,
  ;Nx=2048 & Ny=2048 & Delta=128 & factor_image = 2.
 
   if keyword_set(BK) then $
-  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,Delta=Delta,/record,comp_gif=comp_gif,/create_FITS_for_tom,data_dir=data_dir,/BK,/log,/wispr,figures_title
+  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,Delta=Delta,/record,comp_gif=comp_gif,data_dir=data_dir,/BK,/log,/wispr,figures_title,/create_FITS_for_tom;,/crop
 
   if keyword_set(pB) then $
   compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,Delta=Delta,/record,/crop,comp_gif=comp_gif,/create_FITS_for_tom,data_dir=data_dir,/pB,/log,figures_title
@@ -324,8 +342,9 @@ common euv_stuff,model
   close,1
 
   Io = rotate(Io,4)
-  Ic = rotate(Ic,4)  
-                                ;if keyword_set(compare3) then
+  Ic = rotate(Ic,4)
+ ;stop
+ ;if keyword_set(compare3) then
   mreadfits,input_data_dir+orig_image,hdr,img
 
   Io = Io / factor_unit
@@ -564,8 +583,8 @@ if NOT keyword_set(compare3) then begin
     West_rs = strmid(data_string,98, 6)
   endif
 
-  device, set_font = 'Helvetica',/TT_FONT
-
+;  device, set_font = 'Helvetica',/TT_FONT
+  
   xyouts,[x0],[y0+ysimage+DY/3],['WISPR-'+instrument_string+'. '+figures_title],$
          color=0,charsize=4,charthick=4,font=1,/device
   
