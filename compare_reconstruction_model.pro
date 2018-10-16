@@ -3,20 +3,25 @@ pro wrapper_compare
   radial_grid_file='radial_grid_sphere_wedge_WISPR.dat'
  ;radial_grid_file='radial_grid_sphere_wedge_WISPR_20points.dat'
 
+r0A=10.+findgen(31)
+nrads=n_elements(r0A)  
+for i=0,nrads-1 do compare_reconstruction_model,orbit=01,r0=r0A[i],filename='Ne-WISPR-Tom_Orb-01_reg2D_Tol-0.20',/UniformLong,radial_grid_file=radial_grid_file,/CR2082
+return
+
+nrads=30
+r0A=2.+0.5*findgen(nrads)
+for i=0,nrads-1 do compare_reconstruction_model,orbit=24,r0=r0A[i],filename='Ne-WISPR-Tom_Orb-24_reg2D_CR2082_Tol-0.10',/UniformLong,radial_grid_file=radial_grid_file,/CR2082
+return
+
+
+
+
+
 nrads=60
 r0A=2.+0.5*findgen(nrads)
 for i=0,nrads-1 do compare_reconstruction_model,orbit=12,r0=r0A[i],filename='Ne-WISPR-Tom_Orb-12_reg2D_CR2082',/UniformLong,radial_grid_file=radial_grid_file,/CR2082
 return
 
-nrads=24
-r0A=2.+0.5*findgen(nrads)
-for i=0,nrads-1 do compare_reconstruction_model,orbit=24,r0=r0A[i],filename='Ne-WISPR-Tom_Orb-24_reg2D_CR2082',/UniformLong,radial_grid_file=radial_grid_file,/CR2082
-return
-
-r0A=10.+findgen(21)
-nrads=n_elements(r0A)  
-for i=0,nrads-1 do compare_reconstruction_model,orbit=01,r0=r0A[i],filename='Ne-WISPR-Tom_Orb-01_reg3D',/UniformLong,radial_grid_file=radial_grid_file,/CR2082
-return
 
 nrads=24
 r0A=2.+0.5*findgen(nrads)
@@ -438,7 +443,7 @@ endif
  device, decomposed =  0
 
  rot         = 4
- scalefactor = 4
+ scalefactor = 3
  Npanels     = 2
  if keyword_set(circular_eq) OR keyword_set(circular_offeq) then Npanels = 2
 
@@ -449,18 +454,22 @@ endif
   DY      = ysimage/2
   x0      = DX/2.5
   y0      = (ysimage+DY)*(Npanels-1)
-  window,0,xs=xsimage+DX,ys=(ysimage+DY)*Npanels
+  factor=1.2
+  window,0,xs=xsimage+DX,ys=(ysimage+factor*DY)*Npanels
   loadct,27
-  tvscl,fltarr(xsimage+DX,(ysimage+DY)*Npanels)
+  tvscl,fltarr(xsimage+DX,(ysimage+factor*DY)*Npanels)
 
  ;window,0,xs=np*scalefactor, ys=nt*scalefactor*Npanels
 
  loadct,39
  if keyword_set(UniformLong) then begin
-    height_string = strmid(sufijo,0,5)
+    height_string = strmid(sufijo,0,4)
     x = x0
-    y = y0+DY/2
+    frac=0.8
+    y = y0+DY*frac
     map = alog10(rotate(congrid(map1 ,nt*scalefactor,np*scalefactor),rot))
+    mapref = map
+    tol    = 2.0e-1
     carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,$
             xtitle_status=0,ytitle_status=1,titulo_status=1,$
             title='Log!d10!N(N!De!N [cm!U-3!N]) of Model at '+height_string+' R!DSUN!N',$
@@ -476,11 +485,12 @@ endif
 ;map36= reform(Ne_wIO_UnifLong_ExtOrb01_bf4_hlaplac_l1e6(ir,*,*))
 ;map42= reform(Ne_wIO_UnifLong_ExtOrb01_bf4_hlaplac_l1e6_2(ir,*,*))
     
-    y = (ysimage+DY)*(Npanels-3)+DY*4./5
+    y = (ysimage+DY)*(Npanels-3)+DY*2./3
     skip_extended_01:
    ;map=alog10(rotate(congrid(map39,nt*scalefactor,np*scalefactor),rot))
     map=alog10(rotate(congrid(map45,nt*scalefactor,np*scalefactor),rot))
-    carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=1,ytitle_status=1,titulo_status=1,title='Reconstruction with Orbit 01'
+    map=mask(map,mapref,mini,maxi,tol)
+    carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=1,ytitle_status=1,titulo_status=1,title='Reconstruction for PSP Orbit-01'
 ;map39= reform(Ne_wIO_UnifLong_SciOrb01_bf4_hlaplac_l1e6(ir,*,*))
 ;map45= reform(Ne_wIO_UnifLong_SciOrb01_bf4_hlaplac_l1e6_2(ir,*,*))
  endif
@@ -504,7 +514,7 @@ endif
  endif
  
  if orbit eq 24 then begin
-    y = (ysimage+DY)*(Npanels-2)+DY*2./3
+    y = (ysimage+DY)*(Npanels-2)+DY*frac
 
     goto,include_circular
     goto,skip_extended_24
@@ -514,19 +524,27 @@ endif
 
   include_circular:
   map=alog10(rotate(congrid(map48,nt*scalefactor,np*scalefactor),rot))
-  carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=0,ytitle_status=1,titulo_status=1,title='Reconstruction with Circular Orbit'
+  map=mask(map,mapref,mini,maxi,tol)
+  carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=0,ytitle_status=1,titulo_status=1,title='Reconstruction for Circular Orbit'
 ;map38= reform(Ne_wIO_UnifLong_ExtOrb24_bf4_hlaplac_l1e6(ir,*,*))
 ;map44= reform(Ne_wIO_UnifLong_ExtOrb24_bf4_hlaplac_l1e6_2(ir,*,*))
 
-    y = (ysimage+DY)*(Npanels-3)+DY*4./5
+    include_12:
+    y = (ysimage+DY)*(Npanels-3)+DY*frac
+    map=alog10(rotate(congrid(map46,nt*scalefactor,np*scalefactor),rot))
+    map=mask(map,mapref,mini,maxi,tol)
+    carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=0,ytitle_status=1,titulo_status=1,title='Reconstruction for PSP Orbit-12'
+
+    y = (ysimage+DY)*(Npanels-4)+DY*frac
     skip_extended_24:
    ;map=alog10(rotate(congrid(map41,nt*scalefactor,np*scalefactor),rot))
     map=alog10(rotate(congrid(map47,nt*scalefactor,np*scalefactor),rot))
-    carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=1,ytitle_status=1,titulo_status=1,title='Reconstruction with Orbit 24'
+    map=mask(map,mapref,mini,maxi,tol)
+    carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=1,ytitle_status=1,titulo_status=1,title='Reconstruction for PSP Orbit-24'
 ;map41= reform(Ne_wIO_UnifLong_SciOrb24_bf4_hlaplac_l1e6(ir,*,*))
 ;map47= reform(Ne_wIO_UnifLong_SciOrb24_bf4_hlaplac_l1e6_2(ir,*,*))
  endif
-
+;stop
 endif
  
  if not keyword_set(circular_eq) AND not keyword_set(circular_offeq) AND not keyword_set(UniformLong) then begin
@@ -620,6 +638,16 @@ end
 function saturate,map,mini,maxi
   map(0:1,0) = [mini,maxi]
   map = map > mini < maxi
+  return,map
+end
+
+function mask,map,mapref,mini,maxi,tol
+  x    = 10.^map
+  xref = 10.^mapref
+  p = where( (abs(x-xref)/xref) gt tol)
+  if p(0) ne -1 then map(p) = alog10(mini)
+  map(0:1,0) = alog10([mini,maxi])
+  map = map > alog10(mini) < alog10(maxi)
   return,map
 end
 
