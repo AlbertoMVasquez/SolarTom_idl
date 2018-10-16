@@ -10,7 +10,7 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
   
   if not keyword_set(dir)         then dir         = '/data1/tomography/bindata/'
   if not keyword_set(comp_suffix) then comp_suffix = 'A_vs_B'
-  if not keyword_set(tit)         then tit         = 'Scatter Plot'
+;  if not keyword_set(tit)         then tit         = 'Scatter Plot'
   if not keyword_set(xtit)        then xtit        = 'A'
   if not keyword_set(ytit)        then ytit        = 'B'
   if not keyword_set(clrtbl)      then clrtbl      = 39
@@ -154,10 +154,10 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
   ps1,'/data1/tomography/SolarTom_idl/Figures/'+'Average_Radial_Profiles_'+comp_suffix+'.eps',12
   device,/inches,xsize=8,ysize=5
   plot,radA,x_A_avg,font=0,xr=[1,max([radA(iA),radB(iB)])],xstyle=1,yr=[0,max([x_A_avg(iA),x_B_avg(iB)])],/nodata,$     
-       title='Average Radial Profiles. '+tit,xtitle='r [R!DSUN!N]',ytitle=rad_y_tit,charsize=1.3
+       title='Average Radial Profiles '+tit,xtitle='r [R!DSUN!N]',ytitle=rad_y_tit,charsize=2.1
   oplot,radA(iA),x_A_avg(iA),color=100,thick=4
   oplot,radB(iB),x_B_avg(iB),color=200,thick=4
-  xyouts,0.89-[.01,.01],0.83-[0.,0.05],['KCOR','DEMT'],/normal,color=[100,200],charthick=4,charsize=1.3
+  xyouts,0.82-[.01,.01],0.8-[0.,0.05],['KCOR','DEMT'],/normal,color=[100,200],charthick=4,charsize=2.1
   ps2
   
   return
@@ -175,10 +175,10 @@ pro graphs,ratio,values_A,values_B,comp_suffix=comp_suffix,sufijo=sufijo,x_tit=x
   
   ps1,'/data1/tomography/SolarTom_idl/Figures/'+'comparison_'+comp_suffix+'_'+sufijo+'.eps',0
   device,/inches,xsize=12,ysize=5
-  !p.multi = [0,2,1]
-  plot,values_A,values_B,font=0,psym=4,xtitle=x_tit,ytitle=y_tit,title=tit
-  plot,xval,histo_ratio ,font=0,xtitle=histo_x_tit,title='Frequency Histogram',linestyle=8
-  xyouts,0.85*[1,1,1,1],1-[0.18,0.25,0.32,0.38],['m='+strmid(string(med),4,6),'!9m!3='+strmid(string(avg),4,6),'!9s!3/!9m!3='+strmid(string(stdev_frac),4,6),'N='+strmid(string(cant),7,7)],/normal,charthick=1,Font=0
+;  !p.multi = [0,2,1]
+ ; plot,values_A,values_B,font=0,psym=4,xtitle=x_tit,ytitle=y_tit,title=tit
+  plot,xval,histo_ratio ,font=0,xtitle=histo_x_tit,title='Frequency Histogram',linestyle=8,psym=10,thick=4,charsize=2.2
+  xyouts,0.8*[1,1,1,1],0.98-[0.18,0.25,0.32,0.38],['m='+strmid(string(med),4,6),'!9m!3='+strmid(string(avg),4,6),'!9s!3/!9m!3='+strmid(string(stdev_frac),4,6),'N='+strmid(string(cant),7,7)],/normal,charthick=1,Font=0,charsize=2.2
   !p.multi = 0
 
 
