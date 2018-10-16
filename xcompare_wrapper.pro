@@ -6,8 +6,11 @@ pro xcompare_wrapper
 ;  fileB='Ne_CR2198_DEMT-AIA_FD-L0.75_r3D'
 ;  suff='FD'
 ;fileB='Ne_CR2198_DEMT-AIA_H1-L0.225_r3D'
-suff='Hh_reduced_overreg'
-fileB='Ne_CR2198_DEMT-AIA_H1_reduced-L.1_r3D'
+suff='Hh_redl.2_kcor_subreg'
+suff='Hh_l.45_kcor_subreg'
+;fileB='Ne_CR2198_DEMT-AIA_H1_reduced-L.1_r3D'
+;fileB='Ne_CR2198_DEMT-AIA_H1-L.2_r3D_reduced'
+fileB='Ne_CR2198_DEMT-AIA_H1-L.45_r3D'
 goto,salt
   xcompare,fileA=fileA,fileB=fileB,nrA=295,ntA=90,rminA=1.05,rmaxA=4.0,nrB=26,rminB=1.0,rmaxB=1.26,$
            comp_suffix='KCOR-Tom_vs_DEMT_CR2198_'+suff+'-All-Latitudes',x_tit='KCOR-Tom Ne [cm!U-3!N]',y_tit='AIA DEMT Ne [cm!U-3!N]',$
@@ -58,7 +61,7 @@ goto,salt
            comp_suffix='KCOR-Tom_vs_DEMT_CR2198_'+suff+'-Ative-region',x_tit='KCOR-Tom Ne [cm!U-3!N]',y_tit='AIA DEMT Ne [cm!U-3!N]',$
            histo_x_tit='Ratio: Ne (KCOR) / Ne (DEMT)',tit='Lat: [-30!Uo!N,10!Uo!N] Lon: [160!Uo!N,210!Uo!N]',rad_y_tit='Ne [cm!U-3!N]',$
            rad_range_A=[1.09,2.0],rad_range_B=[1.02,1.2],r0A=r0A,radd_range=[1.105,1.195],Nvals=25
-salt:
+
   xcompare,fileA=fileA,fileB=fileB,nrA=295,ntA=90,rminA=1.05,rmaxA=4.0,nrB=26,rminB=1.0,rmaxB=1.26,lat_range=[-25.,0.5],lon_range=[180,210],$
            comp_suffix='KCOR-Tom_vs_DEMT_CR2198_'+suff+'-Ative-region2',x_tit='KCOR-Tom Ne [cm!U-3!N]',y_tit='AIA DEMT Ne [cm!U-3!N]',$
            histo_x_tit='Ratio: Ne (KCOR) / Ne (DEMT)',tit='Lat: [-25!Uo!N,05!Uo!N] Lon: [180!Uo!N,210!Uo!N]',rad_y_tit='Ne [cm!U-3!N]',$
@@ -78,6 +81,17 @@ salt:
            comp_suffix='KCOR-Tom_vs_DEMT_CR2198_'+suff+'-Open-region_S',x_tit='KCOR-Tom Ne [cm!U-3!N]',y_tit='AIA DEMT Ne [cm!U-3!N]',$
            histo_x_tit='Ratio: Ne (KCOR) / Ne (DEMT)',tit='Lat: [-80!Uo!N,-70!Uo!N] Lon: [190!Uo!N,290!Uo!N]',rad_y_tit='Ne [cm!U-3!N]',$
            rad_range_A=[1.09,2.0],rad_range_B=[1.02,1.2],r0A=r0A,radd_range=[1.105,1.155]
+salt:
+  xcompare,fileA=fileA,fileB=fileB,nrA=295,ntA=90,rminA=1.05,rmaxA=4.0,nrB=26,rminB=1.0,rmaxB=1.26,lat_range=[-40.,0.],lon_range=[230,320],$
+           comp_suffix='KCOR-Tom_vs_DEMT_CR2198_'+suff+'-Quiet-region1',x_tit='WL Ne [cm!U-3!N]',y_tit='EUV Ne [cm!U-3!N]',$
+           histo_x_tit='Ratio: Ne (WL) / Ne (EUV)',tit='',rad_y_tit='Ne [cm!U-3!N]',$
+           rad_range_A=[1.09,2.0],rad_range_B=[1.02,1.2],r0A=r0A,radd_range=[1.105,1.195]
+stop
+
+ xcompare,fileA=fileA,fileB=fileB,nrA=295,ntA=90,rminA=1.05,rmaxA=4.0,nrB=26,rminB=1.0,rmaxB=1.26,lat_range=[70.,80.],lon_range=[180,360],$
+           comp_suffix='KCOR-Tom_vs_DEMT_CR2198_'+suff+'-Open-region_N',x_tit='WL Ne [cm!U-3!N]',y_tit='EUV Ne [cm!U-3!N]',$
+           histo_x_tit='Ratio: Ne (WL) / Ne (EUV)',tit='',rad_y_tit='Ne [cm!U-3!N]',$
+           rad_range_A=[1.09,2.0],rad_range_B=[1.02,1.155],r0A=r0A,radd_range=[1.105,1.155]
 
 
   return
