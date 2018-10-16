@@ -35,7 +35,7 @@ pro kcor_prep,data_dir=data_dir,file_list=file_list,r0=r0
      mwritefits,hdr,img,outfile=data_dir+new_filename
      printf,2,new_filename
      kcor_inspect,hdr=hdr,img=img,r0=r0,data_dir=data_dir,filename=filename
-    ;stop
+    ;stop 
     ;print,'Exp Time:',hdr.exptime
   endfor
   close,/all
