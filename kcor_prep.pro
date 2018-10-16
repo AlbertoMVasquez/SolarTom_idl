@@ -85,7 +85,7 @@ pro display_latitudinal_profiles,height=height,hdr=hdr,img=img,ra=ra,pa=pa,x=x,y
 
 if not keyword_set(height) then begin
    print,'please specify hright.'
-   stop
+   stop 
 endif
 
 img_data = img
