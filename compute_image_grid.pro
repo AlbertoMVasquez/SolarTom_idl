@@ -29,6 +29,7 @@ pro compute_image_grid,hdr=hdr,ra=ra,pa=pa,x=x,y=y,instrument=instrument
        instrument_detected_flag = 1
        if instrument eq 'aia' then Rs=hdr.rsun_obs ; Sun radius in arcsec
        if instrument ne 'aia' then Rs=hdr.rsun     ; Sun radius in arcsec
+       print,'Sun radius in arcsec, from header:',Rs
        px  = hdr.cdelt1                            ; Pixel size in arcsec
        Rs  = Rs/px                                 ; Sun radius in pixels
        px  = 1./Rs                                 ; Pixel size in Rsun units
