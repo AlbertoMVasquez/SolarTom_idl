@@ -3,14 +3,36 @@ pro wrapper_compare
   radial_grid_file='radial_grid_sphere_wedge_WISPR.dat'
  ;radial_grid_file='radial_grid_sphere_wedge_WISPR_20points.dat'
 
-nrads=40
-r0A=3.+12.*findgen(nrads)/float(nrads-1)
-for i=0,nrads-1 do compare_reconstruction_model,orbit=12,r0=r0A[i],filename='Ne-WISPR-Tom_Orb-12_reg2D_CR2082',/UniformLong,radial_grid_file=radial_grid_file,/CR2082
-return
+  tol    = 2.0e-1
 
-nrads=40
-r0A=2.+8.*findgen(nrads)/float(nrads-1)
-for i=0,nrads-1 do compare_reconstruction_model,orbit=24,r0=r0A[i],filename='Ne-WISPR-Tom_Orb-24_reg2D_CR2082',/UniformLong,radial_grid_file=radial_grid_file,/CR2082
+nrads=80
+r0A=2.+18.*findgen(nrads)/float(nrads-1)
+fraction_A = fltarr(nrads)
+for i=0,nrads-1 do begin
+   filename0='Ne-WISPR-Tom_Orb-12_reg2D_CR2082'
+   compare_reconstruction_model,orbit=12,r0=r0A[i],filename=filename0,/UniformLong,radial_grid_file=radial_grid_file,/CR2082,fraction=fraction,tol=tol
+   fraction_A[i]=fraction
+endfor
+goto,fraction_plot
+
+
+nrads=80
+r0A=2.+18.*findgen(nrads)/float(nrads-1)
+fraction_A = fltarr(nrads)
+for i=0,nrads-1 do begin
+   filename0='Ne-WISPR-Tom_Orb-24_reg2D_CR2082'
+   compare_reconstruction_model,orbit=24,r0=r0A[i],filename=filename0,/UniformLong,radial_grid_file=radial_grid_file,/CR2082,fraction=fraction,tol=tol
+   fraction_A[i]=fraction
+endfor
+goto,fraction_plot
+
+
+fraction_plot:
+loadct,0
+ps1,'~/Pictures/Fraction_'+filename0+'.eps',0
+plot,r0A,fraction_A,psym=4,Charsize=2,font=1,title='Tol = '+string(tol),xtitle='r [R!DSUN!N]'
+ps2
+stop
 return
 
 nrads=50
@@ -103,7 +125,7 @@ return
 
 end
 
-pro compare_reconstruction_model,r0=r0,filename=filename,orbit=orbit,circular_eq=circular_eq,circular_offeq=circular_offeq,UniformLong=UniformLong,CR2082=CR2082,radial_grid_file=radial_grid_file
+pro compare_reconstruction_model,r0=r0,filename=filename,orbit=orbit,circular_eq=circular_eq,circular_offeq=circular_offeq,UniformLong=UniformLong,CR2082=CR2082,radial_grid_file=radial_grid_file,fraction=fraction,tol=tol
 
 input_dir = '/data1/tomography/bindata/'
   
@@ -463,7 +485,7 @@ endif
    map = alog10(rotate(congrid(map1 ,nt*scalefactor,np*scalefactor),rot))
   ;map =       (rotate(congrid(map1 ,nt*scalefactor,np*scalefactor),rot))
    mapref = map
-   tol    = 2.0e-1
+
    carrmap, map=mapref,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,$
             xtitle_status=0,ytitle_status=1,titulo_status=1,$
             title='Log!d10!N(N!De!N [cm!U-3!N]) of Model at '+height_string+' R!DSUN!N',$
@@ -485,7 +507,7 @@ if orbit eq  1 then begin
     skip_extended_01:
    ;map=alog10(rotate(congrid(map39,nt*scalefactor,np*scalefactor),rot))
     map=alog10(rotate(congrid(map45,nt*scalefactor,np*scalefactor),rot))
-    map=mask(map,mapref,mini,maxi,tol)
+    map=mask(map,mapref,mini,maxi,tol,fraction=fraction)
     carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=1,ytitle_status=1,titulo_status=1,title='Reconstruction for PSP Orbit-01'
 ;map39= reform(Ne_wIO_UnifLong_SciOrb01_bf4_hlaplac_l1e6(ir,*,*))
 ;map45= reform(Ne_wIO_UnifLong_SciOrb01_bf4_hlaplac_l1e6_2(ir,*,*))
@@ -504,8 +526,9 @@ if orbit eq  1 then begin
     y = (ysimage+DY)*(Npanels-2)+DY*4./5
 ;   map=alog10(rotate(congrid(map40,nt*scalefactor,np*scalefactor),rot))
     map=alog10(rotate(congrid(map46,nt*scalefactor,np*scalefactor),rot))
-    map=mask(map,mapref,mini,maxi,tol)
+    map=mask(map,mapref,mini,maxi,tol,fraction=fraction)
     carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=1,ytitle_status=1,titulo_status=1,title='Reconstruction for PSP Orbit 12'
+    print,'Fraction:',fraction
 ;map40= reform(Ne_wIO_UnifLong_SciOrb12_bf4_hlaplac_l1e6(ir,*,*))
 ;map46= reform(Ne_wIO_UnifLong_SciOrb12_bf4_hlaplac_l1e6_2(ir,*,*))
  endif
@@ -522,7 +545,7 @@ if orbit eq  1 then begin
 
   include_circular:
   map=alog10(rotate(congrid(map48,nt*scalefactor,np*scalefactor),rot))
-  map=mask(map,mapref,mini,maxi,tol)
+  map=mask(map,mapref,mini,maxi,tol,fraction=fraction)
   carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=0,ytitle_status=1,titulo_status=1,title='Reconstruction for Circular Orbit'
 ;map38= reform(Ne_wIO_UnifLong_ExtOrb24_bf4_hlaplac_l1e6(ir,*,*))
 ;map44= reform(Ne_wIO_UnifLong_ExtOrb24_bf4_hlaplac_l1e6_2(ir,*,*))
@@ -530,7 +553,7 @@ if orbit eq  1 then begin
     include_12:
     y = (ysimage+DY)*(Npanels-3)+DY*frac
     map=alog10(rotate(congrid(map46,nt*scalefactor,np*scalefactor),rot))
-    map=mask(map,mapref,mini,maxi,tol)
+    map=mask(map,mapref,mini,maxi,tol,fraction=fraction)
     carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=0,ytitle_status=1,titulo_status=1,title='Reconstruction for PSP Orbit 12'
 
     y = (ysimage+DY)*(Npanels-4)+DY*frac
@@ -539,7 +562,7 @@ if orbit eq  1 then begin
     y = (ysimage+DY)*(Npanels-2)+DY*4./5
    ;map=alog10(rotate(congrid(map41,nt*scalefactor,np*scalefactor),rot))
     map=alog10(rotate(congrid(map47,nt*scalefactor,np*scalefactor),rot))
-    map=mask(map,mapref,mini,maxi,tol)
+    map=mask(map,mapref,mini,maxi,tol,fraction=fraction)
     carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=1,ytitle_status=1,titulo_status=1,title='Reconstruction for PSP Orbit 24'
 ;map41= reform(Ne_wIO_UnifLong_SciOrb24_bf4_hlaplac_l1e6(ir,*,*))
 ;map47= reform(Ne_wIO_UnifLong_SciOrb24_bf4_hlaplac_l1e6_2(ir,*,*))
@@ -573,7 +596,7 @@ endif
 
   map=alog10(rotate(congrid(map48,nt*scalefactor,np*scalefactor),rot))
  ;map=      (rotate(congrid(map48,nt*scalefactor,np*scalefactor),rot))
-  map=mask(map,mapref,mini,maxi,tol)
+  map=mask(map,mapref,mini,maxi,tol,fraction=fraction)
   carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=1,ytitle_status=1,titulo_status=1,title='Reconstruction for Circular Orbit'
 ;tvscl,alog10(rotate(congrid(map25,nt*scalefactor,np*scalefactor),rot)),1
  
@@ -634,10 +657,11 @@ function saturate,map,mini,maxi
   return,map
 end
 
-function mask,map,mapref,mini,maxi,tol
+function mask,map,mapref,mini,maxi,tol,fraction=fraction
   x    = 10.^map
   xref = 10.^mapref
-  p = where( (abs(x-xref)/xref) gt tol)
+  p = where( (abs(x-xref)/xref) gt tol AND x gt 0.)
+  fraction = 1.-float(n_elements(p))/float(n_elements(x))
   if p(0) ne -1 then map(p) = alog10(mini)
   map(0:1,0) = alog10([mini,maxi])
   map = map > alog10(mini) < alog10(maxi)
