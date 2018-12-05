@@ -284,7 +284,7 @@ pro movie,input_file=input_file,data_dir=data_dir,table_file=table_file,model_fi
      readf,2,orig_image
      if keyword_set(BK) then compare_wispr,orig_image=orig_image,data_dir=data_dir,model_file=model_file,figures_title=figures_title,/BK
      if keyword_set(pB) then compare_wispr,orig_image=orig_image,data_dir=data_dir,model_file=model_file,figures_title=figures_title,/pB
-;    stop
+    ;stop
   endfor
   close,/all
 end
@@ -309,7 +309,7 @@ pro compare_wispr,orig_image=orig_image,data_dir=data_dir,model_file=model_file,
  ;Nx=2048 & Ny=2048 & Delta=128 & factor_image = 2.
 
   if keyword_set(BK) then $
-  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,Delta=Delta,/record,comp_gif=comp_gif,data_dir=data_dir,/BK,/log,/wispr,figures_title,/create_FITS_for_tom;,/crop
+  compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,Delta=Delta,/record,comp_gif=comp_gif,data_dir=data_dir,/BK,/log,/wispr,figures_title,/create_FITS_for_tom,/crop
 
   if keyword_set(pB) then $
   compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,factor_image=factor_image,Delta=Delta,/record,/crop,comp_gif=comp_gif,/create_FITS_for_tom,data_dir=data_dir,/pB,/log,figures_title
@@ -368,8 +368,11 @@ common euv_stuff,model
   pc = where(Ic  gt 0.)
 
   if keyword_set(wispr) then begin
-    mini =      min(Ic(pc))
-    maxi =      max(Ic(pc))
+     correction = 0.15
+     print,'Correction:',correction
+     Ic2 = Ic2*correction
+    mini =      min(Ic(pc)*correction)
+    maxi =      max(Ic(pc)*correction)
  endif
   
   if keyword_set(kcor) or keyword_set(lasco_awsom) then begin
@@ -380,7 +383,7 @@ common euv_stuff,model
      correction = medo/medc
      correction = 0.15
      print,'Correction:',correction
-     Ic2        = Ic2*correction     
+     Ic2        = Ic2*correction
   endif
   if keyword_set(euv) then begin
      mini = min([median(Io(po)),median(Ic(pc))])/500.
@@ -594,7 +597,7 @@ if NOT keyword_set(compare3) then begin
          color=0,charsize=4,charthick=4,font=1,/device
   
   xyouts,[x0],[y0-DY/4],$
-         ['East: '+East_rs+' R!DS!N            UT: '+UT+'             West: '+West_rs+' R!DS!N'],$
+         ['Inner: '+East_rs+' R!DS!N           UT: '+UT+'            Outter: '+West_rs+' R!DS!N'],$
          color=0,charsize=4,charthick=4,font=1,/device
 
   if keyword_set(BK) then $
