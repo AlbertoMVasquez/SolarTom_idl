@@ -601,7 +601,7 @@ if NOT keyword_set(compare3) then begin
          color=0,charsize=4,charthick=4,font=1,/device
 
   if keyword_set(BK) then $
-  xyouts,[xs0-Dx/10],[ys0+ysimage+DY/10],['Log!d10!N(B!DK!N)'],$
+  xyouts,[xs0-Dx/3.25],[ys0+ysimage+DY/10],['Log(B/10!U-10!NB!DSUN!N)'],$
          color=0,charsize=4,charthick=4,font=1,/device
   
   if keyword_set(pB) then $
