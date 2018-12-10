@@ -5,6 +5,17 @@ pro wrapper_compare
 
   tol    = 2.0e-1
 
+  nrads=80
+r0A=2.+18.*findgen(nrads)/float(nrads-1)
+fraction_A = fltarr(nrads)
+for i=0,nrads-1 do begin
+   filename0='Ne-WISPR-Tom_Orb-24_reg2D_CR2082'
+   compare_reconstruction_model,orbit=24,r0=r0A[i],filename=filename0,/UniformLong,radial_grid_file=radial_grid_file,/CR2082,fraction=fraction,tol=tol
+   fraction_A[i]=fraction
+endfor
+goto,fraction_plot
+
+
 nrads=80
 r0A=2.+18.*findgen(nrads)/float(nrads-1)
 fraction_A = fltarr(nrads)
@@ -15,16 +26,6 @@ for i=0,nrads-1 do begin
 endfor
 goto,fraction_plot
 
-
-nrads=80
-r0A=2.+18.*findgen(nrads)/float(nrads-1)
-fraction_A = fltarr(nrads)
-for i=0,nrads-1 do begin
-   filename0='Ne-WISPR-Tom_Orb-24_reg2D_CR2082'
-   compare_reconstruction_model,orbit=24,r0=r0A[i],filename=filename0,/UniformLong,radial_grid_file=radial_grid_file,/CR2082,fraction=fraction,tol=tol
-   fraction_A[i]=fraction
-endfor
-goto,fraction_plot
 
 
 fraction_plot:
@@ -660,8 +661,18 @@ end
 function mask,map,mapref,mini,maxi,tol,fraction=fraction
   x    = 10.^map
   xref = 10.^mapref
+  p = where( (abs(x-xref)/xref) le tol AND x gt 0.)
+  Nph   = (size(x))(1)
+  Nth   = (size(x))(2)
+  dph   = 2.*!pi/float(Nph)
+  dth   =    !pi/float(Nth)
+  Theta = !pi - dth/2. - dth*findgen(Nth)
+  A_map = fltarr(Nph,Nth)
+  for iph = 0,Nph-1 do A_map(iph,*) = sin(Theta)*dth*dph 
+ ;fraction = 1.-float(n_elements(p))/float(n_elements(x))
+  fraction = total(A_map(p)) / (4.*!pi)
+
   p = where( (abs(x-xref)/xref) gt tol AND x gt 0.)
-  fraction = 1.-float(n_elements(p))/float(n_elements(x))
   if p(0) ne -1 then map(p) = alog10(mini)
   map(0:1,0) = alog10([mini,maxi])
   map = map > alog10(mini) < alog10(maxi)
