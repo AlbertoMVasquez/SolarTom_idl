@@ -8,7 +8,7 @@ pro xdisplay,dir=dir,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A=r0A,min
   if not keyword_set(np)          then np          = 2*nt
   if not keyword_set(scalefactor) then scalefactor = 3
   if not keyword_set(lat_range)   then lat_range   = [-90.,+90.]
- ; if not keyword_set(rad_range)   then rad_range   = [1.02 , 1.255]
+  if not keyword_set(rad_range)   then rad_range   = [1.02 , 1.255]
   if not keyword_set(r0A      )   then r0A         = [1.10,1.15,1.20]
   if not keyword_set(box_lat )    then box_lat     = 0.
   if not keyword_set(box_lon )    then box_lon     = 0.
