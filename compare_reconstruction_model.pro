@@ -5,7 +5,7 @@ pro wrapper_compare
 
   tol    = 2.0e-1
 
-  nrads=80
+nrads=80
 r0A=2.+18.*findgen(nrads)/float(nrads-1)
 fraction_A = fltarr(nrads)
 for i=0,nrads-1 do begin
@@ -15,7 +15,6 @@ for i=0,nrads-1 do begin
 endfor
 goto,fraction_plot
 
-
 nrads=80
 r0A=2.+18.*findgen(nrads)/float(nrads-1)
 fraction_A = fltarr(nrads)
@@ -23,10 +22,9 @@ for i=0,nrads-1 do begin
    filename0='Ne-WISPR-Tom_Orb-12_reg2D_CR2082'
    compare_reconstruction_model,orbit=12,r0=r0A[i],filename=filename0,/UniformLong,radial_grid_file=radial_grid_file,/CR2082,fraction=fraction,tol=tol
    fraction_A[i]=fraction
+;  stop
 endfor
 goto,fraction_plot
-
-
 
 fraction_plot:
 loadct,0
@@ -38,16 +36,17 @@ return
 
 nrads=50
 r0A=2.+8.*findgen(nrads)/float(nrads-1)
-for i=0,nrads-1 do compare_reconstruction_model,orbit=01,r0=r0A[i],filename='Ne-WISPR-Tom_CircOrbit_reg2D_Tol-0.20',/circular_eq,radial_grid_file=radial_grid_file,/CR2082
+for i=0,nrads-1 do begin
+   compare_reconstruction_model,orbit=01,r0=r0A[i],filename='Ne-WISPR-Tom_CircOrbit_reg2D_Tol-0.20',/circular_eq,radial_grid_file=radial_grid_file,/CR2082,tol=tol,fraction=fraction
+endfor
 return
-
 
 
 nrads=30
 r0A=2.+0.5*findgen(nrads)
 for i=0,nrads-1 do compare_reconstruction_model,orbit=24,r0=r0A[i],filename='Ne-WISPR-Tom_Orb-24_reg2D_CR2082_Tol-0.10',/UniformLong,radial_grid_file=radial_grid_file,/CR2082
 return
-w
+
 r0A=10.+findgen(31)
 nrads=n_elements(r0A)  
 for i=0,nrads-1 do compare_reconstruction_model,orbit=01,r0=r0A[i],filename='Ne-WISPR-Tom_Orb-01_reg2D_Tol-0.20',/UniformLong,radial_grid_file=radial_grid_file,/CR2082
@@ -129,7 +128,7 @@ end
 pro compare_reconstruction_model,r0=r0,filename=filename,orbit=orbit,circular_eq=circular_eq,circular_offeq=circular_offeq,UniformLong=UniformLong,CR2082=CR2082,radial_grid_file=radial_grid_file,fraction=fraction,tol=tol
 
 input_dir = '/data1/tomography/bindata/'
-  
+
 files=[$
   'x_AWSOM_CR2081run5_WISPR_sphere_2.dat',$
   'x_wisprI.512.Orbit01.60images_l1e-5',$
@@ -487,11 +486,14 @@ endif
   ;map =       (rotate(congrid(map1 ,nt*scalefactor,np*scalefactor),rot))
    mapref = map
 
-   carrmap, map=mapref,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,$
+   ShiftLon = np*scalefactor/2.
+   map = shift(map,ShiftLon,ShiftLon)
+
+   carrmap, map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,$
             xtitle_status=0,ytitle_status=1,titulo_status=1,$
             title='Log!d10!N(N!De!N [cm!U-3!N]) of Model at '+height_string+' R!DSUN!N',$
-            /color_scale,DX=DX,DY=DY,mini=mini,maxi=maxi,xsimage=xsimage,ysimage=ysimage
-
+            /color_scale,DX=DX,DY=DY,mini=mini,maxi=maxi,xsimage=xsimage,ysimage=ysimage,ShiftLon=ShiftLon
+   
 if keyword_set(UniformLong) then begin
 
 if orbit eq  1 then begin
@@ -528,7 +530,8 @@ if orbit eq  1 then begin
 ;   map=alog10(rotate(congrid(map40,nt*scalefactor,np*scalefactor),rot))
     map=alog10(rotate(congrid(map46,nt*scalefactor,np*scalefactor),rot))
     map=mask(map,mapref,mini,maxi,tol,fraction=fraction)
-    carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=1,ytitle_status=1,titulo_status=1,title='Reconstruction for PSP Orbit 12'
+    map = shift(map,ShiftLon,ShiftLon)
+    carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=1,ytitle_status=1,titulo_status=1,title='Reconstruction for PSP Orbit 12',ShiftLon=ShiftLon
     print,'Fraction:',fraction
 ;map40= reform(Ne_wIO_UnifLong_SciOrb12_bf4_hlaplac_l1e6(ir,*,*))
 ;map46= reform(Ne_wIO_UnifLong_SciOrb12_bf4_hlaplac_l1e6_2(ir,*,*))
@@ -564,7 +567,8 @@ if orbit eq  1 then begin
    ;map=alog10(rotate(congrid(map41,nt*scalefactor,np*scalefactor),rot))
     map=alog10(rotate(congrid(map47,nt*scalefactor,np*scalefactor),rot))
     map=mask(map,mapref,mini,maxi,tol,fraction=fraction)
-    carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=1,ytitle_status=1,titulo_status=1,title='Reconstruction for PSP Orbit 24'
+    map = shift(map,ShiftLon,ShiftLon)
+    carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=1,ytitle_status=1,titulo_status=1,title='Reconstruction for PSP Orbit 24',ShiftLon=ShiftLon
 ;map41= reform(Ne_wIO_UnifLong_SciOrb24_bf4_hlaplac_l1e6(ir,*,*))
 ;map47= reform(Ne_wIO_UnifLong_SciOrb24_bf4_hlaplac_l1e6_2(ir,*,*))
  endif
@@ -653,7 +657,11 @@ endif
 end
 
 function saturate,map,mini,maxi
-  map(0:1,0) = [mini,maxi]
+ ;map(0:1,0) = [mini,maxi]
+  p=median(where(map eq min(map)))
+  map(p)=mini
+  p=median(where(map eq max(map)))
+  map(p)=maxi
   map = map > mini < maxi
   return,map
 end
@@ -667,6 +675,12 @@ function mask,map,mapref,mini,maxi,tol,fraction=fraction
   dph   = 2.*!pi/float(Nph)
   dth   =    !pi/float(Nth)
   Theta = !pi - dth/2. - dth*findgen(Nth)
+  Phi   =       dph/2. + dph*findgen(Nph)
+  The2D = fltarr(Nph,Nth)
+  for iph=0,Nph-1 do The2D(iph,*)=Theta/!dtor
+  Lat2D = 90.-The2D
+  Phi2D = fltarr(Nph,Nth)
+  for ith=0,Nth-1 do Phi2D(*,ith)=Phi  /!dtor
   A_map = fltarr(Nph,Nth)
   for iph = 0,Nph-1 do A_map(iph,*) = sin(Theta)*dth*dph 
  ;fraction = 1.-float(n_elements(p))/float(n_elements(x))
@@ -674,6 +688,11 @@ function mask,map,mapref,mini,maxi,tol,fraction=fraction
 
   p = where( (abs(x-xref)/xref) gt tol AND x gt 0.)
   if p(0) ne -1 then map(p) = alog10(mini)
+
+  p = where(Phi2D ge 100. and Phi2D le 290.)
+; p = where(Lat2D lt -25. or  Lat2D gt +25.)
+  if p(0) ne -1 then map(p) = alog10(mini)
+  
   map(0:1,0) = alog10([mini,maxi])
   map = map > alog10(mini) < alog10(maxi)
   return,map
@@ -684,8 +703,8 @@ pro carrmap,map=map,xi=xi,yi=yi,np=np,nt=nt,scalefactor=scalefactor,$
             xtitle_status=xtitle_status,ytitle_status=ytitle_status,$
             titulo_status=titulo_status,title=title,toptitle=toptitle,$
             color_scale=color_scale,DX=DX,DY=DY,mini=mini,maxi=maxi,$
-            xsimage=xsimage,ysimage=ysimage
-  
+            xsimage=xsimage,ysimage=ysimage,ShiftLon=ShiftLon
+ 
     x=xi
     y=yi
     tvscl,map,x,y
@@ -696,8 +715,16 @@ pro carrmap,map=map,xi=xi,yi=yi,np=np,nt=nt,scalefactor=scalefactor,$
     LatMAX = +90.
     LonMIN =   0.
     LonMAX = 360.
-    LAT=LatMIN+(LatMAX-LatMIN)*FINDGEN(Nlat)/FLOAT(Nlat-1)
-    LON=LonMIN+(LonMAX-LonMIN)*FINDGEN(Nlon)/FLOAT(Nlon-1)
+    dLon = (LonMAX-LonMIN)/Nlon
+    dLat = (LatMAX-LatMIN)/Nlat
+    LAT  = LatMIN + dLat/2. + dLat * findgen(NLat) 
+    LON  = LonMIN + dLon/2. + dLon * findgen(NLon) 
+    LON  = shift(LON,ShiftLon)
+
+    extlon = 60.*findgen(7)
+    extlonlab = ['180','240','300','360','60','120','180']
+    Nextlon = n_elements(extlon)
+  
     loadct,40
     xtitle=''
     ytitle=''
@@ -710,7 +737,8 @@ pro carrmap,map=map,xi=xi,yi=yi,np=np,nt=nt,scalefactor=scalefactor,$
         xtitle=xtitle,$
         ytitle=ytitle,$
         title=titulo,$
-        yticklen=.02,xticklen=.03,ythick=2,xthick=2,charthick=1,font=1
+        yticklen=.02,xticklen=.03,ythick=2,xthick=2,charthick=1,font=1,$
+        xticks=Nextlon-1,xtickname = extlonlab,xtickv=extlon
 
    if keyword_set(color_scale) then begin
       nsy = ysimage
