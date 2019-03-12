@@ -8,11 +8,13 @@
 ;
 ; Calling sequence examples:
 ; comp_prep,data_dir='/data1/tomography/DATA/comp/1074/CR2198/',file_list='list_mean.txt',r0=[1.1,1.3],/meanfits
-; comp_prep,data_dir='/data1/tomography/DATA/comp/1074/CR2198/',file_list='list.txt'     ,r0=[1.1,1.3],/dynamics
+; comp_prep,data_dir='/data1/tomography/DATA/comp/1074/CR2198/',file_list='list.txt'     ,r0=[1.05,1.07],/dynamics
 ; comp_prep,data_dir='/data1/tomography/DATA/comp/1079/CR2198/',file_list='list.txt'     ,r0=[1.1,1.3],/dynamics
 
 ; comp_prep,data_dir='/data1/tomography_dev/DATA/comp/research_data/2017/20171118.comp.1079.daily_dynamics.3/',file_list='list.txt',r0=[1.1,1.3],/dynamics
 
+
+; comp_prep,data_dir='/data1/tomography/DATA/comp/1074/CR2198/',file_list='list_total_intensity_Dt2.txt',r0=[1.1,1.3],/meanfits
 ;
 ;---------------------------------------------------------------------
 

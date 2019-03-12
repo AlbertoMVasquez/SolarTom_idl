@@ -137,3 +137,19 @@ xdisplay,dir='/data1/tomography/bindata/',file='x_wisprIO.512.CR2081.UnifLong.Sc
 
 xdisplay,dir='/data1/tomography/bindata/',file='x_wisprIO.512.CR2081.UnifLong.SciOrb24.bf4.NonUniform_20_90_180.10Rs_r2D_l1e-6',nr=20,nt=90,r0A=r0A,win=0,titulo='WISPR-r2D NonUniform Nr=20 Rmax=14.0Rs: Ne [cm!U-3!N]',rmin=2.,rmax=14.,rad_range=[2.,14.],radial_grid_file='radial_grid_sphere_wedge_WISPR_20points.dat'
 xdisplay,dir='/data1/tomography/bindata/',file='x_wisprIO.512.CR2081.UnifLong.SciOrb24.bf4.NonUniform_20_90_180.10Rs_r3D_l1e-6',nr=20,nt=90,r0A=r0A,win=0,titulo='WISPR-r3D NonUniform Nr=20 Rmax=14.0Rs: Ne [cm!U-3!N]',rmin=2.,rmax=14.,rad_range=[2.,14.],radial_grid_file='radial_grid_sphere_wedge_WISPR_20points.dat'
+
+
+xdisplay,dir='/data1/tomography/bindata/',file='x_aia.171.cr2198.26x90_bf4_ri.98_ro1.02_l2._OldSet_r3d' ,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=1.1,/log,win=0,minima=minima,maxima=maxima
+xdisplay,dir='/data1/tomography/bindata/',file='x_aia.171.cr2198.26x90_bf4_ri.98_ro1.02_l2.1_OldSet_r3d',nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=1.1,/log,win=1,minA=minima,maxA=maxima
+
+xdisplay,dir='/data1/tomography/bindata/',file='x_aia.193.cr2198.26x90_bf4_ri.00_ro1.02_l.45_h1_OldSet_r3d'             ,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=1.1,/log,win=0,minima=minima,maxima=maxima
+
+
+xdisplay,dir='/data1/tomography/bindata/',file='x_AIA_CR2208_193b_h1_Rmin1.00_Rmax1.26_Nr26_InstRmax1.26_bf4_r2d_L0.45' ,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=[1.025,1.105,1.205,1.255],/log,win=0,minima=minima,maxima=maxima
+xdisplay,dir='/data1/tomography/bindata/',file='x_AIA_CR2208_193b_h1_Rmin1.00_Rmax1.26_Nr26_InstRmax1.26_bf4_r3d_L0.45' ,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=[1.025,1.105,1.205,1.255],/log,win=0,minA=minima,maxA=maxima
+
+xdisplay,dir='/data1/tomography/bindata/',file='x_AIA_CR2208_193b_h1_Rmin1.00_Rmax1.50_Nr50_InstRmax1.26_bf4_r2d_L0.45' ,nr=50,nt=90,rmin=1.0,rmax=1.50,r0A=[1.025,1.105,1.205,1.255],/log,win=0,minA=minima,maxA=maxima
+xdisplay,dir='/data1/tomography/bindata/',file='x_AIA_CR2208_193b_h1_Rmin1.00_Rmax1.50_Nr50_InstRmax1.26_bf4_r3d_L0.45' ,nr=50,nt=90,rmin=1.0,rmax=1.50,r0A=[1.025,1.105,1.205,1.255],/log,win=0,minA=minima,maxA=maxima
+
+xdisplay,dir='/data1/tomography/bindata/',file='' ,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=1.1,/log,win=0,minima=minima,maxima=maxima
+

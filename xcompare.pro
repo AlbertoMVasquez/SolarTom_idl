@@ -3,14 +3,13 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
              r0A=r0A,lat_range=lat_range,lon_range=lon_range,rad_range_A=rad_range_A,rad_range_B=rad_range_B,$
              clrtbl=clrtbl,scalefactor=scalefactor,comp_suffix=comp_suffix,$
              tit=tit,x_tit=x_tit,y_tit=y_tit,histo_x_tit=histo_x_tit,max_ratio=max_ratio,min_ratio=min_ratio,rad_y_tit=rad_y_tit,$
-             radd_range=rad_range,Nvals=Nvals
+             radd_range=rad_range,Nvals=Nvals,LabelA=LabelA,LabelB=LabelB
 
-
-  EPS=1.e-4                     ; fractional tolerance for evaluating same height is being compared.
+  EPS=1.e-4                     ; fractional tolerance to evaluate if same height is being compared.
   
   if not keyword_set(dir)         then dir         = '/data1/tomography/bindata/'
   if not keyword_set(comp_suffix) then comp_suffix = 'A_vs_B'
-;  if not keyword_set(tit)         then tit         = 'Scatter Plot'
+; if not keyword_set(tit)         then tit         = 'Scatter Plot'
   if not keyword_set(xtit)        then xtit        = 'A'
   if not keyword_set(ytit)        then ytit        = 'B'
   if not keyword_set(clrtbl)      then clrtbl      = 39
@@ -28,6 +27,9 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
   if not keyword_set(min_ratio)   then min_ratio   = 0.
   if not keyword_set(max_ratio)   then max_ratio   = 5.
   if not keyword_set(nvals)       then Nvals       = 50.
+  if not keyword_set(LabelA)      then LabelA      = 'Map-A'
+  if not keyword_set(LabelA)      then LabelA      = 'Map-B'
+  
   xread,dir=dir,file=fileA,nr=nrA,nt=ntA,np=npA,map=mapA
   xread,dir=dir,file=fileB,nr=nrB,nt=ntB,np=npB,map=mapB
 
@@ -136,7 +138,7 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
      endelse
   endfor
 ;Compute average radial profile of x_B(r) in selected lat/lon range.
-  x_B_avg = fltarr(NrA)
+  x_B_avg = fltarr(NrB)
   for irB=0,nrB-1 do begin
      map_B = reform(mapB(irB,*,*))     
      index = where(map_B gt 0. and $
@@ -157,7 +159,7 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
        title='Average Radial Profiles '+tit,xtitle='r [R!DSUN!N]',ytitle=rad_y_tit,charsize=2.1
   oplot,radA(iA),x_A_avg(iA),color=100,thick=4
   oplot,radB(iB),x_B_avg(iB),color=200,thick=4
-  xyouts,0.82-[.01,.01],0.8-[0.,0.05],['KCOR','DEMT'],/normal,color=[100,200],charthick=4,charsize=2.1
+  xyouts,0.7,0.8-[0.,0.05],[LabelA,LabelB],/normal,color=[100,200],charthick=4,charsize=2.1
   ps2
   
   return

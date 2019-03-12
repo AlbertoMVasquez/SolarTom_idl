@@ -27,7 +27,7 @@ pro xdisplay,dir=dir,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A=r0A,min
   
   if keyword_set(rad_range) then  begin
      sufijo = strmid(string(rad_range[0]),6,5)+'-'+strmid(string(rad_range[1]),6,5)+'_Rsun'
-     xhisto,map=map,nr=nr,nt=nt,np=np,radii=rad,rad_range=rad_range,lat_range=lat_range,win=0,dir=dir,file=file,titulo='Histogram of '+titulo,sufijo=sufijo
+     xhisto,map=map,nr=nr,nt=nt,np=np,radii=rad,rad_range=rad_range,lat_range=lat_range,win=win,dir=dir,file=file,titulo='Histogram of '+titulo,sufijo=sufijo
   endif
   
   minima = fltarr(n_elements(r0A))
@@ -38,13 +38,13 @@ pro xdisplay,dir=dir,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A=r0A,min
      r0   = rad[ir]
      rad_range=[r0,r0]
      sufijo = strmid(string(r0),6,5)+'_Rsun'
-     win=i
+
      if keyword_set(minA) then mini = minA[i]
      if keyword_set(maxA) then maxi = maxA[i]
 
 ;stop     
-     if not keyword_set(log) then xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+2,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon
-     if     keyword_set(log) then xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+2,file=file,titulo=titulo,/log
+     if not keyword_set(log) then xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+1+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon
+     if     keyword_set(log) then xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+1+i,file=file,titulo=titulo,/log
     
 ;     xhisto,map=map,nr=nr,nt=nt,np=np,radii=rad,rad_range=rad_range,lat_range=lat_range,win=win+3,dir=dir,file=file,titulo='Histogram of '+titulo,sufijo=sufijo,mini=mini,maxi=maxi
      ; Store mini and maxi for a final report.
