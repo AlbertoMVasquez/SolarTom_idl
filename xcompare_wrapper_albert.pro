@@ -84,7 +84,7 @@ pro xcompare_wrapper_albert
    xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=26,ntA=90,rminA=1.0,rmaxA=1.26,nrB=30,rminB=1.0,rmaxB=1.30,lat_range=[-40.,+40.],lon_range=[160.,240.],$
             comp_suffix='AIA171_CR2209_FD_Quiet-Streamer_OS-NS',x_tit='FBE171-OS',y_tit='FBE171-NS',$
             histo_x_tit='Ratio: FBE171-NS/OS',tit='',rad_y_tit='FBE171',$
-            rad_range_A=[1.02,1.26],rad_range_B=[1.07,1.30],r0A=r0A,radd_range=[1.02,1.30],LabelA='OldSet',LabelB='NewSet'
+            rad_range_A=[1.02,1.26],rad_range_B=[1.02,1.30],r0A=r0A,radd_range=[1.02,1.30],LabelA='OldSet',LabelB='NewSet'
      return
 
 
