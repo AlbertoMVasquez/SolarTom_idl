@@ -1,21 +1,3 @@
-pro test_inter
-
-  Nlat1 = 1000
-  Nlon1 = 2000
-  Nlat2 =    5
-  Nlon2 =   10
-  A1    = cos((-!pi+2.*!pi*(findgen(Nlat1,Nlon1))/Nlat1/Nlon1)^2)
-  inter,A1=A1,A2=A2,Nlat1=Nlat1,Nlon1=Nlon1,Nlat2=Nlat2,Nlon2=Nlon2,Lat1=Lat1,Lon1=Lon1,Lat2=Lat2,Lon2=Lon2
-
-  !p.charsize=4
-   plot,Lon1,A1(0,*)
-  oplot,Lon2,A2(0,*),psym=4,th=4
-  stop
-  
-  return
-end
-
-
 pro inter,A1=A1,A2=A2,Nlat1=Nlat1,Nlon1=Nlon1,Nlat2=Nlat2,Nlon2=Nlon2,Lat1=Lat1,Lon1=Lon1,Lat2=Lat2,Lon2=Lon2
 ;;
 ; 
@@ -58,8 +40,8 @@ pro inter,A1=A1,A2=A2,Nlat1=Nlat1,Nlon1=Nlon1,Nlat2=Nlat2,Nlon2=Nlon2,Lat1=Lat1,
  iX1 = ( (lat1 - min(lat1)) / DX1 ) * (Nlat1-1) ; (This has to go from 0 to Nlat1-1)
  iY1 = ( (lon1 - min(lon1)) / DY1 ) * (Nlon1-1) ; (This has to go from 0 to Nlon1-1)
 
- iX2 = ( (lat2 - min(lat1)) / DX1 ) * (Nlat1-1)
- iY2 = ( (lon2 - min(lon1)) / DY1 ) * (Nlon1-1)
+ iX2 = ( (lat2 - min(lat1)) / DX1 ) * (Nlat1-1) ; Virtual subscripts of Grid2-X on Grid1-X
+ iY2 = ( (lon2 - min(lon1)) / DY1 ) * (Nlon1-1) ; Virtual subscripts of Grid2-Y on Grid1-Y
 
  IX = ix2
  JY = iY2
