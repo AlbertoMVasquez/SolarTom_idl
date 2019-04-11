@@ -7,6 +7,14 @@ pro grid_tool,WISPR=WISPR,DEMT=DEMT,UNIFCUSTOM=UNIFCUSTOM,output_dir=output_dir
 if NOT keyword_set (output_dir) then output_dir = '/data1/tomography_dev/SolarTom_idl/DATA/'
   
 ; Set grid density key parameters:
+if keyword_set(UNIFCUSTOM) then begin
+  file = 'sphere_Rmin-1.0_Rmax-6.0_dr-0.01_dlat-2.0_dlon-2.0.dat'
+  Rmin = 1.0  ; Rsun
+  Rmax = 6.0  ; Rsun
+  drad = 0.01 ; Rsun
+  dlon = 2.   ; deg
+  dlat = 2.   ; deg
+endif
 if keyword_set(WISPR) then begin
   file = 'sphere_wedge_WISPR.dat'
   Nr   = 100
@@ -18,16 +26,8 @@ if keyword_set(DEMT) then begin
   Rmin = 1.00 ; Rsun
   Rmax = 1.26 ; Rsun
   drad = 0.01;Rsun
-  dlon = 2.  ; deg
-  dlat = 2.  ; deg
-endif
-if keyword_set(UNIFCUSTOM) then begin
-  file = 'sphere_wedge_custom_test.dat'
-  Rmin =  2.0 ; Rsun
-  Rmax = 12.0 ; Rsun
-  drad = 0.05  ;Rsun
-  dlon = 1.   ; deg
-  dlat = 1.   ; deg
+  dlon = 1.  ; deg
+  dlat = 1.  ; deg
 endif
 
 if keyword_set(WISPR) then begin
@@ -68,14 +68,14 @@ Ntheta = Nlat
 
 ; Create Table for TECPLOT's SWMF tools:
 openw,1,output_dir+file
-printf,1,'      X [Rsun]        Y [Rsun]        Z [Rsun]'
+printf,1,'      X [Rsun]        Y [Rsun]        Z [Rsun]       Rad [Rsun]        Lat [deg]       Lon [deg]'
 for ip=0,Nphi  -1 do begin
 for it=0,Ntheta-1 do begin
 for ir=0,Nr    -1 do begin         
   x = r[ir]*sin(theta[it])*cos(phi[ip]) 
   y = r[ir]*sin(theta[it])*sin(phi[ip])
   z = r[ir]*cos(theta[it]) 
-  printf,1,format="(3(f16.8))",x,y,z
+  printf,1,format="(6(f16.8))",x,y,z,r[ir],Lat[it],Lon[ip]
 endfor
 endfor
 endfor

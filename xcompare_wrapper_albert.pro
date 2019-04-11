@@ -1,6 +1,36 @@
 pro xcompare_wrapper_albert
 
    dir = '/data1/tomography_dev/bindata/'
+   r0A = [1.09,1.155,1.195]
+
+   fileA = 'x_KCOR.CR2198.13imgs.bf2.ri1.05.ro2.00_Inst_1.09_2.00_95_90_180_dropneg_r3D_l1e-4'
+   fileB = 'x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_dropneg_r3D_l1e-4'
+
+   suff=''
+   
+  xcompare,fileA=fileA,fileB=fileB,nrA=95,ntA=90,rminA=1.05,rmaxA=2.0,nrB=295,rminB=1.05,rmaxB=4.0,r0A=r0A,$
+           comp_suffix='KCOR-Tom_095_vs_295_CR2198_'+suff+'-All-Latitudes',x_tit='KCOR-095 Ne [cm!U-3!N]',y_tit='KCOR-295 Ne [cm!U-3!N]',$
+           histo_x_tit='Ratio: Ne (KCOR-295) / Ne (LCOR-095)',tit='All Latitudes',rad_y_tit='Ne [cm!U-3!N]',$
+           rad_range_A=[1.09,2.0],rad_range_B=[1.09,4.0],LabelA='KCOR-095',LabelB='KCOR-295'
+
+  stop
+  
+   dir = '/data1/tomography_dev/bindata/'
+   r0A = [1.025,1.105,1.155,1.205]
+
+;x_aia.171.cr2198.26x90_bf4_ri.00_ro1.09_l0.65_h1_Oldset_r3d
+;x_aia.171.cr2198.26x90_bf4_ri.00_ro1.09_l0.65_h1_Oldset_r3d_NSUBIT1000
+;x_aia.171.cr2198.26x90_bf4_ri.00_ro1.09_l0.65_h1_Oldset_r3d_NSUBIT1000_BTOL0.001
+ 
+   fileA='x_aia.171.cr2198.26x90_bf4_ri.00_ro1.09_l0.65_h1_Oldset_r3d'
+   fileB='x_aia.171.cr2198.26x90_bf4_ri.00_ro1.09_l0.65_h1_Oldset_r3d_NSUBIT1000_BTOL0.001'
+   xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=26,ntA=90,rminA=1.0,rmaxA=1.26,nrB=26,rminB=1.0,rmaxB=1.26,lat_range=[-90.,+90.],lon_range=[0.,360.],$
+            comp_suffix='COMP2',$
+            histo_x_tit='Ratio',tit='',rad_y_tit='FBE171',$
+            rad_range_A=[1.0,1.5],rad_range_B=[1.0,1.3],r0A=r0A,LabelA='Default',LabelB='BTOL0.001'
+   return
+
+   dir = '/data1/tomography_dev/bindata/'
    r0A = [1.095,1.155,1.205,1.255,1.295]
    
    fileA='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.50_50_90_180_r3D_2.65_IRMIN_1.09'    

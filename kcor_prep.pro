@@ -12,6 +12,7 @@
 ; kcor_prep,data_dir='/data1/tomography/DATA/kcor/CR2198/AvgNoOffset_Images/',file_list='list.txt',r0=[1.09,1.5,2.0]
 ; kcor_prep,data_dir='/data1/tomography/DATA/kcor/CR2198/2017/12/03/',file_list='list.txt'
 ;
+; kcor_prep,data_dir='/data1/tomography/DATA/kcor/CR2198/AvgNoOffset_Images/',file_list='list_test.txt',r0=[1.09,1.5,2.0]
 ;---------------------------------------------------------------------
 
 ; Main routine:
