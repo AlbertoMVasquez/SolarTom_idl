@@ -36,8 +36,8 @@ pro kcor_prep,data_dir=data_dir,file_list=file_list,r0=r0
      mwritefits,hdr,img,outfile=data_dir+new_filename
      printf,2,new_filename
      kcor_inspect,hdr=hdr,img=img,r0=r0,data_dir=data_dir,filename=filename
-    ;stop 
-    ;print,'Exp Time:',hdr.exptime
+     print,'Exp Time:',hdr.exptime
+     print,'Units:',hdr.bunit
   endfor
   close,/all
   return
@@ -45,6 +45,7 @@ end
 
 ; Sub-routines:
 pro expand_header_kcor,hdr=hdr
+
   AU = 149597870700. ; m
   geocentric_sun_ephemeris = get_sun(hdr.DATE_OBS)
   DSUN = geocentric_sun_ephemeris[0] * AU  ; m
@@ -61,7 +62,6 @@ pro expand_header_kcor,hdr=hdr
 end
 
 pro kcor_inspect,hdr=hdr,img=img,r0=r0,data_dir=data_dir,filename=filename
-
   compute_image_grid,hdr=hdr,ra=ra,pa=pa,x=x,y=y,instrument='kcor'
 ; Image for display:
  img2  = img
@@ -73,7 +73,6 @@ for ir=0,n_elements(r0)-1 do begin
  display_latitudinal_profiles,height=r0[ir],hdr=hdr,img=img,ra=ra,pa=pa,x=x,y=y
  ps2
 endfor
- 
  window,xs=hdr.naxis1,ys=hdr.naxis1
  loadct,39
  i  = where(img gt 0.) & mini  = min(img(i)) 

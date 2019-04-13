@@ -1,9 +1,9 @@
 pro inter_test
 
-  Nlat1 =  500
-  Nlon1 = 1000
-  Nlat2 =  300
-  Nlon2 =  400
+  Nlat1 =  10
+  Nlon1 =  20
+  Nlat2 =   5
+  Nlon2 =   8
 
   A1 = fltarr(Nlat1,Nlon1)
   for i=0,Nlat1-1 do $

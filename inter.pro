@@ -43,11 +43,11 @@ pro inter,A1=A1,A2=A2,Nlat1=Nlat1,Nlon1=Nlon1,Nlat2=Nlat2,Nlon2=Nlon2,Lat1=Lat1,
  iX2 = ( (lat2 - min(lat1)) / DX1 ) * (Nlat1-1) ; Virtual subscripts of Grid2-X on Grid1-X
  iY2 = ( (lon2 - min(lon1)) / DY1 ) * (Nlon1-1) ; Virtual subscripts of Grid2-Y on Grid1-Y
 
- IX = ix2
+ IX = iX2
  JY = iY2
 
 ; Bilinear interpolarion of A1 onto Grid2:
  A2  = bilinear(A1,IX,JY)
- 
+
   return
 end
