@@ -4,16 +4,14 @@
 ;
 ; Tool to prepare CoMP/UCoMP images for tomography.
 ;
-; History:  V1.0, Alberto M. Vasquez, CLaSP, Spring-2018.
+; History:  V1.0, Alberto M. Vasquez, CLaSP, Jun-2018.
+;           V2.0, Alberto M. Vasquez, IAFE,  Apr-2019.
 ;
 ; Calling sequence examples:
 ; comp_prep,data_dir='/data1/tomography/DATA/comp/1074/CR2198/',file_list='list_mean.txt',r0=[1.1,1.3],/meanfits
 ; comp_prep,data_dir='/data1/tomography/DATA/comp/1074/CR2198/',file_list='list.txt'     ,r0=[1.05,1.07],/dynamics
 ; comp_prep,data_dir='/data1/tomography/DATA/comp/1079/CR2198/',file_list='list.txt'     ,r0=[1.1,1.3],/dynamics
-
 ; comp_prep,data_dir='/data1/tomography_dev/DATA/comp/research_data/2017/20171118.comp.1079.daily_dynamics.3/',file_list='list.txt',r0=[1.1,1.3],/dynamics
-
-
 ; comp_prep,data_dir='/data1/tomography/DATA/comp/1074/CR2198/',file_list='list_total_intensity_Dt2.txt',r0=[1.1,1.3],/meanfits
 ;
 ;---------------------------------------------------------------------
@@ -176,19 +174,19 @@ if filetype eq 'dynamics' then begin
  width_img(ring)= max(image_width)
  total_img(ring)= max(image_total_intensity)
  ps1,data_dir+filename+'_peak_latiudinal_profile.'+string(r0[ir])+'.eps',0
- display_latitudinal_profiles,height=r0[ir],/peak
+ display_latitudinal_profiles,height=r0[ir],/peak,ra=ra,pa=pa,x=x,y=y
  ps2
  ps1,data_dir+filename+'_width_latiudinal_profile.'+string(r0[ir])+'.eps',0
- display_latitudinal_profiles,height=r0[ir],/width
+ display_latitudinal_profiles,height=r0[ir],/width,ra=ra,pa=pa,x=x,y=y
  ps2 
  ps1,data_dir+filename+'_total_intensity_latiudinal_profile.'+string(r0[ir])+'.eps',0
- display_latitudinal_profiles,height=r0[ir],/total
+ display_latitudinal_profiles,height=r0[ir],/total,ra=ra,pa=pa,x=x,y=y
  ps2
 endif
 if filetype eq 'meanfits' then begin
  mean_img(ring) = max(image_Imean)
  ps1,data_dir+filename+'_meanimage_intensity_latiudinal_profile.'+string(r0[ir])+'.eps',0
- display_latitudinal_profiles,height=r0[ir],/meanimage
+ display_latitudinal_profiles,height=r0[ir],/meanimage,ra=ra,pa=pa,x=x,y=y
  ps2
 endif
 endfor
@@ -215,8 +213,7 @@ loadct,0
  return
 end
 
-pro display_latitudinal_profiles,height=height,peak=peak,width=width,total=total,meanimage=meanimage,$
-                                 ra=ra,pa=pa,x=x,y=y
+pro display_latitudinal_profiles,height=height,peak=peak,width=width,total=total,meanimage=meanimage,ra=ra,pa=pa,x=x,y=y
    common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity,image_Imean,header_Imean_struct
    common files,filetype
 
