@@ -151,11 +151,11 @@ end
 
  pro comp_inspect,r0=r0,data_dir=data_dir,filename=filename
    common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity,image_Imean,header_Imean_struct
-   common grid,ra,pa,x, y
    common files,filetype
    
- computegrid
-
+ ;computegrid
+  compute_image_grid,hdr=output_header,ra=ra,pa=pa,x=x,y=y,instrument='comp'
+ 
 ; Images for display:
  if filetype eq 'dynamics' then begin
     peak_img  = image_peak
@@ -215,9 +215,9 @@ loadct,0
  return
 end
 
-pro display_latitudinal_profiles,height=height,peak=peak,width=width,total=total,meanimage=meanimage
+pro display_latitudinal_profiles,height=height,peak=peak,width=width,total=total,meanimage=meanimage,$
+                                 ra=ra,pa=pa,x=x,y=y
    common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity,image_Imean,header_Imean_struct
-   common grid,ra,pa,x, y
    common files,filetype
 
 if not keyword_set(height) then begin
@@ -271,43 +271,6 @@ endfor
  
 return
 end
-
-pro computegrid
-   common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity,image_Imean,header_Imean_struct
-   common grid,ra,pa,x, y
-
- hdr = output_header
-   
- Rs     = hdr.RSUN        ; Sun radius in arcsec
- px     = hdr.cdelt1      ; Pixel size in arcsec 
- Rs=Rs/px                 ; Sun radius in pixels
- px=1./Rs                 ; Pixel size in Rsun units
- ix0=hdr.crpix1-1         ; Disk center x-pixel, changed to IDL convention (FITS convention starts with index=1, IDL starts with index=0). 
- iy0=hdr.crpix2-1         ; Disk center y-pixel, changed to IDL convention
-
- x  = px*(findgen(hdr.naxis1) - ix0)
- y  = px*(findgen(hdr.naxis1) - iy0)
- u  = 1. + fltarr(hdr.naxis1)
- xa = x#u
- ya = u#y
- ra = sqrt(xa^2 + ya^2)
-
- ta = fltarr(hdr.naxis1,hdr.naxis1)
-
- p=where(xa gt 0.)
- ta(p) = Acos( ya(p) / ra(p) )
- p=where(xa lt 0.)
- ta(p) = 2.*!pi-Acos( ya(p) / ra(p) )
- p=where(xa eq 0. AND ya gt 0.)
- if p(0) ne -1 then ta(p)=0.
- p=where(xa eq 0. AND ya lt 0.)
- if p(0) ne -1 then ta(p)=!pi
- ta=2.*!pi-ta
- PA=ta/!dtor
-
-return
-end
-
 
 function findval, ima ,ya ,za , r0, t0
 y0=-r0*sin(t0)
