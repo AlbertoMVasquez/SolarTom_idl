@@ -1,7 +1,7 @@
 ;;
 ;
 ; Brief description: This tool takes two FITS files and compares the
-; images in  same color scale.
+; images in same color scale.
 ;
 ; INPUTS:
 ; data_dir: string with full path to data, including "/" at the end
@@ -44,6 +44,5 @@ pro compare_two_images,data_dir=data_dir,img1_filename=img1_filename,img2_filena
   tvscl,alog10(img1>mini),0
   tvscl,alog10(img2>mini),1
   close,/all
- ;stop
   return
 end

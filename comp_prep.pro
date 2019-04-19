@@ -51,7 +51,7 @@ pro comp_prep,data_dir=data_dir,file_list=file_list,r0=r0,dynamics=dynamics,mean
         header_width_struct   = fitshead2struct(header_width  , dash2underscore=dash2underscore)
      endif
      if filetype eq 'meanfits' then begin
-        fits_read,  fcb, image_Imean, header_Imean, extname = 'I'
+        fits_read,  fcb, image_Imean, header_Imean, extname = 'Intensity'
         header_Imean_struct    = fitshead2struct(header_Imean   , dash2underscore=dash2underscore)
      endif
      fits_close, fcb
@@ -125,11 +125,12 @@ goto,skip
                                 'NAXIS2'  ,(size(image_peak))[1],$
                                 'WAVELENG',output_header.WAVE_REF)
 skip:
-  
+
   geocentric_sun_ephemeris = get_sun(output_header.DATE_OBS)
   DSUN     = geocentric_sun_ephemeris[ 0] * AU ; m
   CRLN_OBS = geocentric_sun_ephemeris[10]      ; deg
   CRLT_OBS = geocentric_sun_ephemeris[11]      ; deg
+
   output_header  = create_struct(output_header,$
                       'DSUN'      ,DSUN       ,$ ; m
                       'CRLN_OBS'  ,CRLN_OBS   ,$ ; deg
@@ -137,7 +138,8 @@ skip:
                       'HAEX_OBS'  ,DSUN       ,$ ; m
                       'HAEY_OBS'  ,0.         ,$
                       'HAEZ_OBS'  ,0.          )
-  return
+
+return
 end
 
 pro load_constants
@@ -292,7 +294,6 @@ endif
 if iyA lt iyB AND izA eq izB then Df=D1+(D2-D1)*(y0-yA(iyA))/(yA(iyB)-yA(iyA))
 if iyA eq iyB AND izA lt izB then Df=D1+(D4-D1)*(z0-zA(izA))/(zA(izB)-zA(izA))
 if iyA eq iyB AND izA eq izB then Df=D1
-;stop
 fin:
 return,Df
 end
