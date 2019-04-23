@@ -1,5 +1,17 @@
 pro xcompare_wrapper_albert
 
+   dir = '/media/Data1/data1/tomography/bindata/'
+   r0A = [1.095,1.155,1.205,1.255,1.295]
+   
+   fileA='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.50_50_90_180_r3D_2.65_IRMIN_1.09'    
+   fileB='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.30_30_90_180_IRad1.09-1.26_L2.65'
+   xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=50,ntA=90,rminA=1.0,rmaxA=1.5,nrB=30,rminB=1.0,rmaxB=1.3,lat_range=[-60.,+60.],lon_range=[0.,360.],$
+            comp_suffix='COMP1074_CR2198_NB_50-30',$
+            histo_x_tit='Ratio: E1074-NB-50/30',tit='',rad_y_tit='E1074',$
+            rad_range_A=[1.0,1.5],rad_range_B=[1.0,1.3],r0A=r0A,LabelA='B1.09-Nr50',LabelB='B1.09-Nr30'
+   return
+
+  
    dir = '/data1/tomography_dev/bindata/'
    r0A = [1.09,1.155,1.195]
 
@@ -30,16 +42,6 @@ pro xcompare_wrapper_albert
             rad_range_A=[1.0,1.5],rad_range_B=[1.0,1.3],r0A=r0A,LabelA='Default',LabelB='BTOL0.001'
    return
 
-   dir = '/data1/tomography_dev/bindata/'
-   r0A = [1.095,1.155,1.205,1.255,1.295]
-   
-   fileA='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.50_50_90_180_r3D_2.65_IRMIN_1.09'    
-   fileB='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.30_30_90_180_IRad1.09-1.26_L2.65'
-   xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=50,ntA=90,rminA=1.0,rmaxA=1.5,nrB=30,rminB=1.0,rmaxB=1.3,lat_range=[-90.,+90.],lon_range=[0.,360.],$
-            comp_suffix='COMP1074_CR2198_NB_50-30',$
-            histo_x_tit='Ratio: E1074-NB-50/30',tit='',rad_y_tit='E1074',$
-            rad_range_A=[1.0,1.5],rad_range_B=[1.0,1.3],r0A=r0A,LabelA='B1.09-Nr50',LabelB='B1.09-Nr30'
-   return
 
    
    fileA='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.50_50_90_180_r3D_2.65'

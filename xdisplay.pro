@@ -1,6 +1,6 @@
 pro xdisplay,dir=dir,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A=r0A,mini=mini,maxi=maxi,win=win,log=log,clrtbl=clrtbl,$
              titulo=titulo,rad_range=rad_range,lat_range=lat_range,scalefactor=scalefactor,minA=minA,maxA=maxA,minima=minima,maxima=maxima,map=map,$
-             radial_grid_file=radial_grid_file,box_lat=box_lat,box_lon=box_lon
+             radial_grid_file=radial_grid_file,box_lat=box_lat,box_lon=box_lon,instrument=instrument,raiz=raiz
 
   if not keyword_set(dir)         then dir         = '/data1/tomography/bindata/'
   if not keyword_set(titulo)      then titulo      = 'Reconstruction'
@@ -12,8 +12,8 @@ pro xdisplay,dir=dir,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A=r0A,min
   if not keyword_set(r0A      )   then r0A         = [1.10,1.15,1.20]
   if not keyword_set(box_lat )    then box_lat     = 0.
   if not keyword_set(box_lon )    then box_lon     = 0.
-  if not keyword_set (map) then  xread,dir=dir,file=file,nr=nr,nt=nt,np=np,map=map
-
+  if not keyword_set(map)         then xread,dir=dir,file=file,nr=nr,nt=nt,np=np,map=map
+  if not keyword_set(instrument)  then instrument  = 'aia'
 
   if not keyword_set(radial_grid_file) then begin
      drad = (rmax-rmin)/nr     
@@ -43,9 +43,13 @@ pro xdisplay,dir=dir,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A=r0A,min
      if keyword_set(maxA) then maxi = maxA[i]
 
 ;stop     
-     if not keyword_set(log) then xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+1+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon
-     if     keyword_set(log) then xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+1+i,file=file,titulo=titulo,/log
-    
+     if (not keyword_set(log) AND not keyword_set(raiz)) then $
+        xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+1+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon,instrument=instrument
+     if     keyword_set(log)  then $
+        xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+1+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon,instrument=instrument,/log
+     if     keyword_set(raiz) then $
+        xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+1+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon,instrument=instrument,/raiz
+     
 ;     xhisto,map=map,nr=nr,nt=nt,np=np,radii=rad,rad_range=rad_range,lat_range=lat_range,win=win+3,dir=dir,file=file,titulo='Histogram of '+titulo,sufijo=sufijo,mini=mini,maxi=maxi
      ; Store mini and maxi for a final report.
      minima[i] = mini

@@ -96,7 +96,27 @@
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.98_ro1.02_l.75_DECON_OldSet_r2D.Albert',nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='EUVI-CR2082-FD-Decon FBE-195 L-0.75 r2D OldSet'
 ;xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2081.26x90_bf4_ri.98_ro1.025_l0.75_DECON',nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='EUVI-CR2081-FD-Decon FBE-195 L-0.75 r2D OldSet'
 
+;--------------MIT PROJECT--------------------------------------------
 
+r0A=[1.105,1.205]
+xdisplay,dir='/media/Data1/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.50_50_90_180_r3D_1.7_IRMIN_1.09'      ,nr= 50,nt=90,rmin=1.00,rmax=1.50,r0A=r0A,win=0,titulo='CoMP-1074 EMissivity'         
+xdisplay,dir='/media/Data1/data1/tomography/bindata/',file='x_KCOR.CR2198.14imgs.bf2.ri1.05.ro2.25_Inst_1.09_2.00_120_90_180_dropneg_r3D_l1e-4' ,nr=120,nt=90,rmin=1.05,rmax=2.25,r0A=r0A,win=0,titulo='KCOR Ne [cm!U-3!N]',minima=minima,maxima=maxima
+xdisplay,dir='/data1/tomography/bindata/'            ,file='x_aia.171.cr2198.26x90_bf4_ri.00_ro1.09_h1_Oldset_r3d_reduced_L0.70'                ,nr= 26,nt=90,rmin=1.00,rmax=1.26,r0A=r0A,win=0,titulo='AIA FBE-171',clrtbl=39,/raiz
+xdisplay,dir='/data1/tomography/bindata/'            ,file='x_aia.193.cr2198.26x90_bf4_ri.00_ro1.09_h1_Oldset_r3d_reduced_L0.90'                ,nr= 26,nt=90,rmin=1.00,rmax=1.26,r0A=r0A,win=0,titulo='AIA FBE-193',clrtbl=39,/raiz
+xdisplay,dir='/data1/tomography/bindata/'            ,file='x_aia.211.cr2198.26x90_bf4_ri.00_ro1.09_h1_Oldset_r3d_reduced_L0.90'                ,nr= 26,nt=90,rmin=1.00,rmax=1.26,r0A=r0A,win=0,titulo='AIA FBE-211',clrtbl=39,/raiz
+
+
+r0A=[1.1,1.15,1.2,1.25]
+xdisplay,dir='/media/Data1/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.26_26_90_180_r3D_2.65_IRMIN_1.09',nr=26,nt=90,rmin=1.00,rmax=1.26,r0A=r0A,win=0,titulo='CoMP-1',minima=minima,maxima=maxima
+xdisplay,dir='/media/Data1/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.50_50_90_180_r3D_2.65_IRMIN_1.09',nr=50,nt=90,rmin=1.00,rmax=1.50,r0A=r0A,win=1,titulo='CoMP-2',minA=minima,maxA=maxima
+xdisplay,dir='/media/Data1/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.30_30_90_180_IRad1.09-1.26_L2.65',nr=30,nt=90,rmin=1.00,rmax=1.30,r0A=r0A,win=2,titulo='CoMP-3',minA=minima,maxA=maxima
+
+xdisplay,dir='/media/Data1/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.26_26_90_180_r3D_1.4_IRMIN_1.09',nr=26,nt=90,rmin=1.00,rmax=1.26,r0A=r0A,win=0,titulo='CoMP-1',minima=minima,maxima=maxima
+xdisplay,dir='/media/Data1/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.50_50_90_180_r3D_1.7_IRMIN_1.09',nr=50,nt=90,rmin=1.00,rmax=1.50,r0A=r0A,win=1,titulo='CoMP-2',minA=minima,maxA=maxima
+xdisplay,dir='/media/Data1/data1/tomography/bindata/',file='x.comp1074.dynamics.Dt2_CR2198.bf2.ri1.00.ro1.30_30_90_180_IRad1.09-1.26_L1.8',nr=30,nt=90,rmin=1.00,rmax=1.30,r0A=r0A,win=2,titulo='CoMP-3',minA=minima,maxA=maxima
+
+
+xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_keepneg_hlaplac_l1e-4',nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=r0A,win=0,titulo='KCOR-KeepNeg: Ne [cm!U-3!N]',minima=minima,maxima=maxima
 
 r0A=[1.1,1.2,1.3,1.4,1.5]
                                                  
@@ -126,6 +146,14 @@ xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.ri1.05.
 xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_dropneg_hlaplac-d2r_l1.3e-4' ,nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=r0A,win=0,titulo='KCOR-DropNeg-r3D: Ne [cm!U-3!N]',minA=minima,maxA=maxima
 xdisplay,dir='/data1/tomography/bindata/',file='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro2.00_Inst_1.09_2.00_95_90_180_dropneg_r3D_l1e-4'            ,nr= 95,nt=90,rmin=1.05,rmax=2.00,r0A=r0A,win=0,titulo='KCOR-DropNeg-r3D-B: Ne [cm!U-3!N]',minA=minima,maxA=maxima
 
+
+r0A=[1.1,1.5,2.0]
+xdisplay,dir='/data1/tomography/bindata/'            ,file='x_KCOR.CR2198.13imgs.bf2.ri1.05.ro4.00_Inst_1.09_2.00_295_90_180_dropneg_r3D_l1e-4'           ,nr=295,nt=90,rmin=1.05,rmax=4.00,r0A=r0A,win=0,titulo='KCOR-r3D-OldGrid-13Img-L1e-4: Ne [cm!U-3!N]',minima=minima,maxima=maxima
+
+xdisplay,dir='/media/Data1/data1/tomography/bindata/',file='x_KCOR.CR2198.14imgs.bf2.ri1.05.ro2.25_Inst_1.09_2.00_120_90_180_dropneg_r3D_l1e-4'           ,nr=120,nt=90,rmin=1.05,rmax=2.25,r0A=r0A,win=0,titulo='KCOR-CR2198-NewGrid-14Img-L1e-4: Ne [cm!U-3!N]',minima=minima,maxima=maxima
+xdisplay,dir='/media/Data1/data1/tomography/bindata/',file='x_KCOR.CR2208.13imgs.bf2.ri1.05.ro2.25_Inst_1.09_2.00_120_90_180_dropneg_r3D_l8e-5'           ,nr=120,nt=90,rmin=1.05,rmax=2.25,r0A=r0A,win=0,titulo='KCOR-CR2208-NewGrid-13Img-L8e-5: Ne [cm!U-3!N]',minA=minima,maxA=maxima
+
+
 Nr0A=10
 r0A=2.+findgen(Nr0A)
 
@@ -153,3 +181,7 @@ xdisplay,dir='/data1/tomography/bindata/',file='x_AIA_CR2208_193b_h1_Rmin1.00_Rm
 
 xdisplay,dir='/data1/tomography/bindata/',file='' ,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=1.1,/log,win=0,minima=minima,maxima=maxima
 
+
+r0A=[1.025,1.055,1.105,1.205,1.255]
+xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.26x90_bf4_ri.00_ro1.02_l.225_DECON_Oldset_H1_r3d_v2'    ,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,/log,win=0,minima=minima,maxima=maxima
+xdisplay,dir='/data1/tomography/bindata/',file='x_euvi.A.195.cr2082.50x90_bf4_ri.00_ro1.02_l.225_DECON.H1_NewSet_r3D.Albert',nr=50,nt=90,rmin=1.0,rmax=1.50,r0A=r0A,/log,win=0,minA=minima,maxA=maxima

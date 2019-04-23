@@ -1,5 +1,5 @@
 pro xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,log=log,interp=interp,win=win,file=file,titulo=titulo,$
-           box_lat=box_lat,box_lon=box_lon
+           box_lat=box_lat,box_lon=box_lon,instrument=instrument,raiz=raiz
 
 ; set graph stuff
 device, retain     = 2
@@ -58,6 +58,13 @@ if keyword_set(log) then begin
    mini=alog10(mini)
    maxi=alog10(maxi)
 endif
+
+if keyword_set(raiz) then begin
+   map2=sqrt(map2)
+   mini=sqrt(mini)
+   maxi=sqrt(maxi)
+endif
+
 if n_elements (box_lat) gt 1. then begin
    map_lat = fltarr(np2,nt2)
    map_lon = fltarr(np2,nt2)
@@ -95,15 +102,16 @@ endif
   loadct,27
   tvscl,fltarr(xsimage+DX,(ysimage+DY)*Npanels)
 
- if clrtbl le 40 then loadct,clrtbl
- if clrtbl gt 40 then secchi_colors, 'EUVI', clrtbl, R, G, B,/load
+; if clrtbl le 40 then loadct,clrtbl
+; if clrtbl gt 40 AND instrument ne 'aia' then secchi_colors, 'EUVI', clrtbl, R, G, B,/load
+; if clrtbl gt 40 AND instrument eq 'aia' then aia_lct,wave=clrtbl,/load
     height_string = strmid(string(r0),6,5)
     x = x0
     y = y0+DY/2
     xcarrmap,map=map2,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,clrtbl=clrtbl,$
             xtitle_status=1,ytitle_status=1,titulo_status=1,$
             title=titulo+' at '+height_string+' R!DSUN!N',$
-            /color_scale,DX=DX,DY=DY,mini=mini,maxi=maxi,xsimage=xsimage,ysimage=ysimage
+            /color_scale,DX=DX,DY=DY,mini=mini,maxi=maxi,xsimage=xsimage,ysimage=ysimage,instrument=instrument
     record_gif,'/data1/tomography/SolarTom_idl/Figures/','map_'+file+'_'+height_string+'_Rsun.gif','X'
 
    if keyword_set(log) then begin

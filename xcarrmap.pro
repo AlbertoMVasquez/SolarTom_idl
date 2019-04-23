@@ -2,12 +2,13 @@ pro xcarrmap,map=map,xi=xi,yi=yi,np=np,nt=nt,scalefactor=scalefactor,clrtbl=clrt
             xtitle_status=xtitle_status,ytitle_status=ytitle_status,$
             titulo_status=titulo_status,title=title,toptitle=toptitle,$
             color_scale=color_scale,DX=DX,DY=DY,mini=mini,maxi=maxi,$
-            xsimage=xsimage,ysimage=ysimage
+            xsimage=xsimage,ysimage=ysimage,instrument=instrument
   
     x=xi
     y=yi
     if clrtbl le 40 then loadct,clrtbl
-    if clrtbl gt 40 then secchi_colors, 'EUVI', clrtbl, R, G, B,/load
+    if clrtbl gt 40 AND instrument ne 'aia' then secchi_colors, 'EUVI', clrtbl, R, G, B,/load
+    if clrtbl gt 40 AND instrument eq 'aia' then aia_lct,wave=clrtbl,/load
     tvscl,map,x,y
     nlon=np*scalefactor
     nlat=nt*scalefactor
@@ -44,7 +45,8 @@ pro xcarrmap,map=map,xi=xi,yi=yi,np=np,nt=nt,scalefactor=scalefactor,clrtbl=clrt
       loadct,0
       tvscl,black,xs0-frame/2,ys0-frame/2
       if clrtbl le 40 then loadct,clrtbl
-      if clrtbl gt 40 then secchi_colors, 'EUVI', clrtbl, R, G, B,/load
+      if clrtbl gt 40 AND instrument ne 'aia' then secchi_colors, 'EUVI', clrtbl, R, G, B,/load
+      if clrtbl gt 40 AND instrument eq 'aia' then aia_lct,wave=clrtbl,/load
       tvscl,scale,xs0,ys0
 
       loadct,0
