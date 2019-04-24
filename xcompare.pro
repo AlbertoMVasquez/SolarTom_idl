@@ -111,13 +111,14 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
   endfor
 
 ;compute comparison at all heights
+  pA_B = where(mapA_rad3d ge rad_range[0] and mapA_rad3d le rad_range[1] and mapA_lat3d ge lat_range[0] and mapA_lat3d le lat_range[1] and mapA_lon3d ge lon_range[0] and mapA_lon3d le lon_range[1] and mapA gt 0. and mapB_rad3d ge rad_range[0] and mapB_rad3d le rad_range[1] and mapB_lat3d ge lat_range[0] and mapB_lat3d le lat_range[1] and mapB_lon3d ge lon_range[0] and mapB_lon3d le lon_range[1] and mapB gt 0.)
 
-  pA = where(mapA_rad3d ge rad_range[0] and mapA_rad3d le rad_range[1] and mapA_lat3d ge lat_range[0] and mapA_lat3d le lat_range[1] and mapA_lon3d ge lon_range[0] and mapA_lon3d le lon_range[1] and mapA gt 0.)
-  if (size(pA))(0) eq -1 then stop
-  x_dataA = reform(mapA(pA))
-  pB = where(mapB_rad3d ge rad_range[0] and mapB_rad3d le rad_range[1] and mapB_lat3d ge lat_range[0] and mapB_lat3d le lat_range[1] and mapB_lon3d ge lon_range[0] and mapB_lon3d le lon_range[1] and mapB gt 0.)
-  if (size(pB))(0) eq -1 then stop
-  x_dataB = reform(mapB(pB)) 
+;  pA = where(mapA_rad3d ge rad_range[0] and mapA_rad3d le rad_range[1] and mapA_lat3d ge lat_range[0] and mapA_lat3d le lat_range[1] and mapA_lon3d ge lon_range[0] and mapA_lon3d le lon_range[1] and mapA gt 0.)
+  if (size(pA_B))(0) eq -1 then stop
+  x_dataA = reform(mapA(pA_B))
+;  pB = where(mapB_rad3d ge rad_range[0] and mapB_rad3d le rad_range[1] and mapB_lat3d ge lat_range[0] and mapB_lat3d le lat_range[1] and mapB_lon3d ge lon_range[0] and mapB_lon3d le lon_range[1] and mapB gt 0.)
+  if (size(pA_B))(0) eq -1 then stop
+  x_dataB = reform(mapB(pA_B)) 
   ratio       = x_dataA/x_dataB > min_ratio < max_ratio
   sss='range'+strmid(string(rad_range[0]),6,5)+'-'+strmid(string(rad_range[1]),6,5)+'_Rsun'
   tit2=tit+' at r = '+strmid(string(rad_range[0]),6,5)+'-'+strmid(string(rad_range[1]),6,5)+' R!DSUN!N'
