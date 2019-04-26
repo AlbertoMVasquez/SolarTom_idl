@@ -45,11 +45,7 @@ old_device = !D.NAME
 ; Default mini and maxi
   ipos = where(map2 gt 0.)
   if ipos(0) eq -1 then ipos = where(finite(map2) eq 1)  
-  if keyword_set(mini) or mini eq 0. then begin 
-     mini = mini ;nothing change
-  endif else begin ;if NOT keyword_set(mini) and of course mini neq 0.
-     mini = min(map2(ipos))
-  endelse
+  if n_elements(mini) eq 0 then mini = min(map2(ipos)) 
   ;keyword_set return 1 for nonzero values, for mini=0 doesn't work 
   if not keyword_set(maxi) then maxi = max(map2(ipos))
   

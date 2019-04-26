@@ -3,10 +3,11 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
              r0A=r0A,lat_range=lat_range,lon_range=lon_range,rad_range_A=rad_range_A,rad_range_B=rad_range_B,$
              clrtbl=clrtbl,scalefactor=scalefactor,comp_suffix=comp_suffix,$
              tit=tit,x_tit=x_tit,y_tit=y_tit,histo_x_tit=histo_x_tit,max_ratio=max_ratio,min_ratio=min_ratio,rad_y_tit=rad_y_tit,$
-             radd_range=rad_range,Nvals=Nvals,LabelA=LabelA,LabelB=LabelB,diff=diff
+             radd_range=rad_range,Nvals=Nvals,LabelA=LabelA,LabelB=LabelB,diff=diff,fileC=fileC
 
 ;diff implica utilizar FileA=awsom y fileB=demt entonces hace (demt-awsom)/awsom
-
+;ademas si se defince /diff y fileC =Rmap entonces selecciona solo
+;donde R<0.25
   EPS=1.e-4                     ; fractional tolerance to evaluate if same height is being compared.
   
   if not keyword_set(dir)         then dir         = '/data1/tomography/bindata/'
@@ -34,7 +35,7 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
   
   xread,dir=dir,file=fileA,nr=nrA,nt=ntA,np=npA,map=mapA
   xread,dir=dir,file=fileB,nr=nrB,nt=ntB,np=npB,map=mapB
-
+  if keyword_set(fileC) then   xread,dir=dir,file=fileC,nr=26,nt=90,np=180,map=mapC
   ; Uniform radial grid
   if not keyword_set(radial_grid_file) then begin
      dradA = (rmaxA-rminA)/nrA
@@ -116,8 +117,11 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
   if keyword_set(diff) then begin
      diff_rel = (mapB - mapA )/mapA 
      name_file = 'relative_difference'+fileA+'-'+fileB
-     diff_rel (where(mapB eq -999.)) = -999. ;zda voxels.
-     xdisplay,map=diff_rel,file=name_file,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='Relative diference (demt-awsom)/awsom',clrtb=12 ,minA=fltarr(n_elements(r0A))-3,maxA=fltarr(n_elements(r0A))+3
+     diff_rel (where(mapB eq -999.)) = -1.;-999. 
+     diff_rel (where(mapC gt  0.25)) = -1.;-999. 
+     minA = fltarr(n_elements(r0A))-1
+     maxA = fltarr(n_elements(r0A))+1
+     xdisplay,map=diff_rel,file=name_file,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='Relative diference (demt-awsom)/awsom',clrtb=39 ,minA=minA,maxA=maxA
      
   endif
 
