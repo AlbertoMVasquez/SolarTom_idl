@@ -3,7 +3,7 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
              r0A=r0A,lat_range=lat_range,lon_range=lon_range,rad_range_A=rad_range_A,rad_range_B=rad_range_B,$
              clrtbl=clrtbl,scalefactor=scalefactor,comp_suffix=comp_suffix,$
              tit=tit,x_tit=x_tit,y_tit=y_tit,histo_x_tit=histo_x_tit,max_ratio=max_ratio,min_ratio=min_ratio,rad_y_tit=rad_y_tit,$
-             radd_range=rad_range,Nvals=Nvals,LabelA=LabelA,LabelB=LabelB,diff=diff,fileC=fileC
+             radd_range=rad_range,Nvals=Nvals,LabelA=LabelA,LabelB=LabelB,diff=diff,fileC=fileC,r_crit=r_crit,min_diff=min_diff,max_diff=max_diff
 
 ;diff implica utilizar FileA=awsom y fileB=demt entonces hace (demt-awsom)/awsom
 ;ademas si se defince /diff y fileC =Rmap entonces selecciona solo
@@ -27,15 +27,18 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
   if not keyword_set(lon_range)   then lon_range   = [  0., 360.]
   if not keyword_set(rad_range)   then rad_range   = [1.02 , 1.255]
   if not keyword_set(r0A      )   then r0A         = [1.10,1.15,1.20]
-  if not keyword_set(min_ratio)   then min_ratio   = 0.
-  if not keyword_set(max_ratio)   then max_ratio   = 5.
+;  if not keyword_set(min_ratio)   then min_ratio   = 0.
+;  if not keyword_set(max_ratio)   then max_ratio   = 5.
   if not keyword_set(nvals)       then Nvals       = 50.
   if not keyword_set(LabelA)      then LabelA      = 'Map-A'
   if not keyword_set(LabelA)      then LabelA      = 'Map-B'
+
+  if n_elements(min_ratio)  eq 0  then min_ratio   = fltarr(n_elements(r0A))*0.
+  if n_elements(max_ratio)  eq 0  then max_ratio   = fltarr(n_elements(r0A)) + 5.
   
   xread,dir=dir,file=fileA,nr=nrA,nt=ntA,np=npA,map=mapA
   xread,dir=dir,file=fileB,nr=nrB,nt=ntB,np=npB,map=mapB
-  if keyword_set(fileC) then   xread,dir=dir,file=fileC,nr=26,nt=90,np=180,map=mapC
+  if keyword_set(fileC) then   xread,dir=dir,file=fileC,nr=26,nt=90,np=180,map=mapC;se utiliza con /diff
   ; Uniform radial grid
   if not keyword_set(radial_grid_file) then begin
      dradA = (rmaxA-rminA)/nrA
@@ -106,22 +109,22 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
      
      values_A    = reform(map_A(index))
      values_B    = reform(map_B(index))
-     ratio       = values_A/values_B > min_ratio < max_ratio
+     ratio       = values_A/values_B > min_ratio(i) < max_ratio(i)
 
      tit1=tit+' at r = '+strmid(sufijo,0,5)+' R!DSUN!N'
      PRINT, CORRELATE(values_A, values_B)
      graphs,ratio,values_A,values_B,comp_suffix=comp_suffix,sufijo=sufijo,x_tit=x_tit,y_tit=y_tit,tit=tit1,histo_x_tit=histo_x_tit,Nvals=Nvals
-     
+
   endfor
 
   if keyword_set(diff) then begin
      diff_rel = (mapB - mapA )/mapA 
-     name_file = 'relative_difference'+fileA+'-'+fileB
+     name_file = 'relative_difference_'+fileA+'-'+fileB
      diff_rel (where(mapB eq -999.)) = -1.;-999. 
-     diff_rel (where(mapC gt  0.25)) = -1.;-999. 
-     minA = fltarr(n_elements(r0A))-1
-     maxA = fltarr(n_elements(r0A))+1
-     xdisplay,map=diff_rel,file=name_file,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='Relative diference (demt-awsom)/awsom',clrtb=39 ,minA=minA,maxA=maxA
+     diff_rel (where(mapC gt  r_crit)) = -1.;-999. 
+     minA = min_diff ;fltarr(n_elements(r0A))-1
+     maxA = max_diff ;fltarr(n_elements(r0A))+10
+     xdisplay,map=diff_rel,file=name_file,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='Rel diff '+strmid(fileB,0,2)+' (demt-awsom)/awsom',clrtb=39 ,minA=minA,maxA=maxA,scalefactor=scalefactor
      
   endif
 
@@ -197,7 +200,7 @@ pro graphs,ratio,values_A,values_B,comp_suffix=comp_suffix,sufijo=sufijo,x_tit=x
   device,/inches,xsize=12,ysize=5
 ;  !p.multi = [0,2,1]
  ; plot,values_A,values_B,font=0,psym=4,xtitle=x_tit,ytitle=y_tit,title=tit
-  plot,xval,histo_ratio ,font=0,xtitle=histo_x_tit,title='Frequency Histogram',linestyle=8,psym=10,thick=4,charsize=2.2
+  plot,xval,histo_ratio ,font=0,xtitle=histo_x_tit,title='Frequency Histogram'+tit,linestyle=8,psym=10,thick=4,charsize=2.2
   xyouts,0.8*[1,1,1,1],0.98-[0.18,0.25,0.32,0.38],['m='+strmid(string(med),4,6),'!9m!3='+strmid(string(avg),4,6),'!9s!3/!9m!3='+strmid(string(stdev_frac),4,6),'N='+strmid(string(cant),7,7)],/normal,charthick=1,Font=0,charsize=2.2
   !p.multi = 0
 
