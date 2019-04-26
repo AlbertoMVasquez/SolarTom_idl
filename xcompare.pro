@@ -113,7 +113,7 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
      graphs,ratio,values_A,values_B,comp_suffix=comp_suffix,sufijo=sufijo,x_tit=x_tit,y_tit=y_tit,tit=tit1,histo_x_tit=histo_x_tit,Nvals=Nvals
      
   endfor
-  stop
+
   if keyword_set(diff) then begin
      diff_rel = (mapB - mapA )/mapA 
      name_file = 'relative_difference'+fileA+'-'+fileB
