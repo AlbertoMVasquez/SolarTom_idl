@@ -121,7 +121,7 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
      diff_rel = (mapB - mapA )/mapA 
      name_file = 'relative_difference_'+fileA+'-'+fileB
      diff_rel (where(mapB eq -999.)) = -1.;-999. 
-     diff_rel (where(mapC gt  r_crit)) = -1.;-999. 
+     diff_rel (where(mapC gt  r_crit)) = -1.;-999. Esto podria hacerse mas robusto!
      minA = min_diff ;fltarr(n_elements(r0A))-1
      maxA = max_diff ;fltarr(n_elements(r0A))+10
      xdisplay,map=diff_rel,file=name_file,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='Rel diff '+strmid(fileB,0,2)+' (demt-awsom)/awsom',clrtb=39 ,minA=minA,maxA=maxA,scalefactor=scalefactor
