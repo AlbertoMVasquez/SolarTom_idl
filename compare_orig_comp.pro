@@ -157,7 +157,6 @@ pro compare_lascoc2,orig_image=orig_image,orig_file=orig_file,comp_file=comp_fil
   Nx=512;1024
   Ny=512;1024
   factor_image=0.5
- ;factor_unit = 1.e10*0.79
   if NOT keyword_set(compare3)  then $
   compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,data_dir=data_dir,factor_image=factor_image,factor_unit=factor_unit,winn=winn
   if     keyword_set(compare3) then $
@@ -377,14 +376,14 @@ common euv_stuff,model
  endif
   
   if keyword_set(kcor) or keyword_set(lasco_awsom) then begin
-     mini = min([min(Io(po)),min(Ic(pc))])
-     maxi = max([max(Io(po)),max(Ic(pc))])
      medo = median(Io(po))
      medc = median(Ic(pc))
      correction = medo/medc
-     correction = 0.15
+     correction = 0.15 
      print,'Correction:',correction
      Ic2        = Ic2*correction
+     mini = min([min(Io(po)),min(Ic(pc))])*2.
+     maxi = max([max(Io(po)),max(correction*Ic(pc))])
   endif
   if keyword_set(euv) then begin
      mini = min([median(Io(po)),median(Ic(pc))])/500.
@@ -443,6 +442,7 @@ if keyword_set(compare3) then begin
   tvscl,black,x0+deltaX-frame/2,y0-frame/2  
   if     keyword_set(log) then tvscl,alog10( Ic2),x0+deltaX,y0
   if NOT keyword_set(log) then tvscl,      ( Ic2),x0+deltaX,y0
+
 ;---PUT COLOR SCALE BAR---------------------------------------------------------
   if     keyword_set(log) then begin
   logmini = alog10(mini)
@@ -521,6 +521,7 @@ endif
 
 skip2:
 endif
+
 
 if NOT keyword_set(compare3) then begin
   if NOT keyword_set(winn) then winn=0
