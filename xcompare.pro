@@ -1,4 +1,4 @@
-pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB=ntB,npB=npB,rminA=rminA,rmaxA=rmaxA,rminB=rminB,rmaxB=rmaxB,$
+pro xcompare,dirA=dirA,dirB=dirB,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB=ntB,npB=npB,rminA=rminA,rmaxA=rmaxA,rminB=rminB,rmaxB=rmaxB,$
              radial_grid_file_A=radial_grid_file_A,radial_grid_file_B=radial_grid_file_B,$
              r0A=r0A,lat_range=lat_range,lon_range=lon_range,rad_range_A=rad_range_A,rad_range_B=rad_range_B,$
              clrtbl=clrtbl,scalefactor=scalefactor,comp_suffix=comp_suffix,$
@@ -10,7 +10,8 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
 ;donde R<0.25
   EPS=1.e-4                     ; fractional tolerance to evaluate if same height is being compared.
   
-  if not keyword_set(dir)         then dir         = '/data1/tomography/bindata/'
+  if not keyword_set(dirA)        then dirA         = '/data1/work/MHD/'
+  if not keyword_set(dirB)        then dirB         = '/data1/DATA/ldem_files/'
   if not keyword_set(comp_suffix) then comp_suffix = 'A_vs_B'
 ; if not keyword_set(tit)         then tit         = 'Scatter Plot'
   if not keyword_set(xtit)        then xtit        = 'A'
@@ -32,13 +33,14 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
   if not keyword_set(nvals)       then Nvals       = 50.
   if not keyword_set(LabelA)      then LabelA      = 'Map-A'
   if not keyword_set(LabelA)      then LabelA      = 'Map-B'
-
+  if not keyword_set(r_crit)      then r_crit      = 0.25
+  
   if n_elements(min_ratio)  eq 0  then min_ratio   = fltarr(n_elements(r0A))*0.
   if n_elements(max_ratio)  eq 0  then max_ratio   = fltarr(n_elements(r0A)) + 5.
   
-  xread,dir=dir,file=fileA,nr=nrA,nt=ntA,np=npA,map=mapA
-  xread,dir=dir,file=fileB,nr=nrB,nt=ntB,np=npB,map=mapB
-  if keyword_set(fileC) then   xread,dir=dir,file=fileC,nr=26,nt=90,np=180,map=mapC;se utiliza con /diff
+  xread,dir=dirA,file=fileA,nr=nrA,nt=ntA,np=npA,map=mapA
+  xread,dir=dirB,file=fileB,nr=nrB,nt=ntB,np=npB,map=mapB
+  if keyword_set(fileC) then   xread,dir=dirB,file=fileC,nr=26,nt=90,np=180,map=mapC;se utiliza con /diff
   ; Uniform radial grid
   if not keyword_set(radial_grid_file) then begin
      dradA = (rmaxA-rminA)/nrA
@@ -111,11 +113,32 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
      values_B    = reform(map_B(index))
      ratio       = values_A/values_B > min_ratio(i) < max_ratio(i)
 
-     tit1=tit+' at r = '+strmid(sufijo,0,5)+' R!DSUN!N'
+     tit1='Lat=['+strmid(string(lat_range(0)),5,5)+','+strmid(string(lat_range(1)),5,5)+'] '+strmid(fileB,0,2)+' ratio at r = '+strmid(sufijo,0,5)+' R!DSUN!N'
      PRINT, CORRELATE(values_A, values_B)
-     graphs,ratio,values_A,values_B,comp_suffix=comp_suffix,sufijo=sufijo,x_tit=x_tit,y_tit=y_tit,tit=tit1,histo_x_tit=histo_x_tit,Nvals=Nvals
+     histo_x_tit=strmid(fileB,0,2)+' (awsom) /'+strmid(fileB,0,2)+'  (demt)'
+     xhisto2,ratio,comp_suffix='ratio_'+comp_suffix,sufijo=sufijo,tit=tit1,histo_x_tit=histo_x_tit,Nvals=Nvals
+
+     if keyword_set(diff) then begin
+        diff_rel_corte = ( values_B - values_A ) /values_A
+        diff_rel_corte = diff_rel_corte > min_diff(i) < max_diff(i)
+        tit1='Lat=['+strmid(string(lat_range(0)),5,5)+','+strmid(string(lat_range(1)),5,5)+'] '+strmid(fileB,0,2)+'diff at r = '+strmid(sufijo,0,5)+' R!DSUN!N'
+        histo_x_tit=strmid(fileB,0,2)+' (demt-awsom)/awsom'
+        xhisto2,diff_rel_corte,comp_suffix='diff_rel_'+comp_suffix,sufijo=sufijo,tit=tit1,histo_x_tit=histo_x_tit,Nvals=Nvals
+     endif
 
   endfor
+
+  if keyword_set(ratio_graf) then begin ;no terminado!
+     ratio = mapA/mapB
+     name_file = 'ratio_'+fileA+'-'+fileB
+     ratio (where(mapB eq -999.)) = -1.
+     ratio (where(mapC gt  r_crit)) = -1.
+     minA = min_diff
+     maxA = max_diff
+     xdisplay,map=ratio,file=name_file,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='ratio '+strmid(fileB,0,2)+' awsom/demt',clrtb=39 ,minA=minA,maxA=maxA,scalefactor=scalefactor
+  endif
+
+
 
   if keyword_set(diff) then begin
      diff_rel = (mapB - mapA )/mapA 
@@ -125,24 +148,21 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
      minA = min_diff ;fltarr(n_elements(r0A))-1
      maxA = max_diff ;fltarr(n_elements(r0A))+10
      xdisplay,map=diff_rel,file=name_file,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='Rel diff '+strmid(fileB,0,2)+' (demt-awsom)/awsom',clrtb=39 ,minA=minA,maxA=maxA,scalefactor=scalefactor
-     
   endif
 
 
-
+;SOLO FUNCIONA BIEN SI LAS MATRICES TIENEN IGUAL DIMENSION -- > ARREGLAR
 ;compute comparison at all heights
   pA_B = where(mapA_rad3d ge rad_range[0] and mapA_rad3d le rad_range[1] and mapA_lat3d ge lat_range[0] and mapA_lat3d le lat_range[1] and mapA_lon3d ge lon_range[0] and mapA_lon3d le lon_range[1] and mapA gt 0. and mapB_rad3d ge rad_range[0] and mapB_rad3d le rad_range[1] and mapB_lat3d ge lat_range[0] and mapB_lat3d le lat_range[1] and mapB_lon3d ge lon_range[0] and mapB_lon3d le lon_range[1] and mapB gt 0.)
 
-;  pA = where(mapA_rad3d ge rad_range[0] and mapA_rad3d le rad_range[1] and mapA_lat3d ge lat_range[0] and mapA_lat3d le lat_range[1] and mapA_lon3d ge lon_range[0] and mapA_lon3d le lon_range[1] and mapA gt 0.)
   if (size(pA_B))(0) eq -1 then stop
   x_dataA = reform(mapA(pA_B))
-;  pB = where(mapB_rad3d ge rad_range[0] and mapB_rad3d le rad_range[1] and mapB_lat3d ge lat_range[0] and mapB_lat3d le lat_range[1] and mapB_lon3d ge lon_range[0] and mapB_lon3d le lon_range[1] and mapB gt 0.)
   if (size(pA_B))(0) eq -1 then stop
   x_dataB = reform(mapB(pA_B)) 
   ratio       = x_dataA/x_dataB > min_ratio < max_ratio
-  sss='range'+strmid(string(rad_range[0]),6,5)+'-'+strmid(string(rad_range[1]),6,5)+'_Rsun'
+  sss='ratio_range'+strmid(string(rad_range[0]),6,5)+'-'+strmid(string(rad_range[1]),6,5)+'_Rsun'
   tit2=tit+' at r = '+strmid(string(rad_range[0]),6,5)+'-'+strmid(string(rad_range[1]),6,5)+' R!DSUN!N'
-  graphs,ratio,x_dataA,x_dataB,comp_suffix=comp_suffix,sufijo=sss,x_tit=x_tit,y_tit=y_tit,tit=tit2,histo_x_tit=histo_x_tit,Nvals=Nvals
+  xhisto2,ratio,comp_suffix=comp_suffix,sufijo=sss,tit=tit2,histo_x_tit=histo_x_tit,Nvals=Nvals
 
 
 ;Compute average radial profile of x_A(r) in selected lat/lon range.
@@ -184,29 +204,4 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
   ps2
   
   return
-end
-
-pro graphs,ratio,values_A,values_B,comp_suffix=comp_suffix,sufijo=sufijo,x_tit=x_tit,y_tit=y_tit,tit=tit,histo_x_tit=histo_x_tit,Nvals=Nvals
-
-  histo_ratio = histogram(ratio,binsize=(max(ratio)-min(ratio))/Nvals,locations=xval)
-  histo_ratio = float(histo_ratio) / float(n_elements(ratio))
-  
-  avg        =   mean(ratio)
-  med        = median(ratio)
-  stdev_frac =  stdev(ratio)/abs(avg)
-  cant       = long(n_elements(ratio))
-  
-  ps1,'/data1/tomography/SolarTom_idl/Figures/'+'comparison_'+comp_suffix+'_'+sufijo+'.eps',0
-  device,/inches,xsize=12,ysize=5
-;  !p.multi = [0,2,1]
- ; plot,values_A,values_B,font=0,psym=4,xtitle=x_tit,ytitle=y_tit,title=tit
-  plot,xval,histo_ratio ,font=0,xtitle=histo_x_tit,title='Frequency Histogram'+tit,linestyle=8,psym=10,thick=4,charsize=2.2
-  xyouts,0.8*[1,1,1,1],0.98-[0.18,0.25,0.32,0.38],['m='+strmid(string(med),4,6),'!9m!3='+strmid(string(avg),4,6),'!9s!3/!9m!3='+strmid(string(stdev_frac),4,6),'N='+strmid(string(cant),7,7)],/normal,charthick=1,Font=0,charsize=2.2
-  !p.multi = 0
-
-
-
-
-
-return
 end
