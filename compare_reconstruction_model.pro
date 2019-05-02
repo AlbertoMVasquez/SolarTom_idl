@@ -3,7 +3,16 @@ pro wrapper_compare
   radial_grid_file='radial_grid_sphere_wedge_WISPR.dat'
  ;radial_grid_file='radial_grid_sphere_wedge_WISPR_20points.dat'
 
-  tol    = 2.0e-1
+  tol        = 2.0e-1
+  correction = 1.;0.15
+  
+nrads=50
+r0A=2.+8.*findgen(nrads)/float(nrads-1)
+for i=0,nrads-1 do begin
+   compare_reconstruction_model,orbit=01,r0=r0A[i],filename='Ne-WISPR-Tom_CircOrbit_reg2D_Tol-0.20_TEST',/circular_eq,radial_grid_file=radial_grid_file,/CR2082,tol=tol,fraction=fraction,correction=correction
+endfor
+return
+
 
 nrads=80
 r0A=2.+18.*findgen(nrads)/float(nrads-1)
@@ -32,13 +41,6 @@ ps1,'~/Pictures/Fraction_'+filename0+'.eps',0
 plot,r0A,fraction_A,psym=4,Charsize=2,font=1,title='Tol = '+string(tol),xtitle='r [R!DSUN!N]'
 ps2
 stop
-return
-
-nrads=50
-r0A=2.+8.*findgen(nrads)/float(nrads-1)
-for i=0,nrads-1 do begin
-   compare_reconstruction_model,orbit=01,r0=r0A[i],filename='Ne-WISPR-Tom_CircOrbit_reg2D_Tol-0.20',/circular_eq,radial_grid_file=radial_grid_file,/CR2082,tol=tol,fraction=fraction
-endfor
 return
 
 
@@ -125,7 +127,11 @@ return
 
 end
 
-pro compare_reconstruction_model,r0=r0,filename=filename,orbit=orbit,circular_eq=circular_eq,circular_offeq=circular_offeq,UniformLong=UniformLong,CR2082=CR2082,radial_grid_file=radial_grid_file,fraction=fraction,tol=tol
+pro compare_reconstruction_model,r0=r0,filename=filename,orbit=orbit,circular_eq=circular_eq,circular_offeq=circular_offeq,UniformLong=UniformLong,CR2082=CR2082,radial_grid_file=radial_grid_file,fraction=fraction,tol=tol,correction=correction
+
+common adjust,correction_2
+
+correction_2 = correction
 
 input_dir = '/data1/tomography/bindata/'
 
@@ -194,7 +200,9 @@ files7=['x_wisprIO.512.CircularOrbit01.60images_l1e-4',$
 
  ; Read Model, assign as map1, and set mini/maxi at this height
  readtom_sph,input_dir,files[0],nr,nt,rmin,rmax,Ne_model
+
  map1 = reform(Ne_model  (ir,*,*)) ;1
+ map1 = correct(map1,correction)
  mini = min(map1)
  maxi = max(map1)
  print,'Log10(mini/maxi) at r0 = '+string(r0)+' set to: ',alog10(mini),'    /',alog10(maxi)
@@ -394,7 +402,7 @@ endif
  map35= reform(Ne_wIO_O24_hlaplac_1e6(ir,*,*))
  endif
 
- map1 = saturate(map1,mini,maxi)
+;map1 = saturate(map1,mini,maxi)
  map2 = saturate(map2,mini,maxi)
  map3 = saturate(map3,mini,maxi)
  map4 = saturate(map4,mini,maxi)
@@ -486,12 +494,12 @@ endif
   ;map =       (rotate(congrid(map1 ,nt*scalefactor,np*scalefactor),rot))
    mapref = map
 
+  ;ShiftLon = 0.
    ShiftLon = np*scalefactor/2.
    map = shift(map,ShiftLon,ShiftLon)
-
    carrmap, map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,$
             xtitle_status=0,ytitle_status=1,titulo_status=1,$
-            title='Log!d10!N(N!De!N [cm!U-3!N]) of Model at '+height_string+' R!DSUN!N',$
+            title='Log(Ne [cm!U-3!N]) of Model at '+height_string+' R!DSUN!N',$
             /color_scale,DX=DX,DY=DY,mini=mini,maxi=maxi,xsimage=xsimage,ysimage=ysimage,ShiftLon=ShiftLon
    
 if keyword_set(UniformLong) then begin
@@ -511,7 +519,7 @@ if orbit eq  1 then begin
    ;map=alog10(rotate(congrid(map39,nt*scalefactor,np*scalefactor),rot))
     map=alog10(rotate(congrid(map45,nt*scalefactor,np*scalefactor),rot))
     map=mask(map,mapref,mini,maxi,tol,fraction=fraction)
-    carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=1,ytitle_status=1,titulo_status=1,title='Reconstruction for PSP Orbit-01'
+    carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=1,ytitle_status=1,titulo_status=1,title='Reconstruction for PSP Orbit-01',ShiftLon=ShiftLon
 ;map39= reform(Ne_wIO_UnifLong_SciOrb01_bf4_hlaplac_l1e6(ir,*,*))
 ;map45= reform(Ne_wIO_UnifLong_SciOrb01_bf4_hlaplac_l1e6_2(ir,*,*))
  endif
@@ -550,7 +558,8 @@ if orbit eq  1 then begin
   include_circular:
   map=alog10(rotate(congrid(map48,nt*scalefactor,np*scalefactor),rot))
   map=mask(map,mapref,mini,maxi,tol,fraction=fraction)
-  carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=0,ytitle_status=1,titulo_status=1,title='Reconstruction for Circular Orbit'
+  map = shift(map,18,ShiftLon)
+  carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=0,ytitle_status=1,titulo_status=1,title='Reconstruction for Circular Orbit',ShiftLon=ShiftLon
 ;map38= reform(Ne_wIO_UnifLong_ExtOrb24_bf4_hlaplac_l1e6(ir,*,*))
 ;map44= reform(Ne_wIO_UnifLong_ExtOrb24_bf4_hlaplac_l1e6_2(ir,*,*))
 
@@ -602,7 +611,8 @@ endif
   map=alog10(rotate(congrid(map48,nt*scalefactor,np*scalefactor),rot))
  ;map=      (rotate(congrid(map48,nt*scalefactor,np*scalefactor),rot))
   map=mask(map,mapref,mini,maxi,tol,fraction=fraction)
-  carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=1,ytitle_status=1,titulo_status=1,title='Reconstruction for Circular Orbit'
+  map = shift(map,ShiftLon,ShiftLon)
+  carrmap,map=map,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,xtitle_status=1,ytitle_status=1,titulo_status=1,title='Reconstruction for Circular Orbit',ShiftLon=ShiftLon
 ;tvscl,alog10(rotate(congrid(map25,nt*scalefactor,np*scalefactor),rot)),1
  
 ;tvscl,alog10(rotate(congrid(map13,nt*scalefactor,np*scalefactor),rot)),2
@@ -656,13 +666,21 @@ endif
 
 end
 
+function correct,map,correction
+  map = map * correction
+  return,map
+end
+
 function saturate,map,mini,maxi
- ;map(0:1,0) = [mini,maxi]
+  common adjust,correction_2
+  if finite(min(map)) eq 0 then goto,do_not_saturate
+  map = correct(map,correction_2)
   p=median(where(map eq min(map)))
   map(p)=mini
   p=median(where(map eq max(map)))
   map(p)=maxi
   map = map > mini < maxi
+  do_not_saturate:
   return,map
 end
 
@@ -689,8 +707,8 @@ function mask,map,mapref,mini,maxi,tol,fraction=fraction
   p = where( (abs(x-xref)/xref) gt tol AND x gt 0.)
   if p(0) ne -1 then map(p) = alog10(mini)
 
-  p = where(Phi2D ge 100. and Phi2D le 290.)
-; p = where(Lat2D lt -25. or  Lat2D gt +25.)
+; p = where(Phi2D ge 100. and Phi2D le 290.)
+  p = where(Lat2D lt -60. or  Lat2D gt +60.)
   if p(0) ne -1 then map(p) = alog10(mini)
   
   map(0:1,0) = alog10([mini,maxi])
@@ -704,7 +722,7 @@ pro carrmap,map=map,xi=xi,yi=yi,np=np,nt=nt,scalefactor=scalefactor,$
             titulo_status=titulo_status,title=title,toptitle=toptitle,$
             color_scale=color_scale,DX=DX,DY=DY,mini=mini,maxi=maxi,$
             xsimage=xsimage,ysimage=ysimage,ShiftLon=ShiftLon
- 
+
     x=xi
     y=yi
     tvscl,map,x,y
@@ -718,7 +736,7 @@ pro carrmap,map=map,xi=xi,yi=yi,np=np,nt=nt,scalefactor=scalefactor,$
     dLon = (LonMAX-LonMIN)/Nlon
     dLat = (LatMAX-LatMIN)/Nlat
     LAT  = LatMIN + dLat/2. + dLat * findgen(NLat) 
-    LON  = LonMIN + dLon/2. + dLon * findgen(NLon) 
+    LON  = LonMIN + dLon/2. + dLon * findgen(NLon)
     LON  = shift(LON,ShiftLon)
 
     extlon = 60.*findgen(7)
@@ -733,7 +751,7 @@ pro carrmap,map=map,xi=xi,yi=yi,np=np,nt=nt,scalefactor=scalefactor,$
     if ytitle_status eq 1 then ytitle='Latitude [deg]'
     if titulo_status eq 1 then titulo=title
     contour,map,lon,lat,pos=[X,Y,X+nlon,Y+nlat],/noerase,/nodata,$
-        /device,color=255,xstyle=1,ystyle=1,charsize=scalefactor,$
+        /device,color=255,xstyle=1,ystyle=1,charsize=scalefactor*1.2,$
         xtitle=xtitle,$
         ytitle=ytitle,$
         title=titulo,$
