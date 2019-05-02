@@ -114,7 +114,6 @@ pro comp_lam
         orig_file  =  orig_file_a[i],$
         comp_file  =  comp_file_a[i],$
         data_dir   = data_subdir , winn = i, factor_unit = factor_unit, /compare3
-;     stop
   endfor
   close,/all
 end
@@ -158,7 +157,6 @@ pro compare_lascoc2,orig_image=orig_image,orig_file=orig_file,comp_file=comp_fil
   Nx=512;1024
   Ny=512;1024
   factor_image=0.5
- ;factor_unit = 1.e10*0.79
   if NOT keyword_set(compare3)  then $
   compare_orig_comp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,data_dir=data_dir,factor_image=factor_image,factor_unit=factor_unit,winn=winn
   if     keyword_set(compare3) then $
@@ -216,26 +214,28 @@ end
 
 
 ; WISPR-Tom PAPER:
-
+pro wrapper
 ; Fig Circular / CR 2082
-; movie,input_file='list.wisprI.circular.txt',data_dir='wisprI/Circular_CR2082/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.CircularOrbit01.short.UPDATED-POINTINGS.txt',/BK,figures_title='Equatorial plane circular orbit. AWSoM model CR-2082.' 
-; movie,input_file='list.wisprO.circular.txt',data_dir='wisprO/Circular_CR2082/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.CircularOrbit01.short.UPDATED-POINTINGS.txt',/BK,figures_title='Equatorial plane circular orbit. AWSoM model CR-2082.' 
+; movie,input_file='list.wisprI.circular.txt',data_dir='wisprI/Circular_CR2082/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.CircularOrbit01.short.UPDATED-POINTINGS.txt',/BK,figures_title='Circular Orbit.' 
+; movie,input_file='list.wisprO.circular.txt',data_dir='wisprO/Circular_CR2082/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.CircularOrbit01.short.UPDATED-POINTINGS.txt',/BK,figures_title='Circular Orbit.'
 
 ; Fig Sci Orb 01 / CR 2082
-; movie,input_file='list.wisprI.Blank.CR2082.UnifLong.SciOrb01.txt',data_dir='wisprI/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.SciOrbit.01.UPDATED-POINTINGS.txt',/BK,figures_title='Orbit # 01. AWSoM model CR-2082.'
-; movie,input_file='list.wisprO.Blank.CR2082.UnifLong.SciOrb01.txt',data_dir='wisprO/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.SciOrbit.01.UPDATED-POINTINGS.txt',/BK,figures_title='Orbit # 01. AWSoM model CR-2082.'
+;movie,input_file='list.wisprI.Blank.CR2082.UnifLong.SciOrb01.txt',data_dir='wisprI/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.SciOrbit.01.UPDATED-POINTINGS.txt',/BK,figures_title='Orbit # 01.'
+; movie,input_file='list.wisprO.Blank.CR2082.UnifLong.SciOrb01.txt',data_dir='wisprO/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.SciOrbit.01.UPDATED-POINTINGS.txt',/BK,figures_title='Orbit # 01.'
 
 ; Fig Sci Orb 24 / CR 2082
-; movie,input_file='list.wisprI.Blank.CR2082.UnifLong.SciOrb24.txt',data_dir='wisprI/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.SciOrbit.24.UPDATED-POINTINGS.txt',/BK,figures_title='Orbit # 24. AWSoM model CR-2082.'
-; movie,input_file='list.wisprO.Blank.CR2082.UnifLong.SciOrb24.txt',data_dir='wisprO/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.SciOrbit.24.UPDATED-POINTINGS.txt',/BK,figures_title='Orbit # 24. AWSoM model CR-2082.'
+; movie,input_file='list.wisprI.Blank.CR2082.UnifLong.SciOrb24.txt',data_dir='wisprI/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.SciOrbit.24.UPDATED-POINTINGS.txt',/BK,figures_title='Orbit # 24.'
+; movie,input_file='list.wisprO.Blank.CR2082.UnifLong.SciOrb24.txt',data_dir='wisprO/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.SciOrbit.24.UPDATED-POINTINGS.txt',/BK,figures_title='Orbit # 24.'
 
 ; Fig Sci Orb 12 / CR 2082
-; movie,input_file='list.wisprI.Blank.CR2082.UnifLong.SciOrb12.txt',data_dir='wisprI/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.SciOrbit.12.UPDATED-POINTINGS.txt',/BK,figures_title='Orbit # 12. AWSoM model CR-2082.'
-; movie,input_file='list.wisprO.Blank.CR2082.UnifLong.SciOrb12.txt',data_dir='wisprO/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.SciOrbit.12.UPDATED-POINTINGS.txt',/BK,figures_title='Orbit # 12. AWSoM model CR-2082.'
+; movie,input_file='list.wisprI.Blank.CR2082.UnifLong.SciOrb12.txt',data_dir='wisprI/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.SciOrbit.12.UPDATED-POINTINGS.txt',/BK,figures_title='Orbit # 12.'
+; movie,input_file='list.wisprO.Blank.CR2082.UnifLong.SciOrb12.txt',data_dir='wisprO/CR2082_UnifLong/',model_file='x_AWSOM_CR2082_sphere_WISPR.dat',table_file='table.UnifLong.SciOrbit.12.UPDATED-POINTINGS.txt',/BK,figures_title='Orbit # 12.'
 
 ; Fig Sci Orb 24 / CR 2081
 ; movie,input_file='list.wisprI.Blank.CR2081.UnifLong.SciOrb24.txt',data_dir='wisprI/CR2081_UnifLong/',model_file='x_AWSOM_CR2081run5_WISPR_sphere_2.dat',table_file='table.UnifLong.SciOrbit.24.UPDATED-POINTINGS.txt',/BK,figures_title='Orbit # 24. AWSoM model B.'
 ; movie,input_file='list.wisprO.Blank.CR2081.UnifLong.SciOrb24.txt',data_dir='wisprO/CR2081_UnifLong/',model_file='x_AWSOM_CR2081run5_WISPR_sphere_2.dat',table_file='table.UnifLong.SciOrbit.24.UPDATED-POINTINGS.txt',/BK,figures_title='Orbit # 24. AWSoM model B.'
+  return
+end
 
 ;;
 ; IMPORTANT NOTES on the "movie" tool:
@@ -284,7 +284,7 @@ pro movie,input_file=input_file,data_dir=data_dir,table_file=table_file,model_fi
      readf,2,orig_image
      if keyword_set(BK) then compare_wispr,orig_image=orig_image,data_dir=data_dir,model_file=model_file,figures_title=figures_title,/BK
      if keyword_set(pB) then compare_wispr,orig_image=orig_image,data_dir=data_dir,model_file=model_file,figures_title=figures_title,/pB
-    ;stop
+ ;stop
   endfor
   close,/all
 end
@@ -334,11 +334,11 @@ common euv_stuff,model
   Io = fltarr(Nx,Ny)
   Ic = fltarr(Nx,Ny)
 
-  openr,1,input_dir+comp_file
-  readu,1,Ic
-  close,1
   openr,1,input_dir+orig_file
   readu,1,Io
+  close,1
+  openr,1,input_dir+comp_file
+  readu,1,Ic
   close,1
 
   Io = rotate(Io,4)
@@ -376,14 +376,14 @@ common euv_stuff,model
  endif
   
   if keyword_set(kcor) or keyword_set(lasco_awsom) then begin
-     mini = min([min(Io(po)),min(Ic(pc))])
-     maxi = max([max(Io(po)),max(Ic(pc))])
      medo = median(Io(po))
      medc = median(Ic(pc))
      correction = medo/medc
-     correction = 0.15
+     correction = 0.15 
      print,'Correction:',correction
      Ic2        = Ic2*correction
+     mini = min([min(Io(po)),min(Ic(pc))])*2.
+     maxi = max([max(Io(po)),max(correction*Ic(pc))])
   endif
   if keyword_set(euv) then begin
      mini = min([median(Io(po)),median(Ic(pc))])/500.
@@ -442,6 +442,7 @@ if keyword_set(compare3) then begin
   tvscl,black,x0+deltaX-frame/2,y0-frame/2  
   if     keyword_set(log) then tvscl,alog10( Ic2),x0+deltaX,y0
   if NOT keyword_set(log) then tvscl,      ( Ic2),x0+deltaX,y0
+
 ;---PUT COLOR SCALE BAR---------------------------------------------------------
   if     keyword_set(log) then begin
   logmini = alog10(mini)
@@ -462,30 +463,31 @@ if keyword_set(compare3) then begin
   tvscl,black,xs0-frame/2,ys0-frame/2    
   tvscl,scale,xs0,ys0
 
+  csize = 6
   loadct,0
   contour,scale,findgen(nsx),reform(scale(0,*)),$
               pos=[xs0,ys0,xs0+nsx,ys0+nsy],/device,color=0,/noerase,$
               yticklen=.2,/nodata,ythick=2,xthick=2,charthick=4,$
-              xstyle=5,ystyle=1,charsize=5,font=1
+              xstyle=5,ystyle=1,charsize=csize,font=1
 
  if keyword_set(pB) then $
-  xyouts,[xs0-Dx/10],[ys0+ysimage+DY/10],['Log!d10!N(p!DB!N)'],$
-         color=0,charsize=5,charthick=4,font=1,/device
+  xyouts,[xs0-Dx/10],[ys0+ysimage+DY/10],['Log(pB)'],$
+         color=0,charsize=csize,charthick=4,font=1,/device
 
  if keyword_set(euv) then $
-  xyouts,[xs0-Dx/10],[ys0+ysimage+DY/10],['Log!d10!N(I)'],$
-         color=0,charsize=5,charthick=4,font=1,/device
+  xyouts,[xs0-Dx/10],[ys0+ysimage+DY/10],['Log(I)'],$
+         color=0,charsize=csize,charthick=4,font=1,/device
 
  ; Place information around images:
 
 if keyword_set(lasco_awsom) then begin
  xyouts,x0+[0,deltaX],(y0+ysimage+DY/5)*[1,1],$
-         ['LASCO-C2 LAM Image: '+hdr.filename,'AWSoM Model'],$
-         color=0,charsize=5,charthick=4,font=1,/device
+         ['LASCO-C2 LAM Image: '+hdr.filename,'AWSoM Model Synthetic Image'],$
+         color=0,charsize=csize,charthick=4,font=1,/device
 
   xyouts,[x0],[y0-DY/3],['DATE_OBS: '+hdr.DATE_OBS+'      '+$
                          'TIME_OBS: '+hdr.TIME_OBS],$
-         color=0,charsize=5,charthick=4,font=1,/device
+         color=0,charsize=csize,charthick=4,font=1,/device
 
   filename = 'comparison_'+hdr.filename+'_AWSoM-CR2082-SCALED.gif'
 endif
@@ -516,8 +518,10 @@ endif
  ; Record image
     outdir   = '/data1/tomography/DATA/'+data_dir
   if keyword_set(record) then record_gif,outdir,filename,'X'
+
 skip2:
 endif
+
 
 if NOT keyword_set(compare3) then begin
   if NOT keyword_set(winn) then winn=0
@@ -559,20 +563,21 @@ if NOT keyword_set(compare3) then begin
   tvscl,scale,xs0,ys0
 
   loadct,0
+  csize=6
   contour,scale,findgen(nsx),reform(scale(0,*)),$
               pos=[xs0,ys0,xs0+nsx,ys0+nsy],/device,color=0,/noerase,$
               yticklen=.2,/nodata,ythick=2,xthick=2,charthick=4,$
-              xstyle=5,ystyle=1,charsize=4,font=1
+              xstyle=5,ystyle=1,charsize=csize,font=1
 
 ;print data on top of image
   loadct,0
   lens    = strlen(data_string)
   Orb     = strmid(data_string, 2, 2)
-  UT      = strmid(data_string, 6,20)
-  dsun_rs = strmid(data_string,28, 6)
-  dsun_au = strmid(data_string,40, 6)
-  lon     = strmid(data_string,50, 6)
-  lat     = strmid(data_string,61, 5)
+  UT      = strmid(data_string, 6,17)
+  dsun_rs = strmid(data_string,28, 5)
+  dsun_au = strmid(data_string,40, 5)
+  lon     = strmid(data_string,50, 5)
+  lat     = strmid(data_string,61, 4)
   
   instrument_string = strmid(data_dir,5,1)
 
@@ -588,32 +593,28 @@ if NOT keyword_set(compare3) then begin
 
 ;  device, set_font = 'Helvetica',/TT_FONT
   
-  xyouts,[x0],[y0+ysimage+DY/3],['WISPR-'+instrument_string+'. '+figures_title],$
-         color=0,charsize=4,charthick=4,font=1,/device
+  xyouts,[x0],[y0+ysimage+DY/3],['WISPR-'+instrument_string+'. '+figures_title+' UT: '+UT],$
+         color=0,charsize=csize,charthick=4,font=1,/device
   
   xyouts,[x0],[y0+ysimage+DY/10],$
-         ['D!DPSP-SUN!N = '+dsun_au+' AU = '+dsun_rs+' R!DS!N'+$
-          '        Lon / Lat [deg]: '+lon+' / '+lat],$
-         color=0,charsize=4,charthick=4,font=1,/device
+         ['Sun-PSP: '+ dsun_au+' AU.    Lon/Lat [deg]:'+lon+'/'+lat],$
+         color=0,charsize=csize,charthick=4,font=1,/device
   
   xyouts,[x0],[y0-DY/4],$
-         ['Inner: '+East_rs+' R!DS!N           UT: '+UT+'            Outter: '+West_rs+' R!DS!N'],$
-         color=0,charsize=4,charthick=4,font=1,/device
+         ['Inner: '+East_rs+' R!DS!N                           Outer: '+West_rs+' R!DS!N'],$
+         color=0,charsize=csize,charthick=4,font=1,/device
 
   if keyword_set(BK) then $
-  xyouts,[xs0-Dx/3.25],[ys0+ysimage+DY/10],['Log(B/10!U-10!NB!DSUN!N)'],$
-         color=0,charsize=4,charthick=4,font=1,/device
+  xyouts,[xs0-Dx/6.],[ys0+ysimage+DY/10],['Log(B)'],$;,['Log(B/10!U-10!NB!DSUN!N)'],$
+         color=0,charsize=csize,charthick=4,font=1,/device
   
   if keyword_set(pB) then $
-  xyouts,[xs0-Dx/10],[ys0+ysimage+DY/10],['Log!d10!N(p!DB!N)'],$
-         color=0,charsize=4,charthick=4,font=1,/device
+  xyouts,[xs0],[ys0+ysimage+DY/10],['Log(pB)'],$;['Log!d10!N(p!DB!N)'],$
+         color=0,charsize=csize,charthick=4,font=1,/device
     
   ; Record image
   if keyword_set(record) then record_gif,input_dir,comp_gif,'X'
 endif
-
-;close,/all
-;stop
 
 end
 
