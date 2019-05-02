@@ -10,8 +10,8 @@ pro xcompare,dirA=dirA,dirB=dirB,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA
 ;donde R<0.25
   EPS=1.e-4                     ; fractional tolerance to evaluate if same height is being compared.
   
-  if not keyword_set(dirA)        then dirA         = '/data1/work/dem/'
-  if not keyword_set(dirB)        then dirB         = '/data1/work/MHD/'
+  if not keyword_set(dirA)        then dirA         = '/data1/work/MHD/'
+  if not keyword_set(dirB)        then dirB         = '/data1/DATA/ldem_files/'
   if not keyword_set(comp_suffix) then comp_suffix = 'A_vs_B'
 ; if not keyword_set(tit)         then tit         = 'Scatter Plot'
   if not keyword_set(xtit)        then xtit        = 'A'
@@ -113,16 +113,16 @@ pro xcompare,dirA=dirA,dirB=dirB,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA
      values_B    = reform(map_B(index))
      ratio       = values_A/values_B > min_ratio(i) < max_ratio(i)
 
-     tit1=tit+' at r = '+strmid(sufijo,0,5)+' R!DSUN!N'
+     tit1='Lat=['+strmid(string(lat_range(0)),5,5)+','+strmid(string(lat_range(1)),5,5)+'] '+strmid(fileB,0,2)+' ratio at r = '+strmid(sufijo,0,5)+' R!DSUN!N'
      PRINT, CORRELATE(values_A, values_B)
+     histo_x_tit=strmid(fileB,0,2)+' (awsom) /'+strmid(fileB,0,2)+'  (demt)'
      xhisto2,ratio,comp_suffix='ratio_'+comp_suffix,sufijo=sufijo,tit=tit1,histo_x_tit=histo_x_tit,Nvals=Nvals
 
      if keyword_set(diff) then begin
-        diff_rel_corte = ( mapB(irB,*,*) - mapA(irA,*,*) )/mapA(irA,*,*)
-        diff_rel_corte = reform(diff_rel_corte(0,*,*))
-        diff_rel_corte = diff_rel_corte(where(mapB(irB,*,*) ge 0.) and where(mapA(irA,*,*) ge 0.)) ;no ZDA
+        diff_rel_corte = ( values_B - values_A ) /values_A
         diff_rel_corte = diff_rel_corte > min_diff(i) < max_diff(i)
-        tit1=strmid(fileB,0,2)+' (demt-awsom)/awsom'+' at r = '+strmid(sufijo,0,5)+' R!DSUN!N'
+        tit1='Lat=['+strmid(string(lat_range(0)),5,5)+','+strmid(string(lat_range(1)),5,5)+'] '+strmid(fileB,0,2)+'diff at r = '+strmid(sufijo,0,5)+' R!DSUN!N'
+        histo_x_tit=strmid(fileB,0,2)+' (demt-awsom)/awsom'
         xhisto2,diff_rel_corte,comp_suffix='diff_rel_'+comp_suffix,sufijo=sufijo,tit=tit1,histo_x_tit=histo_x_tit,Nvals=Nvals
      endif
 
@@ -135,8 +135,7 @@ pro xcompare,dirA=dirA,dirB=dirB,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA
      ratio (where(mapC gt  r_crit)) = -1.
      minA = min_diff
      maxA = max_diff
-     stop
-     xdisplay,map=diff_rel,file=name_file,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='ratio '+strmid(fileB,0,2)+' awsom/demt',clrtb=39 ,minA=minA,maxA=maxA,scalefactor=scalefactor
+     xdisplay,map=ratio,file=name_file,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='ratio '+strmid(fileB,0,2)+' awsom/demt',clrtb=39 ,minA=minA,maxA=maxA,scalefactor=scalefactor
   endif
 
 
