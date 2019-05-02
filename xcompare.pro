@@ -129,7 +129,7 @@ pro xcompare,dir=dir,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA,nrB=nrB,ntB
   endif
 
 
-
+  ;OBS: ESTO FUNCIONARA MAL SI LAS DIMENSIONES DE MAP_A Y MAP_B SON DIFERENTES!
 ;compute comparison at all heights
   pA_B = where(mapA_rad3d ge rad_range[0] and mapA_rad3d le rad_range[1] and mapA_lat3d ge lat_range[0] and mapA_lat3d le lat_range[1] and mapA_lon3d ge lon_range[0] and mapA_lon3d le lon_range[1] and mapA gt 0. and mapB_rad3d ge rad_range[0] and mapB_rad3d le rad_range[1] and mapB_lat3d ge lat_range[0] and mapB_lat3d le lat_range[1] and mapB_lon3d ge lon_range[0] and mapB_lon3d le lon_range[1] and mapB gt 0.)
 
