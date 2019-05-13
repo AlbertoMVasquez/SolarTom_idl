@@ -340,13 +340,17 @@ common euv_stuff,model
   openr,1,input_dir+comp_file
   readu,1,Ic
   close,1
-
   Io = rotate(Io,4)
   Ic = rotate(Ic,4)
- ;stop
+
+
  ;if keyword_set(compare3) then
   mreadfits,input_data_dir+orig_image,hdr,img
-
+  compute_image_grid,hdr=hdr,ra=ra,pa=pa,x=x,y=y,instrument='lascoc2'
+  print,'ROLLANGLE:',hdr.rollangl
+  p=where(ra ge .975 and ra le 1.025)
+  Io(p) = max(Io)
+  
   Io = Io / factor_unit
   Ic = Ic / factor_unit
 
