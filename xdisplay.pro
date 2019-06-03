@@ -1,5 +1,5 @@
 pro xdisplay,dir=dir,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A=r0A,mini=mini,maxi=maxi,win=win,log=log,clrtbl=clrtbl,$
-             titulo=titulo,rad_range=rad_range,lat_range=lat_range,scalefactor=scalefactor,minA=minA,maxA=maxA,minima=minima,maxima=maxima,map=map,$
+             titulo=titulo,rad_range=rad_range,lat_range=lat_range,scalefactor=scalefactor,minA=minA,maxA=maxA,minS=minS,maxS=maxS,map=map,$
              radial_grid_file=radial_grid_file,box_lat=box_lat,box_lon=box_lon,instrument=instrument,raiz=raiz
 
   if not keyword_set(dir)         then dir         = '/data1/tomography/bindata/'
@@ -30,8 +30,8 @@ pro xdisplay,dir=dir,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A=r0A,min
      xhisto,map=map,nr=nr,nt=nt,np=np,radii=rad,rad_range=rad_range,lat_range=lat_range,win=win,dir=dir,file=file,titulo='Histogram of '+titulo,sufijo=sufijo
   endif
   
-  minima = fltarr(n_elements(r0A))
-  maxima = fltarr(n_elements(r0A))
+  mins = fltarr(n_elements(r0A))
+  maxs = fltarr(n_elements(r0A))
   for i=0,n_elements(r0A)-1 do begin
      frad = abs(rad-r0A[i])
      ir   = median(where(frad eq min(frad)))
@@ -52,16 +52,16 @@ pro xdisplay,dir=dir,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A=r0A,min
      
 ;     xhisto,map=map,nr=nr,nt=nt,np=np,radii=rad,rad_range=rad_range,lat_range=lat_range,win=win+3,dir=dir,file=file,titulo='Histogram of '+titulo,sufijo=sufijo,mini=mini,maxi=maxi
      ; Store mini and maxi for a final report.
-     minima[i] = mini
-     maxima[i] = maxi
+     mins[i] = mini
+     maxs[i] = maxi
      ; Set mini and max back to zero. 
      mini      = 0.
      maxi      = 0.
   endfor
   print,'-----------------------------------------------'
   print,'r0A    = ',r0A   
-  print,'minima = ',minima
-  print,'maxima = ',maxima
+  print,'mins = ',mins
+  print,'maxs = ',maxs
   print,'-----------------------------------------------'
 
   return
