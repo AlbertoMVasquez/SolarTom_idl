@@ -72,6 +72,15 @@ suff='Hh_l.45_kcor_subreg'
 ;fileB='Ne_CR2198_DEMT-AIA_H1_reduced-L.1_r3D'
 ;fileB='Ne_CR2198_DEMT-AIA_H1-L.2_r3D_reduced'
 fileB='Ne_CR2198_DEMT-AIA_H1-L.45_r3D'
+;...................... Nuevas corridas..................
+r0A=[1.105,1.155,1.205,1.125,1.165]
+fileA = 'x_KCOR.CR2198.13imgs-reduced.bf2.ri1.05.ro2.25_Inst_1.09_2.00_120_90_180_dropneg_r3D_l1e-4'
+fileB = 'Ne_CR2198_DEMT-AIA_H1-L.45_r3D'
+suff='Hh_l.45_kcor_1e4_subreg'
+
+fileA = 'x_KCOR.CR2208.13imgs.bf2.ri1.05.ro2.25_Inst_1.09_2.00_120_90_180_dropneg_r3D_l6.e-5'
+
+
 goto,salt
   xcompare,fileA=fileA,fileB=fileB,nrA=295,ntA=90,rminA=1.05,rmaxA=4.0,nrB=26,rminB=1.0,rmaxB=1.26,$
            comp_suffix='KCOR-Tom_vs_DEMT_CR2198_'+suff+'-All-Latitudes',x_tit='KCOR-Tom Ne [cm!U-3!N]',y_tit='AIA DEMT Ne [cm!U-3!N]',$
@@ -155,5 +164,51 @@ stop
            rad_range_A=[1.09,2.0],rad_range_B=[1.02,1.155],r0A=r0A,radd_range=[1.105,1.155]
 
 
+  return
+end
+
+
+pro nuevas_cosas
+
+;...................... Nuevas corridas..................                                                                   
+r0A=[1.105,1.155,1.205,]
+fileA = 'x_KCOR.CR2198.13imgs-reduced.bf2.ri1.05.ro2.25_Inst_1.09_2.00_120_90_180_dropneg_r3D_l1e-4'
+fileB = 'Ne_CR2198_DEMT-AIA_H1-L.7.9.9_r3D_reduced'
+suff='h_l.7.9.9_reduced_kcor_1e4_newgrid'
+
+;fileA = 'x_KCOR.CR2208.13imgs.bf2.ri1.05.ro2.25_Inst_1.09_2.00_120_90_180_dropneg_r3D_l6.e-5'
+
+
+  xcompare,fileA=fileA,fileB=fileB,nrA=120,ntA=90,rminA=1.05,rmaxA=2.25,nrB=26,rminB=1.0,rmaxB=1.26,lat_range=[-40.,0.],lon_range=[230,320],$
+           comp_suffix='KCOR-Tom_vs_DEMT_CR2198_'+suff+'-Quiet-region1',x_tit='WL Ne [cm!U-3!N]',y_tit='EUV Ne [cm!U-3!N]',$
+           histo_x_tit='Ratio: Ne (WL) / Ne (EUV)',tit='',rad_y_tit='Ne [cm!U-3!N]',labelA='Kcor',labelB='DEMT',$
+           rad_range_A=[1.09,2.0],rad_range_B=[1.09,1.2],r0A=r0A,radd_range=[1.105,1.195],dirA='/media/Data1/data1/tomography/bindata/',$
+           dirB='/data1/work/dem/',histotit='Streamer Quiet Region'
+
+ xcompare,fileA=fileA,fileB=fileB,nrA=120,ntA=90,rminA=1.05,rmaxA=2.25,nrB=26,rminB=1.0,rmaxB=1.26,lat_range=[70.,80.],lon_range=[180,360],$
+           comp_suffix='KCOR-Tom_vs_DEMT_CR2198_'+suff+'-Open-region_N',x_tit='WL Ne [cm!U-3!N]',y_tit='EUV Ne [cm!U-3!N]',$
+           histo_x_tit='Ratio: Ne (WL) / Ne (EUV)',tit='',rad_y_tit='Ne [cm!U-3!N]',labelA='Kcor',labelB='DEMT',$
+           rad_range_A=[1.09,2.0],rad_range_B=[1.09,1.155],r0A=r0A,radd_range=[1.105,1.155],dirA='/media/Data1/data1/tomography/bindata/',$
+           dirB='/data1/work/dem/',histotit='Subpolar Open  Region'
+;-------------------------------corridas 2208
+
+ r0A=[1.105,1.155,1.205,]
+fileA = 'x_KCOR.CR2208.13imgs.bf2.ri1.05.ro2.25_Inst_1.09_2.00_120_90_180_dropneg_r3D_l6.e-5'
+fileB = 'Ne_CR2208_l1.0.60.90_h1_r3D_reduced'
+suff='h_l1.0.6.9_reduced_kcor_6e5_newgrid'
+ 
+  xcompare,fileA=fileA,fileB=fileB,nrA=120,ntA=90,rminA=1.05,rmaxA=2.25,nrB=30,rminB=1.0,rmaxB=1.30,lat_range=[-40.,0.],lon_range=[230,320],$
+           comp_suffix='KCOR-Tom_vs_DEMT_CR2208_'+suff+'-Quiet-region1',x_tit='WL Ne [cm!U-3!N]',y_tit='EUV Ne [cm!U-3!N]',$
+           histo_x_tit='Ratio: Ne (WL) / Ne (EUV)',tit='',rad_y_tit='Ne [cm!U-3!N]',labelA='Kcor',labelB='DEMT',$
+           rad_range_A=[1.09,2.0],rad_range_B=[1.09,1.2],r0A=r0A,radd_range=[1.105,1.195],dirA='/media/Data1/data1/tomography/bindata/',$
+           dirB='/data1/work/dem/',histotit='Streamer Quiet Region'
+
+ xcompare,fileA=fileA,fileB=fileB,nrA=120,ntA=90,rminA=1.05,rmaxA=2.25,nrB=30,rminB=1.0,rmaxB=1.30,lat_range=[70.,80.],lon_range=[180,360],$
+           comp_suffix='KCOR-Tom_vs_DEMT_CR2208_'+suff+'-Open-region_N',x_tit='WL Ne [cm!U-3!N]',y_tit='EUV Ne [cm!U-3!N]',$
+           histo_x_tit='Ratio: Ne (WL) / Ne (EUV)',tit='',rad_y_tit='Ne [cm!U-3!N]',labelA='Kcor',labelB='DEMT',$
+           rad_range_A=[1.09,2.0],rad_range_B=[1.09,1.155],r0A=r0A,radd_range=[1.105,1.155],dirA='/media/Data1/data1/tomography/bindata/',$
+           dirB='/data1/work/dem/',histotit='Subpolar Open  Region'
+
+  
   return
 end
