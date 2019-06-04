@@ -3,7 +3,7 @@ pro xcompare,dirA=dirA,dirB=dirB,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA
              r0A=r0A,lat_range=lat_range,lon_range=lon_range,rad_range_A=rad_range_A,rad_range_B=rad_range_B,$
              clrtbl=clrtbl,scalefactor=scalefactor,comp_suffix=comp_suffix,$
              tit=tit,x_tit=x_tit,y_tit=y_tit,histo_x_tit=histo_x_tit,max_ratio=max_ratio,min_ratio=min_ratio,rad_y_tit=rad_y_tit,$
-             radd_range=rad_range,Nvals=Nvals,LabelA=LabelA,LabelB=LabelB,diff=diff,fileC=fileC,r_crit=r_crit,min_diff=min_diff,max_diff=max_diff
+             radd_range=rad_range,Nvals=Nvals,LabelA=LabelA,LabelB=LabelB,diff=diff,fileC=fileC,r_crit=r_crit,min_diff=min_diff,max_diff=max_diff,histotit=histotit
 
 ;diff implica utilizar FileA=awsom y fileB=demt entonces hace (demt-awsom)/awsom
 ;ademas si se defince /diff y fileC =Rmap entonces selecciona solo
@@ -32,8 +32,9 @@ pro xcompare,dirA=dirA,dirB=dirB,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA
 ;  if not keyword_set(max_ratio)   then max_ratio   = 5.
   if not keyword_set(nvals)       then Nvals       = 50.
   if not keyword_set(LabelA)      then LabelA      = 'Map-A'
-  if not keyword_set(LabelA)      then LabelA      = 'Map-B'
+  if not keyword_set(LabelB)      then LabelB      = 'Map-B'
   if not keyword_set(r_crit)      then r_crit      = 0.25
+  if not keyword_set(histotit)    then histotit='Lat=['+strmid(string(lat_range(0)),5,5)+','+strmid(string(lat_range(1)),5,5)+'] '+strmid(fileB,0,2)+' at r = '+strmid(string(rad_range[0]),6,5)+'-'+strmid(string(rad_range[1]),6,5)+' R!DSUN!N'
   
   if n_elements(min_ratio)  eq 0  then min_ratio   = fltarr(n_elements(r0A))*0.
   if n_elements(max_ratio)  eq 0  then max_ratio   = fltarr(n_elements(r0A)) + 5.
@@ -92,6 +93,48 @@ pro xcompare,dirA=dirA,dirB=dirB,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA
   for irA=0,nrA-1 do mapA_rad3d(irA,*,*) = radA[irA]
   for irB=0,nrB-1 do mapB_rad3d(irB,*,*) = radB[irB]
 
+;quiero recortar mapA y mapB
+  if radA(1)-radA(0) ne radB(1)-radB(0) then stop
+;la idea es que esto de abajo va a servir si los pasos radiales son
+;los mismos.
+  if radA(1)-radA(0) eq	radB(1)-radB(0) then begin
+     if radA(0) ne radB(0) or radA(nrB-1) ne radB(nrB-1) then begin
+;mayor de los minimos
+        if min(radA) gt min(radB) then begin
+           inferior = min(radA)
+           indinfB = where(radB eq min(radA))
+           indinfA = 0
+        endif
+        if min(radA) le	min(radB) then begin
+           inferior = min(radB)
+           indinfA = where(radA eq min(radB))
+           indinfB = 0
+        endif
+       
+;menor de los maximos  
+	if max(radA) gt	max(radB) then begin
+           superior = max(radB)
+           indsupA = where(radA eq max(radB))
+           indsupB = nrB-1
+        endif
+        if max(radA) le max(radB) then begin
+           superior = max(radA)
+           indsupB = where(radB eq max(radA))
+           indsupA =nrA-1
+        endif
+
+        mapA_recort = mapA(indinfA:indsupA,*,*)
+        mapB_recort = mapB(indinfB:indsupB,*,*)
+        mapA_rad3d_recort = mapA_rad3d(indinfA:indsupA,*,*)
+        mapB_rad3d_recort = mapB_rad3d(indinfB:indsupB,*,*)
+        mapA_lat3d_recort = mapA_lat3d(indinfA:indsupA,*,*)
+        mapB_lat3d_recort = mapB_lat3d(indinfB:indsupB,*,*)
+        mapA_lon3d_recort = mapA_lon3d(indinfA:indsupA,*,*)
+        mapB_lon3d_recort = mapB_lon3d(indinfB:indsupB,*,*)
+     endif
+  endif
+
+  
   ; Statistical comparison at each height for the specified lat and lon ranges.
   ; For the momento this only works when A and B have the same
   ; lat and lon grids. In the future I will put above a bi-linear interpolator
@@ -153,16 +196,18 @@ pro xcompare,dirA=dirA,dirB=dirB,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA
 
 ;SOLO FUNCIONA BIEN SI LAS MATRICES TIENEN IGUAL DIMENSION -- > ARREGLAR
 ;compute comparison at all heights
-  pA_B = where(mapA_rad3d ge rad_range[0] and mapA_rad3d le rad_range[1] and mapA_lat3d ge lat_range[0] and mapA_lat3d le lat_range[1] and mapA_lon3d ge lon_range[0] and mapA_lon3d le lon_range[1] and mapA gt 0. and mapB_rad3d ge rad_range[0] and mapB_rad3d le rad_range[1] and mapB_lat3d ge lat_range[0] and mapB_lat3d le lat_range[1] and mapB_lon3d ge lon_range[0] and mapB_lon3d le lon_range[1] and mapB gt 0.)
+;  pA_B = where(mapA_rad3d ge rad_range[0] and mapA_rad3d le rad_range[1] and mapA_lat3d ge lat_range[0] and mapA_lat3d le lat_range[1] and mapA_lon3d ge lon_range[0] and mapA_lon3d le lon_range[1] and mapA gt 0. and mapB_rad3d ge rad_range[0] and mapB_rad3d le rad_range[1] and mapB_lat3d ge lat_range[0] and mapB_lat3d le lat_range[1] and mapB_lon3d ge lon_range[0] and mapB_lon3d le lon_range[1] and mapB gt 0.)
+
+pA_B = where(mapA_rad3d_recort ge rad_range[0] and mapA_rad3d_recort le rad_range[1] and mapA_lat3d_recort ge lat_range[0] and mapA_lat3d_recort le lat_range[1] and mapA_lon3d_recort ge lon_range[0] and mapA_lon3d_recort le lon_range[1] and mapA_recort gt 0. and mapB_rad3d_recort ge rad_range[0] and mapB_rad3d_recort le rad_range[1] and mapB_lat3d_recort ge lat_range[0] and mapB_lat3d_recort le lat_range[1] and mapB_lon3d_recort ge lon_range[0] and mapB_lon3d_recort le lon_range[1] and mapB_recort gt 0.)
+;los nombres quedaron largos pero son explicitos, y son todos los
+;recortes dentro de los mismos rangos de rad,lat,lon
 
   if (size(pA_B))(0) eq -1 then stop
-  x_dataA = reform(mapA(pA_B))
-  if (size(pA_B))(0) eq -1 then stop
-  x_dataB = reform(mapB(pA_B)) 
-  ratio       = x_dataA/x_dataB > min_ratio < max_ratio
+  x_dataA = reform(mapA_recort(pA_B))
+  x_dataB = reform(mapB_recort(pA_B)) 
+  ratio       = x_dataA/x_dataB > mean(min_ratio) < min(max_ratio)
   sss='ratio_range'+strmid(string(rad_range[0]),6,5)+'-'+strmid(string(rad_range[1]),6,5)+'_Rsun'
-  tit2=tit+' at r = '+strmid(string(rad_range[0]),6,5)+'-'+strmid(string(rad_range[1]),6,5)+' R!DSUN!N'
-  xhisto2,ratio,comp_suffix=comp_suffix,sufijo=sss,tit=tit2,histo_x_tit=histo_x_tit,Nvals=Nvals
+  xhisto2,ratio,comp_suffix=comp_suffix,sufijo=sss,tit=histotit,histo_x_tit=histo_x_tit,Nvals=Nvals
 
 
 ;Compute average radial profile of x_A(r) in selected lat/lon range.
