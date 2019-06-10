@@ -195,8 +195,8 @@ fileB = 'Ne_CR2208_l1.0.60.90_h1_r3D_reduced'
 suff='h_l1.0.6.9_reduced_kcor_6e5_newgrid'
  
 
-  xcompare,fileA=fileA,fileB=fileB,nrA=120,ntA=90,rminA=1.05,rmaxA=2.25,nrB=30,rminB=1.0,rmaxB=1.30,lat_range=[-50.,-30.],lon_range=[200,300],$
-           comp_suffix='KCOR-Tom_vs_DEMT_CR2208_'+suff+'-Quiet-region',x_tit='WL Ne [cm!U-3!N]',y_tit='EUV Ne [cm!U-3!N]',$
+  xcompare,fileA=fileA,fileB=fileB,nrA=120,ntA=90,rminA=1.05,rmaxA=2.25,nrB=30,rminB=1.0,rmaxB=1.30,lat_range=[-40.,0.],lon_range=[200,300],$
+           comp_suffix='KCOR-Tom_vs_DEMT_CR2208_'+suff+'-Quiet-region2',x_tit='WL Ne [cm!U-3!N]',y_tit='EUV Ne [cm!U-3!N]',$
            histo_x_tit='Ratio: Ne (WL) / Ne (EUV)',tit='',rad_y_tit='Ne [cm!U-3!N]',labelA='Kcor',labelB='DEMT',$
            rad_range_A=[1.09,2.0],rad_range_B=[1.09,1.2],r0A=r0A,radd_range=[1.105,1.195],dirA='/media/Data1/data1/tomography/bindata/',$
            dirB='/data1/work/dem/',histotit='Streamer Quiet Region'
