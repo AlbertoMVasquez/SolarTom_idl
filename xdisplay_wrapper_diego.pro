@@ -52,7 +52,7 @@ xdisplay,dir='/data1/work/MHD/',file='Te_awsom_2208_1.85',nr= 26,nt=90,rmin=1.0,
 
 r0A=[1.025,1.035,1.105]
 xdisplay,dir='/data1/work/dem/',file='Ne_CR2208_DEMT-AIA_H1_L.5.2.2_r3d',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
-         r0A=r0A,win=0,titulo='CR-2208 DEMT: Ne [cm!U-3!N]',clrtbl=4,minA=[0,0,0],maxA=[2.5,2.5,1]*1.e8,clrtbl=4
+         r0A=r0A,win=0,titulo='CR-2208 DEMT: Ne [cm!U-3!N]',clrtbl=4,minA=[0,0,0],maxA=[2.5,2.5,1]*1.e8
 r0A=[1.025,1.035,1.105]
 xdisplay,dir='/data1/work/dem/',file='Ne_CR2082_DEMT-EUVI_behind_H1-L.35.2.3_r3d',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
          r0A=r0A,win=0,titulo='CR-2082 DEMT: Ne [cm!U-3!N]',minA=[0,0,0],maxA=[2.5,2.5,1]*1.e8,clrtbl=4
@@ -77,7 +77,7 @@ xdisplay,dir='/data1/work/dem/',file='R_CR2082_DEMT-EUVI_behind_H1-L.35.2.3_r3d'
 
 r0A=[1.025,1.035,1.105,1.155]
 xdisplay,dir='/data1/work/dem/',file='Er_CR2082_DEMT-EUVI_behind_H1-L.35.2.3_r3d',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
-         r0A=r0A,win=0,titulo='CR-2082 DEMT: Er [erg cm!U-3!N s!U-1!N]',clrtbl=5;,maxA=[2,2,2.5,2.5]*1.e6
+         r0A=r0A,win=0,titulo='CR-2082 DEMT: Er [erg cm!U-3!N s!U-1!N]',clrtbl=5,maxA=[30,20,6,3]*1.e-6
 r0A=[1.025,1.035,1.105,1.155]
 xdisplay,dir='/data1/work/MHD/',file='qrad_awsom_2082_1.85_short',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
          r0A=r0A,win=0,titulo='CR-2082 awsom: Er [erg cm!U-3!N s!U-1!N]',clrtbl=5
