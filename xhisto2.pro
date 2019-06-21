@@ -7,7 +7,6 @@ pro xhisto2,vector,comp_suffix=comp_suffix,sufijo=sufijo,tit=tit,histo_x_tit=his
   med        = median(vector)
   stdev_frac =  stdev(vector)/abs(avg)
   cant       = long(n_elements(vector))
-
   ps1,'/data1/tomography/SolarTom_idl/Figures/'+'comparison_'+comp_suffix+'_'+sufijo+'.eps',0
   device,/inches,xsize=12,ysize=5
   plot,xval,histo_vector ,font=0,xtitle=histo_x_tit,ytitle='Freq. Histogram',title=tit,linestyle=8,psym=10,thick=4,charsize=2.2

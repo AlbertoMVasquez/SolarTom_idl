@@ -79,5 +79,15 @@ r0A=[1.025,1.035,1.105,1.155]
 xdisplay,dir='/data1/work/dem/',file='Er_CR2082_DEMT-EUVI_behind_H1-L.35.2.3_r3d',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
          r0A=r0A,win=0,titulo='CR-2082 DEMT: Er [erg cm!U-3!N s!U-1!N]',clrtbl=5,maxA=[30,20,6,3]*1.e-6
 r0A=[1.025,1.035,1.105,1.155]
+r0A=[1.105]
 xdisplay,dir='/data1/work/MHD/',file='qrad_awsom_2082_1.85_short',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
          r0A=r0A,win=0,titulo='CR-2082 awsom: Er [erg cm!U-3!N s!U-1!N]',clrtbl=5
+
+
+r0A=[1.025,1.035,1.105,1.155]
+xdisplay,dir='/data1/work/dem/',file='Er_CR2208_DEMT-EUVI_behind_H1-L.50.20.20_r3d',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2208 DEMT: Er [erg cm!U-3!N s!U-1!N]',clrtbl=5,maxA=[30,20,6,3]*1.e-6
+r0A=[1.105]
+xdisplay,dir='/data1/work/MHD/',file='qrad_awsom_2208_1.85',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2028 awsom: Er [erg cm!U-3!N s!U-1!N]',clrtbl=5
+

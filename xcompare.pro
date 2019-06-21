@@ -190,7 +190,6 @@ pro xcompare,dirA=dirA,dirB=dirB,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA
      ratio (where(mapC gt  r_crit)) = -1.
      minA = min_diff
      maxA = max_diff
-     stop
      xdisplay,map=ratio,file=name_file,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo=strmid(fileB,0,2)+'_awsom/'+strmid(fileB,0,2)+'_demt',clrtb=39 ,minA=minA,maxA=maxA,scalefactor=scalefactor
   endif
 

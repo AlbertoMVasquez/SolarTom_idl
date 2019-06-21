@@ -1,5 +1,5 @@
 pro xhisto,map=map,nr=nr,nt=nt,np=np,radii=radii,rad_range=rad_range,lat_range=lat_range,win=win,titulo=titulo,dir=dir,file=file,sufijo=sufijo,mini=mini,maxi=maxi
-
+old_device = !D.NAME
   if not keyword_set(sufijo) then sufijo =''
 
   dlat = 180./nt
@@ -33,6 +33,6 @@ pro xhisto,map=map,nr=nr,nt=nt,np=np,radii=radii,rad_range=rad_range,lat_range=l
      xyouts,0.6*[1,1,1,1],0.8-0.05*findgen(4),['RadMin  [Rsun] =','RadMax [Rsun] =','Latmin  [deg]  =','LatMax  [deg]  =']+strmid(string([rad_range,lat_range]),4,6),/normal,Font=0
      xyouts,0.6*[1,1,1,1],0.8-0.05*(5+findgen(4)),['% Npos = ','% Nnul = ','% Nneg = ','Tot. Num= ']+string([[Npos,Nnul,Nneg]*(100./Ntot),Ntot]),/normal,Font=0
      ps2
-      
+SET_PLOT, old_device      
   return  
 end
