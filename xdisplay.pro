@@ -30,14 +30,14 @@ pro xdisplay,dir=dir,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A=r0A,min
      sufijo = strmid(string(rad_range[0]),6,5)+'-'+strmid(string(rad_range[1]),6,5)+'_Rsun'
      xhisto,map=map,nr=nr,nt=nt,np=np,radii=rad,rad_range=rad_range,lat_range=lat_range,win=win,dir=dir,file=file,titulo='Histogram of '+titulo,sufijo=sufijo
   endif
-  
+
   mins = fltarr(n_elements(r0A))
   maxs = fltarr(n_elements(r0A))
   for i=0,n_elements(r0A)-1 do begin
      frad = abs(rad-r0A[i])
      ir   = median(where(frad eq min(frad)))
      r0   = rad[ir]
-     rad_range=[r0,r0]
+;     rad_range=[r0,r0]
      sufijo = strmid(string(r0),6,5)+'_Rsun'
 
      if keyword_set(minA) then mini = minA[i]

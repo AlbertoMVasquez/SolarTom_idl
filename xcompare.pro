@@ -3,11 +3,13 @@ pro xcompare,dirA=dirA,dirB=dirB,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA
              r0A=r0A,lat_range=lat_range,lon_range=lon_range,rad_range_A=rad_range_A,rad_range_B=rad_range_B,$
              clrtbl=clrtbl,scalefactor=scalefactor,comp_suffix=comp_suffix,$
              tit=tit,x_tit=x_tit,y_tit=y_tit,histo_x_tit=histo_x_tit,max_ratio=max_ratio,min_ratio=min_ratio,rad_y_tit=rad_y_tit,$
-             radd_range=rad_range,Nvals=Nvals,LabelA=LabelA,LabelB=LabelB,diff=diff,fileC=fileC,r_crit=r_crit,min_diff=min_diff,max_diff=max_diff,histotit=histotit
+             radd_range=rad_range,Nvals=Nvals,LabelA=LabelA,LabelB=LabelB,diff=diff,fileC=fileC,r_crit=r_crit,min_diff=min_diff,max_diff=max_diff,$
+             histotit=histotit,ratio_graf=ratio_graf
 
-;diff implica utilizar FileA=awsom y fileB=demt entonces hace (demt-awsom)/awsom
+;diff implica utilizar FileA=awsom y fileB=demt entonces hace (awsom-demt)/demt
 ;ademas si se defince /diff y fileC =Rmap entonces selecciona solo
-;donde R<0.25
+;donde R< r_crit
+;para que todo funciones bien filA=awsom, fileb=demt, fileC=r_demt
   EPS=1.e-4                     ; fractional tolerance to evaluate if same height is being compared.
   
   if not keyword_set(dirA)        then dirA         = '/data1/work/MHD/'
@@ -134,6 +136,16 @@ pro xcompare,dirA=dirA,dirB=dirB,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA
      endif
   endif
 
+     if radA(0) eq radB(0) and radA(nrB-1) eq radB(nrB-1) then begin
+        mapA_recort = mapA
+        mapB_recort = mapB
+        mapA_rad3d_recort = mapA_rad3d
+        mapB_rad3d_recort = mapB_rad3d
+        mapA_lat3d_recort = mapA_lat3d
+        mapB_lat3d_recort = mapB_lat3d
+        mapA_lon3d_recort = mapA_lon3d
+        mapB_lon3d_recort = mapB_lon3d
+     endif
   
   ; Statistical comparison at each height for the specified lat and lon ranges.
   ; For the momento this only works when A and B have the same
@@ -158,14 +170,14 @@ pro xcompare,dirA=dirA,dirB=dirB,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA
 
      tit1='Lat=['+strmid(string(lat_range(0)),5,5)+','+strmid(string(lat_range(1)),5,5)+'] '+strmid(fileB,0,2)+' ratio at r = '+strmid(sufijo,0,5)+' R!DSUN!N'
      PRINT, CORRELATE(values_A, values_B)
-     histo_x_tit=strmid(fileB,0,2)+' (awsom) /'+strmid(fileB,0,2)+'  (demt)'
-     xhisto2,ratio,comp_suffix='ratio_'+comp_suffix,sufijo=sufijo,tit=tit1,histo_x_tit=histo_x_tit,Nvals=Nvals
+     if not keyword_set(histo_x_tit) then histo_x_tit=strmid(fileB,0,2)+' (awsom) /'+strmid(fileB,0,2)+'  (demt)'
+;     xhisto2,ratio,comp_suffix='ratio_'+comp_suffix,sufijo=sufijo,tit=tit1,histo_x_tit=histo_x_tit,Nvals=Nvals
 
      if keyword_set(diff) then begin
-        diff_rel_corte = ( values_B - values_A ) /values_A
+        diff_rel_corte = ( values_A - values_B ) /values_B ;( values_B - values_A ) /values_A
         diff_rel_corte = diff_rel_corte > min_diff(i) < max_diff(i)
         tit1='Lat=['+strmid(string(lat_range(0)),5,5)+','+strmid(string(lat_range(1)),5,5)+'] '+strmid(fileB,0,2)+'diff at r = '+strmid(sufijo,0,5)+' R!DSUN!N'
-        histo_x_tit=strmid(fileB,0,2)+' (demt-awsom)/awsom'
+        histo_x_tit=strmid(fileB,0,2)+' (awsom-demt)/demt' ;' (demt-awsom)/awsom'
         xhisto2,diff_rel_corte,comp_suffix='diff_rel_'+comp_suffix,sufijo=sufijo,tit=tit1,histo_x_tit=histo_x_tit,Nvals=Nvals
      endif
 
@@ -178,25 +190,21 @@ pro xcompare,dirA=dirA,dirB=dirB,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA
      ratio (where(mapC gt  r_crit)) = -1.
      minA = min_diff
      maxA = max_diff
-     xdisplay,map=ratio,file=name_file,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='ratio '+strmid(fileB,0,2)+' awsom/demt',clrtb=39 ,minA=minA,maxA=maxA,scalefactor=scalefactor
+     xdisplay,map=ratio,file=name_file,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo=strmid(fileB,0,2)+'_awsom/'+strmid(fileB,0,2)+'_demt',clrtb=39 ,minA=minA,maxA=maxA,scalefactor=scalefactor
   endif
 
 
 
   if keyword_set(diff) then begin
-     diff_rel = (mapB - mapA )/mapA 
+     diff_rel = (mapA - mapB )/mapB ;(mapB - mapA )/mapA 
      name_file = 'relative_difference_'+fileA+'-'+fileB
      diff_rel (where(mapB eq -999.)) = -1.;-999. 
      diff_rel (where(mapC gt  r_crit)) = -1.;-999. Esto podria hacerse mas robusto!
      minA = min_diff ;fltarr(n_elements(r0A))-1
      maxA = max_diff ;fltarr(n_elements(r0A))+10
-     xdisplay,map=diff_rel,file=name_file,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='Rel diff '+strmid(fileB,0,2)+' (demt-awsom)/awsom',clrtb=39 ,minA=minA,maxA=maxA,scalefactor=scalefactor
+     xdisplay,map=diff_rel,file=name_file,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='Rel diff '+strmid(fileB,0,2)+' (awsom-demt)/demt',clrtb=39 ,minA=minA,maxA=maxA,scalefactor=scalefactor
   endif
 
-
-;SOLO FUNCIONA BIEN SI LAS MATRICES TIENEN IGUAL DIMENSION -- > ARREGLAR
-;compute comparison at all heights
-;  pA_B = where(mapA_rad3d ge rad_range[0] and mapA_rad3d le rad_range[1] and mapA_lat3d ge lat_range[0] and mapA_lat3d le lat_range[1] and mapA_lon3d ge lon_range[0] and mapA_lon3d le lon_range[1] and mapA gt 0. and mapB_rad3d ge rad_range[0] and mapB_rad3d le rad_range[1] and mapB_lat3d ge lat_range[0] and mapB_lat3d le lat_range[1] and mapB_lon3d ge lon_range[0] and mapB_lon3d le lon_range[1] and mapB gt 0.)
 
 pA_B = where(mapA_rad3d_recort ge rad_range[0] and mapA_rad3d_recort le rad_range[1] and mapA_lat3d_recort ge lat_range[0] and mapA_lat3d_recort le lat_range[1] and mapA_lon3d_recort ge lon_range[0] and mapA_lon3d_recort le lon_range[1] and mapA_recort gt 0. and mapB_rad3d_recort ge rad_range[0] and mapB_rad3d_recort le rad_range[1] and mapB_lat3d_recort ge lat_range[0] and mapB_lat3d_recort le lat_range[1] and mapB_lon3d_recort ge lon_range[0] and mapB_lon3d_recort le lon_range[1] and mapB_recort gt 0.)
 ;los nombres quedaron largos pero son explicitos, y son todos los
@@ -213,11 +221,11 @@ pA_B = where(mapA_rad3d_recort ge rad_range[0] and mapA_rad3d_recort le rad_rang
 ;Compute average radial profile of x_A(r) in selected lat/lon range.
   x_A_avg = fltarr(NrA)
   for irA=0,nrA-1 do begin
-     map_A = reform(mapA(irA,*,*))     
+     map_A = reform(mapA(irA,*,*))
      index = where(map_A gt 0. and $
                    mapA_lat ge lat_range[0] and mapA_lat le lat_range[1] and $
-                   mapA_lon ge lon_range[0] and mapA_lon le lon_range[1] )
-     if index(0) ne -1 then begin  
+                   mapA_lon ge lon_range[0] and mapA_lon le lon_range[1] )     
+        if index(0) ne -1 then begin  
         x_A_avg[irA] = mean(map_A(index))
      endif else begin
         x_A_avg[irA] = 0.
@@ -227,10 +235,16 @@ pA_B = where(mapA_rad3d_recort ge rad_range[0] and mapA_rad3d_recort le rad_rang
   x_B_avg = fltarr(NrB)
   for irB=0,nrB-1 do begin
      map_B = reform(mapB(irB,*,*))     
-     index = where(map_B gt 0. and $
-                   mapB_lat ge lat_range[0] and mapB_lat le lat_range[1] and $
-                   mapB_lon ge lon_range[0] and mapB_lon le lon_range[1] )
-     if index(0) ne -1 then begin
+     if keyword_set(filec) then begin
+        index = where(map_B gt 0. and $
+                      mapB_lat ge lat_range[0] and mapB_lat le lat_range[1] and $
+                      mapB_lon ge lon_range[0] and mapB_lon le lon_range[1] and mapC ge r_crit) ;
+     endif else begin
+        index = where(map_B gt 0. and $
+                      mapB_lat ge lat_range[0] and mapB_lat le lat_range[1] and $
+                      mapB_lon ge lon_range[0] and mapB_lon le lon_range[1] )
+     endelse
+          if index(0) ne -1 then begin
         x_B_avg[irB] = mean(map_B(index))
      endif else begin
         x_B_avg[irB] = 0.

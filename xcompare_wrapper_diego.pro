@@ -1,6 +1,216 @@
 pro xcompare_wrapper
 
+;------------freswed ratios
+r0A=[1.105]
+lat_range = [-40.,40.]
+suff  = '_cr2082_ratio_streamer'
+dirB='/data1/work/dem/'
+fileA = 'Ne_awsom_2082_1.85_short'
+fileB = 'Ne_CR2082_DEMT-EUVI_behind_H1-L.35.2.3_r3d'
+fileC = 'R_CR2082_DEMT-EUVI_behind_H1-L.35.2.3_r3d'
+xcompare,fileA=fileA,fileB=fileB,nrA=26,ntA=90,rminA=1.0,rmaxA=1.26,nrB=26,rminB=1.0,rmaxB=1.26,lat_range=lat_range,lon_range=[0,360],$
+           comp_suffix='Ne_awsom_vs_demt_H'+suff,x_tit='awsom Ne [cm!U-3!N]',y_tit='demt Ne [cm!U-3!N]',$
+           histo_x_tit=' Ne (awsom) / Ne (demt)',tit='',rad_y_tit='Ne [cm!U-3!N]',$
+           rad_range_A=[1.025,1.25],rad_range_B=[1.025,1.25],r0A=r0A,radd_range=[1.025,1.25],LabelA='awsom',LabelB='demt',dirB=dirB,$
+           fileC=fileC,r_crit=0.25,max_ratio=1.5,min_diff=05,max_diff=1.5,scalefactor=2,/ratio_graf
 
+r0A=[1.105]
+suff  = '_cr2208_ratio_streamer'
+lat_range = [-40.,40.]
+dirB='/data1/work/dem/'
+fileA = 'Ne_awsom_2208_1.85'
+fileB = 'Ne_CR2208_DEMT-AIA_H1_L.5.2.2_r3d'
+fileC = 'R_CR2208_DEMT-AIA_H1_L.5.2.2_r3d'
+xcompare,fileA=fileA,fileB=fileB,nrA=26,ntA=90,rminA=1.0,rmaxA=1.26,nrB=26,rminB=1.0,rmaxB=1.26,lat_range=lat_range,lon_range=[0,360],$
+           comp_suffix='Ne_awsom_vs_demt_H'+suff,x_tit='awsom Ne [cm!U-3!N]',y_tit='demt Ne [cm!U-3!N]',$
+           histo_x_tit=' Ne (awsom) / Ne (demt)',tit='',rad_y_tit='Ne [cm!U-3!N]',$
+           rad_range_A=[1.025,1.25],rad_range_B=[1.025,1.25],r0A=r0A,radd_range=[1.025,1.25],LabelA='awsom',LabelB='demt',dirB=dirB,$
+           fileC=fileC,r_crit=0.25,max_ratio=1.5,min_diff=0.5,max_diff=1.5,scalefactor=2,/ratio_graf
+
+
+r0A=[1.105]
+suff  = '_cr2082_ratio_streamer'
+lat_range = [-40.,40.]
+dirB='/data1/work/dem/'
+fileA = 'Te_awsom_2082_1.85_short'
+fileB = 'Tm_CR2082_DEMT-EUVI_behind_H1-L.35.2.3_r3d'
+fileC = 'R_CR2082_DEMT-EUVI_behind_H1-L.35.2.3_r3d'
+xcompare,fileA=fileA,fileB=fileB,nrA=26,ntA=90,rminA=1.0,rmaxA=1.26,nrB=26,rminB=1.0,rmaxB=1.26,lat_range=lat_range,lon_range=[0,360],$
+           comp_suffix='Te_awsom_vs_demt_H'+suff,x_tit='awsom Te [K]',y_tit='demt Te [K]',$
+           histo_x_tit='Te (awsom) / Te (demt)',tit='',rad_y_tit='Te [K]',$
+           rad_range_A=[1.025,1.25],rad_range_B=[1.025,1.25],r0A=r0A,radd_range=[1.025,1.25],LabelA='awsom',LabelB='demt',dirB=dirB,$
+           fileC=fileC,r_crit=0.25,max_ratio=1.5,min_diff=.5,max_diff=1.5,scalefactor=2,/ratio_graf
+
+r0A=[1.105]
+suff  = '_cr2208_ratio_streamer'
+lat_range = [-40.,40.]
+dirB='/data1/work/dem/'
+fileA = 'Te_awsom_2208_1.85'
+fileB = 'Tm_CR2208_DEMT-AIA_H1_L.5.2.2_r3d'
+fileC = 'R_CR2208_DEMT-AIA_H1_L.5.2.2_r3d'
+xcompare,fileA=fileA,fileB=fileB,nrA=26,ntA=90,rminA=1.0,rmaxA=1.26,nrB=26,rminB=1.0,rmaxB=1.26,lat_range=lat_range,lon_range=[0,360],$
+           comp_suffix='Te_awsom_vs_demt_H'+suff,x_tit='awsom Te [K]',y_tit='demt Te [K]',$
+           histo_x_tit='Te (awsom) / Te (demt)',tit='',rad_y_tit='Te [K]',$
+           rad_range_A=[1.025,1.25],rad_range_B=[1.025,1.25],r0A=r0A,radd_range=[1.025,1.25],LabelA='awsom',LabelB='demt',dirB=dirB,$
+           fileC=fileC,r_crit=0.25,max_ratio=1.5,min_diff=0.5,max_diff=1.5,scalefactor=2,/ratio_graf
+
+
+
+r0A=[1.105]
+suff  = '_cr2208_ratio_streamer'
+lat_range = [-40.,40.]
+dirB='/data1/work/dem/'
+fileA = 'qrad_awsom_2208_1.85'
+fileB = 'Er_CR2208_DEMT-EUVI_behind_H1-L.50.20.20_r3d'
+fileC = 'R_CR2208_DEMT-AIA_H1_L.5.2.2_r3d'
+xcompare,fileA=fileA,fileB=fileB,nrA=26,ntA=90,rminA=1.0,rmaxA=1.26,nrB=26,rminB=1.0,rmaxB=1.26,lat_range=lat_range,lon_range=[0,360],$
+           comp_suffix='Er_awsom_vs_demt_H'+suff,x_tit='awsom Er [Erg cm!U-3!N s!U-1!N]',y_tit='demt Er [Erg cm!U-3!N s!U-1!N]',$
+           histo_x_tit='Er (awsom) / Er (demt)',tit='',rad_y_tit='Er [Erg cm!U-3!N s!U-1!N]',$
+           rad_range_A=[1.055,1.25],rad_range_B=[1.055,1.25],r0A=r0A,radd_range=[1.055,1.25],LabelA='awsom',LabelB='demt',dirB=dirB,$
+           fileC=fileC,r_crit=0.25,min_ratio=-0.5,max_ratio=2.5,min_diff=-0.5,max_diff=2.5,scalefactor=2,histotit='Er at 1.055-1.255 Rsun',/ratio_graf
+
+
+r0A=[1.105]
+suff  = '_cr2082_ratio_streamer'
+lat_range = [-40.,40.]
+dirB='/data1/work/dem/'
+fileA = 'qrad_awsom_2082_1.85_short'
+fileB = 'Er_CR2082_DEMT-EUVI_behind_H1-L.35.2.3_r3d'
+fileC = 'R_CR2082_DEMT-EUVI_behind_H1-L.35.2.3_r3d'
+xcompare,fileA=fileA,fileB=fileB,nrA=26,ntA=90,rminA=1.0,rmaxA=1.26,nrB=26,rminB=1.0,rmaxB=1.26,lat_range=lat_range,lon_range=[0,360],$
+           comp_suffix='Er_awsom_vs_demt_H'+suff,x_tit='awsom Er [Erg cm!U-3!N s!U-1!N]',y_tit='demt Er [Erg cm!U-3!N s!U-1!N]',$
+           histo_x_tit='Er (awsom) / Er (demt)',tit='',rad_y_tit='Er [Erg cm!U-3!N s!U-1!N]',$
+           rad_range_A=[1.055,1.25],rad_range_B=[1.055,1.25],r0A=r0A,radd_range=[1.055,1.25],LabelA='awsom',LabelB='demt',dirB=dirB,$
+           fileC=fileC,r_crit=0.25,min_ratio=-0.5,max_ratio=2.5,min_diff=-0.5,max_diff=2.5,scalefactor=2,histotit='Er at 1.055-1.255 Rsun',/ratio_graf
+
+
+
+
+
+
+  
+;----- para poster freswed 2019
+r0A=[1.025,1.035,1.055,1.105,1.155]
+suff  = '_cr2082_streamer'
+lat_range = [-40.,40.]
+dirB='/data1/work/dem/'
+fileA = 'Ne_awsom_2082_1.85_short'
+fileB = 'Ne_CR2082_DEMT-EUVI_behind_H1-L.35.2.3_r3d'
+fileC = 'R_CR2082_DEMT-EUVI_behind_H1-L.35.2.3_r3d'
+xcompare,fileA=fileA,fileB=fileB,nrA=26,ntA=90,rminA=1.0,rmaxA=1.26,nrB=26,rminB=1.0,rmaxB=1.26,lat_range=lat_range,lon_range=[0,360],$
+           comp_suffix='Ne_awsom_vs_demt_H'+suff,x_tit='awsom Ne [cm!U-3!N]',y_tit='demt Ne [cm!U-3!N]',$
+           histo_x_tit=' Ne (awsom) / Ne (demt)',tit='',rad_y_tit='Ne [cm!U-3!N]',$
+           rad_range_A=[1.025,1.25],rad_range_B=[1.025,1.25],r0A=r0A,radd_range=[1.025,1.25],LabelA='awsom',LabelB='demt',/diff,dirB=dirB,$
+           fileC=fileC,r_crit=0.25,max_ratio=[10,5,5,5,5],min_diff=[1.2,1.2,1.2,1.1,1.1]*(-1),max_diff=[4,1.5,1,0.5,0.5],scalefactor=2
+
+
+r0A=[1.025,1.035,1.055,1.105,1.155]
+suff  = '_cr2208_streamer'
+lat_range = [-40.,40.]
+dirB='/data1/work/dem/'
+fileA = 'Ne_awsom_2208_1.85'
+fileB = 'Ne_CR2208_DEMT-AIA_H1_L.5.2.2_r3d'
+fileC = 'R_CR2208_DEMT-AIA_H1_L.5.2.2_r3d'
+xcompare,fileA=fileA,fileB=fileB,nrA=26,ntA=90,rminA=1.0,rmaxA=1.26,nrB=26,rminB=1.0,rmaxB=1.26,lat_range=lat_range,lon_range=[0,360],$
+           comp_suffix='Ne_awsom_vs_demt_H'+suff,x_tit='awsom Ne [cm!U-3!N]',y_tit='demt Ne [cm!U-3!N]',$
+           histo_x_tit=' Ne (awsom) / Ne (demt)',tit='',rad_y_tit='Ne [cm!U-3!N]',$
+           rad_range_A=[1.025,1.25],rad_range_B=[1.025,1.25],r0A=r0A,radd_range=[1.025,1.25],LabelA='awsom',LabelB='demt',/diff,dirB=dirB,$
+           fileC=fileC,r_crit=0.25,max_ratio=[10,5,5,5,5],min_diff=[1.2,1.2,1.2,1.1,1.1]*(-1),max_diff=[4,1.5,1,0.5,0.5],scalefactor=2
+
+
+r0A=[1.025,1.035,1.055,1.105,1.155]
+suff  = '_cr2082_streamer'
+lat_range = [-40.,40.]
+dirB='/data1/work/dem/'
+fileA = 'Te_awsom_2082_1.85_short'
+fileB = 'Tm_CR2082_DEMT-EUVI_behind_H1-L.35.2.3_r3d'
+fileC = 'R_CR2082_DEMT-EUVI_behind_H1-L.35.2.3_r3d'
+xcompare,fileA=fileA,fileB=fileB,nrA=26,ntA=90,rminA=1.0,rmaxA=1.26,nrB=26,rminB=1.0,rmaxB=1.26,lat_range=lat_range,lon_range=[0,360],$
+           comp_suffix='Te_awsom_vs_demt_H'+suff,x_tit='awsom Te [K]',y_tit='demt Te [K]',$
+           histo_x_tit=' Te (awsom) / Te (demt)',tit='',rad_y_tit='Te [K]',$
+           rad_range_A=[1.025,1.25],rad_range_B=[1.025,1.25],r0A=r0A,radd_range=[1.025,1.25],LabelA='awsom',LabelB='demt',/diff,dirB=dirB,$
+           fileC=fileC,r_crit=0.25,max_ratio=[5,5,5,5,5],min_diff=[-1,-1,-1,-1,-1]*1.5,max_diff=[.5,.5,1,1,1]*1,scalefactor=2
+
+r0A=[1.025,1.035,1.055,1.105,1.155]
+suff  = '_cr2208_streamer'
+lat_range = [-40.,40.]
+dirB='/data1/work/dem/'
+fileA = 'Te_awsom_2208_1.85'
+fileB = 'Tm_CR2208_DEMT-AIA_H1_L.5.2.2_r3d'
+fileC = 'R_CR2208_DEMT-AIA_H1_L.5.2.2_r3d'
+xcompare,fileA=fileA,fileB=fileB,nrA=26,ntA=90,rminA=1.0,rmaxA=1.26,nrB=26,rminB=1.0,rmaxB=1.26,lat_range=lat_range,lon_range=[0,360],$
+           comp_suffix='Te_awsom_vs_demt_H'+suff,x_tit='awsom Te [K]',y_tit='demt Te [K]',$
+           histo_x_tit=' Te (awsom) / Te (demt)',tit='',rad_y_tit='Te [K]',$
+           rad_range_A=[1.025,1.25],rad_range_B=[1.025,1.25],r0A=r0A,radd_range=[1.025,1.25],LabelA='awsom',LabelB='demt',/diff,dirB=dirB,$
+           fileC=fileC,r_crit=0.25,max_ratio=[5,5,5,5,5],min_diff=[-1,-1,-1,-1,-1]*1.5,max_diff=[.5,.5,1,1,1]*1,scalefactor=2
+
+;average de CHs
+r0A=[1.025,1.035,1.055,1.105,1.155]
+suff  = '_cr2082_CHN'
+lat_range = [70.,90.]
+dirB='/data1/work/dem/'
+fileA = 'Ne_awsom_2082_1.85_short'
+fileB = 'Ne_CR2082_DEMT-EUVI_behind_H1-L.35.2.3_r3d'
+fileC = 'R_CR2082_DEMT-EUVI_behind_H1-L.35.2.3_r3d'
+xcompare,fileA=fileA,fileB=fileB,nrA=26,ntA=90,rminA=1.0,rmaxA=1.26,nrB=26,rminB=1.0,rmaxB=1.26,lat_range=lat_range,lon_range=[0,360],$
+           comp_suffix='Ne_awsom_vs_demt_H'+suff,x_tit='awsom Ne [cm!U-3!N]',y_tit='demt Ne [cm!U-3!N]',$
+           histo_x_tit=' Ne (awsom) / Ne (demt)',tit='',rad_y_tit='Ne [cm!U-3!N]',$
+           rad_range_A=[1.025,1.155],rad_range_B=[1.025,1.155],r0A=r0A,radd_range=[1.025,1.155],LabelA='awsom',LabelB='demt',dirB=dirB,$
+           fileC=fileC,r_crit=0.25,max_ratio=[10,5,5,5,5],min_diff=[1.2,1.2,1.2,1.1,1.1]*(-1),max_diff=[4,1.5,1,0.5,0.5],scalefactor=2
+
+
+r0A=[1.025,1.035,1.055,1.105,1.155]
+suff  = '_cr2208_CHN'
+lat_range = [70.,90.]
+dirB='/data1/work/dem/'
+fileA = 'Ne_awsom_2208_1.85'
+fileB = 'Ne_CR2208_DEMT-AIA_H1_L.5.2.2_r3d'
+fileC = 'R_CR2208_DEMT-AIA_H1_L.5.2.2_r3d'
+xcompare,fileA=fileA,fileB=fileB,nrA=26,ntA=90,rminA=1.0,rmaxA=1.26,nrB=26,rminB=1.0,rmaxB=1.26,lat_range=lat_range,lon_range=[0,360],$
+           comp_suffix='Ne_awsom_vs_demt_H'+suff,x_tit='awsom Ne [cm!U-3!N]',y_tit='demt Ne [cm!U-3!N]',$
+           histo_x_tit=' Ne (awsom) / Ne (demt)',tit='',rad_y_tit='Ne [cm!U-3!N]',$
+           rad_range_A=[1.025,1.155],rad_range_B=[1.025,1.155],r0A=r0A,radd_range=[1.025,1.155],LabelA='awsom',LabelB='demt',dirB=dirB,$
+           fileC=fileC,r_crit=0.25,max_ratio=[10,5,5,5,5],min_diff=[1.2,1.2,1.2,1.1,1.1]*(-1),max_diff=[4,1.5,1,0.5,0.5],scalefactor=2
+
+
+r0A=[1.025,1.035,1.055,1.105,1.155]
+suff  = '_cr2082_CHN'
+lat_range = [70.,90.]
+dirB='/data1/work/dem/'
+fileA = 'Te_awsom_2082_1.85_short'
+fileB = 'Tm_CR2082_DEMT-EUVI_behind_H1-L.35.2.3_r3d'
+fileC = 'R_CR2082_DEMT-EUVI_behind_H1-L.35.2.3_r3d'
+xcompare,fileA=fileA,fileB=fileB,nrA=26,ntA=90,rminA=1.0,rmaxA=1.26,nrB=26,rminB=1.0,rmaxB=1.26,lat_range=lat_range,lon_range=[0,360],$
+           comp_suffix='Te_awsom_vs_demt_H'+suff,x_tit='awsom Te [K]',y_tit='demt Te [K]',$
+           histo_x_tit=' Te (awsom) / Te (demt)',tit='',rad_y_tit='Te [K]',$
+           rad_range_A=[1.025,1.155],rad_range_B=[1.025,1.155],r0A=r0A,radd_range=[1.025,1.155],LabelA='awsom',LabelB='demt',dirB=dirB,$
+           fileC=fileC,r_crit=0.25,max_ratio=[5,5,5,5,5],min_diff=[-1,-1,-1,-1,-1]*1.5,max_diff=[.5,.5,1,1,1]*1,scalefactor=2
+
+
+r0A=[1.025,1.035,1.055,1.105,1.155]
+suff  = '_cr2208_CHN'
+lat_range = [70.,90.]
+dirB='/data1/work/dem/'
+fileA = 'Te_awsom_2208_1.85'
+fileB = 'Tm_CR2208_DEMT-AIA_H1_L.5.2.2_r3d'
+fileC = 'R_CR2208_DEMT-AIA_H1_L.5.2.2_r3d'
+xcompare,fileA=fileA,fileB=fileB,nrA=26,ntA=90,rminA=1.0,rmaxA=1.26,nrB=26,rminB=1.0,rmaxB=1.26,lat_range=lat_range,lon_range=[0,360],$
+           comp_suffix='Te_awsom_vs_demt_H'+suff,x_tit='awsom Te [K]',y_tit='demt Te [K]',$
+           histo_x_tit=' Te (awsom) / Te (demt)',tit='',rad_y_tit='Te [K]',$
+           rad_range_A=[1.025,1.155],rad_range_B=[1.025,1.155],r0A=r0A,radd_range=[1.025,1.155],LabelA='awsom',LabelB='demt',dirB=dirB,$
+           fileC=fileC,r_crit=0.25,max_ratio=[5,5,5,5,5],min_diff=[-1,-1,-1,-1,-1]*1.5,max_diff=[.5,.5,1,1,1]*1,scalefactor=2
+
+
+
+
+
+
+
+
+
+
+;===============================================================
+;---Abajo chequeo para reobtener los mapas del poster de nishtha
 r0A=[1.025,1.055,1.105,1.205]
 ;suff  = '_cr2082_open_N'
 ;lat_range = [65,90]
@@ -28,6 +238,7 @@ xcompare,fileA=fileA,fileB=fileB,nrA=26,ntA=90,rminA=1.0,rmaxA=1.26,nrB=26,rminB
            rad_range_A=[1.025,1.25],rad_range_B=[1.025,1.25],r0A=r0A,radd_range=[1.025,1.25],LabelA='awsom',LabelB='demt',/diff,dir=dir,$
            fileC=fileC,r_crit=0.25,max_ratio=[5,5,5,5],min_diff=[-1.2,-1,-1,-1],max_diff=[10,1,1,1],scalefactor=2
 
+;--------------------------------------------------------------------------------
 ;FD
 dir='/data1/work/dem/'
 r0A=[1.025,1.055,1.105,1.205]
@@ -178,13 +389,13 @@ suff='h_l.7.9.9_reduced_kcor_1e4_newgrid'
 
   xcompare,fileA=fileA,fileB=fileB,nrA=120,ntA=90,rminA=1.05,rmaxA=2.25,nrB=26,rminB=1.0,rmaxB=1.26,lat_range=[-40.,0.],lon_range=[230,320],$
            comp_suffix='KCOR-Tom_vs_DEMT_CR2198_'+suff+'-Quiet-region1',x_tit='WL Ne [cm!U-3!N]',y_tit='EUV Ne [cm!U-3!N]',$
-           histo_x_tit='Ratio: Ne (WL) / Ne (EUV)',tit='',rad_y_tit='Ne [cm!U-3!N]',labelA='Kcor',labelB='DEMT',$
+           histo_x_tit=' Ne (WL) / Ne (EUV)',tit='',rad_y_tit='Ne [cm!U-3!N]',labelA='Kcor',labelB='DEMT',$
            rad_range_A=[1.09,2.0],rad_range_B=[1.09,1.2],r0A=r0A,radd_range=[1.105,1.195],dirA='/media/Data1/data1/tomography/bindata/',$
            dirB='/data1/work/dem/',histotit='Streamer Quiet Region'
 
  xcompare,fileA=fileA,fileB=fileB,nrA=120,ntA=90,rminA=1.05,rmaxA=2.25,nrB=26,rminB=1.0,rmaxB=1.26,lat_range=[70.,80.],lon_range=[180,360],$
            comp_suffix='KCOR-Tom_vs_DEMT_CR2198_'+suff+'-Open-region_N',x_tit='WL Ne [cm!U-3!N]',y_tit='EUV Ne [cm!U-3!N]',$
-           histo_x_tit='Ratio: Ne (WL) / Ne (EUV)',tit='',rad_y_tit='Ne [cm!U-3!N]',labelA='Kcor',labelB='DEMT',$
+           histo_x_tit=' Ne (WL) / Ne (EUV)',tit='',rad_y_tit='Ne [cm!U-3!N]',labelA='Kcor',labelB='DEMT',$
            rad_range_A=[1.09,2.0],rad_range_B=[1.09,1.155],r0A=r0A,radd_range=[1.105,1.155],dirA='/media/Data1/data1/tomography/bindata/',$
            dirB='/data1/work/dem/',histotit='Subpolar Open  Region'
 ;-------------------------------corridas 2208
@@ -197,14 +408,14 @@ suff='h_l1.0.6.9_reduced_kcor_6e5_newgrid'
 
   xcompare,fileA=fileA,fileB=fileB,nrA=120,ntA=90,rminA=1.05,rmaxA=2.25,nrB=30,rminB=1.0,rmaxB=1.30,lat_range=[-40.,0.],lon_range=[200,300],$
            comp_suffix='KCOR-Tom_vs_DEMT_CR2208_'+suff+'-Quiet-region2',x_tit='WL Ne [cm!U-3!N]',y_tit='EUV Ne [cm!U-3!N]',$
-           histo_x_tit='Ratio: Ne (WL) / Ne (EUV)',tit='',rad_y_tit='Ne [cm!U-3!N]',labelA='Kcor',labelB='DEMT',$
+           histo_x_tit=' Ne (WL) / Ne (EUV)',tit='',rad_y_tit='Ne [cm!U-3!N]',labelA='Kcor',labelB='DEMT',$
            rad_range_A=[1.09,2.0],rad_range_B=[1.09,1.2],r0A=r0A,radd_range=[1.105,1.195],dirA='/media/Data1/data1/tomography/bindata/',$
            dirB='/data1/work/dem/',histotit='Streamer Quiet Region'
 
   
  xcompare,fileA=fileA,fileB=fileB,nrA=120,ntA=90,rminA=1.05,rmaxA=2.25,nrB=30,rminB=1.0,rmaxB=1.30,lat_range=[70.,80.],lon_range=[180,360],$
            comp_suffix='KCOR-Tom_vs_DEMT_CR2208_'+suff+'-Open-region_N',x_tit='WL Ne [cm!U-3!N]',y_tit='EUV Ne [cm!U-3!N]',$
-           histo_x_tit='Ratio: Ne (WL) / Ne (EUV)',tit='',rad_y_tit='Ne [cm!U-3!N]',labelA='Kcor',labelB='DEMT',$
+           histo_x_tit=' Ne (WL) / Ne (EUV)',tit='',rad_y_tit='Ne [cm!U-3!N]',labelA='Kcor',labelB='DEMT',$
            rad_range_A=[1.09,2.0],rad_range_B=[1.09,1.155],r0A=r0A,radd_range=[1.105,1.155],dirA='/media/Data1/data1/tomography/bindata/',$
            dirB='/data1/work/dem/',histotit='Subpolar Open  Region'
 
