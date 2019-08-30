@@ -1,5 +1,5 @@
 pro xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,log=log,interp=interp,win=win,file=file,titulo=titulo,$
-           box_lat=box_lat,box_lon=box_lon,instrument=instrument,raiz=raiz
+           box_lat=box_lat,box_lon=box_lon,instrument=instrument,raiz=raiz,ysize_factor=ysize_factor
 old_device = !D.NAME
 ; set graph stuff
   device, retain     = 2
@@ -103,7 +103,7 @@ old_device = !D.NAME
 
 
  ;---create over-sized window with white background----------------
-  Npanels = 1
+  Npanels = 1*ysize_factor
   xsimage = np*scalefactor
   ysimage = nt*scalefactor
   DX      = xsimage/1.25
