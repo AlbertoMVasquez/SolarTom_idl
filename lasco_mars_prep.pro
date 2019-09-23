@@ -8,6 +8,7 @@
 ;
 ; Calling sequence example:
 ; lasco_mars_prep,data_dir='/media/Data1/data1/tomography/DATA/c2/CR2208/',file_list='list.txt',r0=[3.0,4.0,5.0]
+; lasco_mars_prep,data_dir='/media/Data1/data1/tomography/DATA/c2/CR2209/',file_list='list.txt',r0=[3.0,4.0,5.0]
 ;---------------------------------------------------------------------
 
 ; Main routine:
@@ -52,7 +53,7 @@ pro expand_header_lasco_mars,hdr=hdr
                       'HAEX_OBS'  ,DSUN ,$ ; m
                       'HAEY_OBS'  ,0.   ,$
                       'HAEZ_OBS'  ,0.   ,$
-                      'CRNL_OBS'  ,DISK_CENTER_LON,$
+                      'CRLN_OBS'  ,DISK_CENTER_LON,$
                       'CRLT_OBS'  ,DISK_CENTER_LAT  )
   return
 end
