@@ -12,7 +12,8 @@
 ; kcor_prep,data_dir='/data1/tomography/DATA/kcor/CR2198/AvgNoOffset_Images/',file_list='list.txt',r0=[1.09,1.5,2.0]
 ; kcor_prep,data_dir='/data1/tomography/DATA/kcor/CR2198/2017/12/03/',file_list='list.txt'
 ;
-; kcor_prep,data_dir='/data1/tomography/DATA/kcor/CR2198/AvgNoOffset_Images/',file_list='list_test.txt',r0=[1.09,1.5,2.0]
+; kcor_prep,data_dir='/media/Data1/data1/tomography/DATA/kcor/CR2198/10MinAvg/',file_list='list_new.txt',r0=[1.09,1.5,2.0]
+; kcor_prep,data_dir='/media/Data1/data1/tomography/DATA/kcor/CR2208/10MinAvg/',file_list='list_new.txt',r0=[1.09,1.5,2.0]
 ;---------------------------------------------------------------------
 
 ; Main routine:
@@ -47,7 +48,7 @@ end
 pro expand_header_kcor,hdr=hdr
 
   AU = 149597870700. ; m
-  geocentric_sun_ephemeris = get_sun(hdr.DATE_OBS)
+  geocentric_sun_ephemeris = get_sun(hdr.TIME_OBS+' '+hdr.DATE_OBS)
   DSUN = geocentric_sun_ephemeris[0] * AU  ; m
   hdr  = create_struct(hdr        ,      $
                       'DSUN'      ,DSUN ,$ ; m
@@ -73,7 +74,7 @@ for ir=0,n_elements(r0)-1 do begin
  display_latitudinal_profiles,height=r0[ir],hdr=hdr,img=img,ra=ra,pa=pa,x=x,y=y
  ps2
 endfor
- window,xs=hdr.naxis1,ys=hdr.naxis1
+ window,0,xs=hdr.naxis1,ys=hdr.naxis1
  loadct,39
  i  = where(img gt 0.) & mini  = min(img(i)) 
  tvscl,alog10(img2  > mini ),0
