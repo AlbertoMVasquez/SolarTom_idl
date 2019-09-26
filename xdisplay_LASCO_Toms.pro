@@ -17,10 +17,6 @@ dir = '/media/Data1/data1/tomography/bindata/'
 ; Selected Heights:
 r0A=[4.0,5.0]
 
-;min and max Arrays:
-minA =  1. + fltarr(n_elements(r0A))
-maxA = 25. + fltarr(n_elements(r0A))
-
 ; Units
 units = 1.e4
 
