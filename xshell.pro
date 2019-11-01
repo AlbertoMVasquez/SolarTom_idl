@@ -1,6 +1,7 @@
 pro xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,log=log,interp=interp,win=win,file=file,titulo=titulo,$
-           box_lat=box_lat,box_lon=box_lon,instrument=instrument,raiz=raiz,ysize_factor=ysize_factor
+           box_lat=box_lat,box_lon=box_lon,instrument=instrument,raiz=raiz,ysize_factor=ysize_factor,mmap_oc=mmap_oc,prefijo_mapoc=prefijo_mapoc
 old_device = !D.NAME
+if not keyword_set(ysize_factor) then ysize_factor =1.
 ; set graph stuff
   device, retain     = 2
   device, true_color = 24
@@ -14,7 +15,10 @@ old_device = !D.NAME
   
   if keyword_set(interp) then $
      map2=rotate(rebin(reform(map(ir,*,*)),nt*scalefactor,np*scalefactor),4)
-  
+
+
+  if keyword_set(mmap_oc) then load_mapoc,'CR'+prefijo_mapoc+'_90X180blines_r_',r0,/mhd,mapoc
+
   if NOT keyword_set(interp) then begin
      tmin= -90.
      tmax= +90.
@@ -23,11 +27,13 @@ old_device = !D.NAME
      t=tmin+(tmax-tmin)*findgen(nt)/float(nt-1)
      p=pmin+(pmax-pmin)*findgen(np)/float(np-1)
      map2d=reform(map(ir,*,*))
+     if keyword_set(mmap_oc) then     mapoc2d= reform(mapoc(ir,*,*))
      nt2=nt*scalefactor
      np2=np*scalefactor
      t2=tmin+(tmax-tmin)*findgen(nt2)/float(nt2-1)
      p2=pmin+(pmax-pmin)*findgen(np2)/float(np2-1)
-     map2=fltarr(nt2,np2)
+     map2  =fltarr(nt2,np2)
+     if keyword_set(mmap_oc) then mapoc2=fltarr(nt2,np2)
      for ip2=0,np2-1 do begin
         p0=p2(ip2)
         fp=abs(p-p0)
@@ -37,11 +43,13 @@ old_device = !D.NAME
            ft=abs(t-t0)
            it=fix( (where(ft eq min(ft)))(0) )
            map2(it2,ip2)=map2d(it,ip)
+           if keyword_set(mmap_oc) then mapoc2(it2,ip2)=mapoc2d(it,ip)
         endfor
      endfor
      map2=rotate(map2,4)
+     if keyword_set(mmap_oc) then mapoc2 = rotate(mapoc2,4)
   endif
-  
+
 ; Default mini and maxi
   ipos = where(map2 gt 0.)
   if ipos(0) eq -1 then ipos = where(finite(map2) eq 1)  
@@ -120,12 +128,20 @@ old_device = !D.NAME
     height_string = strmid(string(r0),6,5)
     x = x0
     y = y0+DY/2
-    xcarrmap,map=map2,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,clrtbl=clrtbl,$
-            xtitle_status=1,ytitle_status=1,titulo_status=1,$
-            title=titulo+' at '+height_string+' R!DSUN!N',$
-            /color_scale,DX=DX,DY=DY,mini=mini,maxi=maxi,xsimage=xsimage,ysimage=ysimage,instrument=instrument
-    record_gif,'/data1/tomography/SolarTom_idl/Figures/','map_'+file+'_'+height_string+'_Rsun.gif','X'
+    if keyword_set(mmap_oc) then xcarrmap,map=map2,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,clrtbl=clrtbl,$
+                                         xtitle_status=1,ytitle_status=1,titulo_status=1,$
+                                         title=titulo+' at '+height_string+' R!DSUN!N',$
+                                         /color_scale,DX=DX,DY=DY,mini=mini,maxi=maxi,xsimage=xsimage,ysimage=ysimage,instrument=instrument,mmapoc=mapoc2
+    if not keyword_set(mmap_oc) then xcarrmap,map=map2,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,clrtbl=clrtbl,$
+                                             xtitle_status=1,ytitle_status=1,titulo_status=1,$
+                                             title=titulo+' at '+height_string+' R!DSUN!N',$
+                                             /color_scale,DX=DX,DY=DY,mini=mini,maxi=maxi,xsimage=xsimage,ysimage=ysimage,instrument=instrument
 
+    str='map_'+file+'_'+height_string+'_Rsun'
+    record_gif,'/data1/tomography/SolarTom_idl/Figures/',(STRJOIN(STRSPLIT(str, /EXTRACT,'.'), ''))+'.gif','X'
+;Le saca los dots separando en substrings y luego los une eliminando
+;los espacios. Esto es utila  al hora de armar .tex ya que no es
+;necesario cambiarle el nombre
    if keyword_set(log) then begin
       mini=10.^mini
       maxi=10.^maxi

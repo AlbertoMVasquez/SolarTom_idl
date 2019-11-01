@@ -2,7 +2,7 @@ pro xcarrmap,map=map,xi=xi,yi=yi,np=np,nt=nt,scalefactor=scalefactor,clrtbl=clrt
             xtitle_status=xtitle_status,ytitle_status=ytitle_status,$
             titulo_status=titulo_status,title=title,toptitle=toptitle,$
             color_scale=color_scale,DX=DX,DY=DY,mini=mini,maxi=maxi,$
-            xsimage=xsimage,ysimage=ysimage,instrument=instrument
+            xsimage=xsimage,ysimage=ysimage,instrument=instrument,mmapoc=mapoc2
   
     x=xi
     y=yi
@@ -31,7 +31,12 @@ pro xcarrmap,map=map,xi=xi,yi=yi,np=np,nt=nt,scalefactor=scalefactor,clrtbl=clrt
         ytitle=ytitle,$
         title=titulo,$
         yticklen=.02,xticklen=.03,ythick=2,xthick=2,charthick=4,font=1
-
+    if keyword_set(mapoc2) then begin
+       contour,mapoc2,lon,lat,/noerase,color=0,pos=[X,Y,X+nlon,Y+nlat],$
+               /device,xstyle=1,ystyle=1,yticklen=.02,xticklen=0.03,ythick=2,$
+               xthick=2,charthick=0.1,charsize=0.1,font=1,c_thick=4,c_linestyle=lstyle
+    endif
+    
    if keyword_set(color_scale) then begin
       nsy = ysimage
       nsx = Dx/5
