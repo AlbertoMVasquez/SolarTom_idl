@@ -1,3 +1,89 @@
+;---------------------
+r0A=[1.005]
+xdisplay,dir='/data1/work/MHD/',file='Br_awsom_2082_1.85_extend',nr=500,nt=90,rmin=1.,rmax=6.,r0A=r0A,win=0,titulo='Br [G] CR-2082' ,minA=-1*[10],maxA =[10]
+xdisplay,dir='/data1/work/MHD/',file='Br_awsom_2208_1.85_extend',nr=500,nt=90,rmin=1.,rmax=6.,r0A=r0A,win=0,titulo='Br [G] CR-2208' ,minA=-1*[10],maxA =[10]
+
+
+
+;-----------------------
+r0A=[1.065]
+xdisplay,dir='/data1/work/dem/',file='Tmfede_multistart_',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2208 R171 2A',minA=[0],maxA=[2.5]*1.e6,clrtbl=5
+
+xdisplay,dir='/data1/work/dem/github_dem/dem/',file='R284fede_multistart_',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2208',minA=[0],maxA=[1.]*0.25,clrtbl=12
+
+;mapas testeo con AIA para Fede
+r0A=[1.025,1.065,1.105]
+
+;temp
+xdisplay,dir='/data1/work/dem/',file='Tmtest_fede_2a',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2208 R171 2A',minA=[0,0,0],maxA=[1,2.5,2.5]*1.e6,clrtbl=5
+
+xdisplay,dir='/data1/work/dem/',file='TmTest_fede_aia3_g3_temp',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2208 R171 2A',minA=[0,0,0],maxA=[1,2.5,2.5]*1.e6,clrtbl=5
+
+xdisplay,dir='/data1/work/dem/github_dem/dem/',file='R171Test_fede_aia2a_g1',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2208 R171 2A',maxA=[1,1,1]*0.25,clrtbl=12
+
+xdisplay,dir='/data1/work/dem/github_dem/dem/',file='R195Test_fede_aia2a_g1',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2208 R193 2A',maxA=[1,1,1]*0.25,clrtbl=12
+
+
+
+xdisplay,dir='/data1/work/dem/github_dem/dem/',file='R171Test_fede_aia2b_g1',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2208 R171 2A',maxA=[1,1,1]*0.25,clrtbl=12
+
+xdisplay,dir='/data1/work/dem/github_dem/dem/',file='R195Test_fede_aia2b_g1',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2208 R193 2B',maxA=[1,1,1]*0.25,clrtbl=12
+
+
+
+xdisplay,dir='/data1/work/dem/github_dem/dem/',file='R171Test_fede_aia3_g3',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2208 R171 EQ',maxA=[1,1,1]*0.25,clrtbl=12
+
+xdisplay,dir='/data1/work/dem/github_dem/dem/',file='R195Test_fede_aia3_g3',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2208 R193 EQ',maxA=[1,1,1]*0.25,clrtbl=12
+
+xdisplay,dir='/data1/work/dem/github_dem/dem/',file='R284Test_fede_aia3_g3',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2208 R211 EQ',maxA=[1,1,1]*0.25,clrtbl=12
+
+
+;-------------------Mppas R_k para ver los problemas en zona abierta
+;con AIA
+
+r0A=[1.025,1.065,1.105,1.145,1.185,1.225]
+xdisplay,dir='/data1/work/dem/',file='R171_CR2208_DEMT-EUVI_behind_H1-L.50.20.20_r3d',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2208 DEMT: Ne [cm!U-3!N]',maxA=[1,1,1,1,1,1]*0.25,clrtbl=12
+
+xdisplay,dir='/data1/work/dem/',file='R193_CR2208_DEMT-EUVI_behind_H1-L.50.20.20_r3d',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2208 DEMT: Ne [cm!U-3!N]',maxA=[1,1,1,1,1,1]*0.25,clrtbl=12
+
+xdisplay,dir='/data1/work/dem/',file='R211_CR2208_DEMT-EUVI_behind_H1-L.50.20.20_r3d',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2208 DEMT: Ne [cm!U-3!N]',maxA=[1,1,1,1,1,1]*0.25,clrtbl=12
+
+
+
+
+;..................... Treshhold                                                                                                                        
+;esta parte es para encontrar treshold en Ne_DEMT con la intencion de recortar las regiones activas                                                   
+r0A=[1.065]
+
+xdisplay,dir='/data1/work/dem/',file='Ne_CR2208_DEMT-AIA_H1_L.5.2.2_r3d',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2208 DEMT: Ne [cm!U-3!N]',minA=[0],maxA=[1.6]*1.e8,clrtbl=4
+
+xdisplay,dir='/data1/work/MHD/',file='Ne_awsom_2208_1.85_short'         ,nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2208 AWSOM:Ne [cm!U-3!N]',minA=[0],maxA=[1.6]*1.e8,clrtbl=4
+
+
+xdisplay,dir='/data1/work/MHD/',file='Ne_awsom_2082_1.85_short',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2082 AWSOM:Ne [cm!U-3!N]',minA=[0],maxA=[1.6]*1.e8,clrtbl=4
+
+xdisplay,dir='/data1/work/dem/',file='Ne_CR2082_DEMT-EUVI_behind_H1-L.35.2.3_r3d',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2082 DEMT: Ne [cm!U-3!N]',minA=[0],maxA=[1.6]*1.e8,clrtbl=4
+
+;hacer un stop en el xdisplay y poner en negro todo aquello mayor a un
+;treshold de 1.4 aprox.
 ;..................................con mapoc - proceeding + topical collectiozn
 ;awsom
 r0A=[1.025,1.065,1.105,1.145,1.185,1.225]
@@ -30,13 +116,13 @@ xdisplay,dir='/data1/work/dem/',file='Tm_CR2208_DEMT-AIA_H1_L.5.2.2_r3d',nr= 26,
 xdisplay,dir='/data1/work/dem/',file='Tm_CR2082_DEMT-EUVI_behind_H1-L.35.2.3_r3d',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
          r0A=r0A,win=0,titulo='CR-2082 DEMT: Te [K]',minA=[0,0,0,0,0,0]*1.e6,maxA=[2.5,2.5,2.5,2.5,2.5,2.5]*1.e6,clrtbl=5,/mmap_oc,prefijo_mapoc='2082'
 
-
+;mapas de R
+r0A=[1.025,1.035,1.045,1.055,1.065,1.085,1.105,1.145,1.225]
 xdisplay,dir='/data1/work/dem/',file='R_CR2208_DEMT-AIA_H1_L.5.2.2_r3d',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
-         r0A=r0A,win=0,titulo='CR-2208 DEMT: R',maxA=[1,1,1,1,1,1,1]*0.25,clrtbl=12,/mmap_oc,prefijo_mapoc='2208'
+         r0A=r0A,win=0,titulo='CR-2208 DEMT: R',maxA=[1,1,1,1,1,1,1,1,1]*0.25,clrtbl=12;,/mmap_oc,prefijo_mapoc='2208'
 
 xdisplay,dir='/data1/work/dem/',file='R_CR2082_DEMT-EUVI_behind_H1-L.35.2.3_r3d',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
-         r0A=r0A,win=0,titulo='CR-2082 DEMT: R',maxA=[1,1,1,1,1,1,1]*0.25,clrtbl=12,/mmap_oc,prefijo_mapoc='2082'
-
+         r0A=r0A,win=0,titulo='CR-2082 DEMT: R',maxA=[1,1,1,1,1,1,1,1,1]*0.25,clrtbl=12;,/mmap_oc,prefijo_mapoc='2082'
 
 
 ;---------------------

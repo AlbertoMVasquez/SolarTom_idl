@@ -62,8 +62,10 @@ if not keyword_set(ysize_factor) then ysize_factor =1.
   map3=map2
   map2=map2>mini<maxi
   map2(0,0)=mini
+;  stop
+if keyword_set(treshold) then map2(where(map2 ge 1.3e8 and map2 lt maxi)) = mini
   map2(0,1)=maxi
-  
+  ;para treshold dejar el maxi, pero todo entre trsh y maxi llevarlo a mini.
 ;for R maps
   if clrtbl eq 12. then begin
      map2(where(map3 eq -999.)) = 0.
