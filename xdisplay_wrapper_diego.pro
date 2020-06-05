@@ -1,3 +1,86 @@
+;-------------------Mppas R_k para ver los problemas en zona abierta
+;con AIA
+
+r0A=[1.025,1.065,1.105,1.145,1.185,1.225]
+xdisplay,dir='/data1/work/dem/',file='R171_CR2208_DEMT-EUVI_behind_H1-L.50.20.20_r3d',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2208 DEMT: Ne [cm!U-3!N]',maxA=[1,1,1,1,1,1]*0.25,clrtbl=12
+
+xdisplay,dir='/data1/work/dem/',file='R193_CR2208_DEMT-EUVI_behind_H1-L.50.20.20_r3d',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2208 DEMT: Ne [cm!U-3!N]',maxA=[1,1,1,1,1,1]*0.5,clrtbl=12
+
+xdisplay,dir='/data1/work/dem/',file='R211_CR2208_DEMT-EUVI_behind_H1-L.50.20.20_r3d',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2208 DEMT: Ne [cm!U-3!N]',maxA=[1,1,1,1,1,1]*0.5,clrtbl=12
+
+
+
+
+;..................... Treshhold                                                                                                                        
+;esta parte es para encontrar treshold en Ne_DEMT con la intencion de recortar las regiones activas                                                   
+r0A=[1.065]
+
+xdisplay,dir='/data1/work/dem/',file='Ne_CR2208_DEMT-AIA_H1_L.5.2.2_r3d',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2208 DEMT: Ne [cm!U-3!N]',minA=[0],maxA=[1.6]*1.e8,clrtbl=4
+
+xdisplay,dir='/data1/work/MHD/',file='Ne_awsom_2208_1.85_short'         ,nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2208 AWSOM:Ne [cm!U-3!N]',minA=[0],maxA=[1.6]*1.e8,clrtbl=4
+
+
+xdisplay,dir='/data1/work/MHD/',file='Ne_awsom_2082_1.85_short',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2082 AWSOM:Ne [cm!U-3!N]',minA=[0],maxA=[1.6]*1.e8,clrtbl=4
+
+xdisplay,dir='/data1/work/dem/',file='Ne_CR2082_DEMT-EUVI_behind_H1-L.35.2.3_r3d',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2082 DEMT: Ne [cm!U-3!N]',minA=[0],maxA=[1.6]*1.e8,clrtbl=4
+
+;hacer un stop en el xdisplay y poner en negro todo aquello mayor a un
+;treshold de 1.4 aprox.
+;..................................con mapoc - proceeding + topical collectiozn
+;awsom
+r0A=[1.025,1.065,1.105,1.145,1.185,1.225]
+xdisplay,dir='/data1/work/MHD/',file='Ne_awsom_2082_1.85_short',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2082 AWSOM:Ne [cm!U-3!N]',minA=[0,0,0,0,0,0],maxA=[6,1.6,1,.8,.5,.4]*1.e8,clrtbl=4,/mmap_oc,prefijo_mapoc='2082'
+
+xdisplay,dir='/data1/work/MHD/',file='Ne_awsom_2208_1.85_short',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2208 AWSOM:Ne [cm!U-3!N]',minA=[0,0,0,0,0,0],maxA=[6,1.6,1,.8,.5,.4]*1.e8,clrtbl=4,/mmap_oc,prefijo_mapoc='2208'
+
+xdisplay,dir='/data1/work/MHD/',file='Te_awsom_2082_1.85_short',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2082 AWSOM: Te [K]',minA=[0,0,0,0,0,0],maxA=[1,2.5,2.5,2.5,2.5,2.5]*1.e6,clrtbl=5,/mmap_oc,prefijo_mapoc='2082'
+
+xdisplay,dir='/data1/work/MHD/',file='Te_awsom_2208_1.85_short',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2208 AWSOM: Te [K]',minA=[0,0,0,0,0,0],maxA=[1,2.5,2.5,2.5,2.5,2.5]*1.e6,clrtbl=5,/mmap_oc,prefijo_mapoc='2208'
+
+
+;demt
+r0A=[1.025,1.065,1.105,1.145,1.185,1.225]
+xdisplay,dir='/data1/work/dem/',file='Ne_CR2208_DEMT-AIA_H1_L.5.2.2_r3d',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2208 DEMT: Ne [cm!U-3!N]',clrtbl=4,minA=[0,0,0,0,0,0],maxA=[2.2,1.6,1,.8,.5,.4]*1.e8,/mmap_oc,prefijo_mapoc='2208'
+
+xdisplay,dir='/data1/work/dem/',file='Ne_CR2082_DEMT-EUVI_behind_H1-L.35.2.3_r3d',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2082 DEMT: Ne [cm!U-3!N]',minA=[0,0,0,0,0,0],maxA=[2.2,1.6,1,.8,.5,.4]*1.e8,clrtbl=4,/mmap_oc,prefijo_mapoc='2082'
+
+
+
+xdisplay,dir='/data1/work/dem/',file='Tm_CR2208_DEMT-AIA_H1_L.5.2.2_r3d',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2208 DEMT: Te [K]',minA=[0,0,0,0,0,0],maxA=[2.5,2.5,2.5,2.5,2.5,2.5]*1.e6,clrtbl=5,/mmap_oc,prefijo_mapoc='2208'
+
+xdisplay,dir='/data1/work/dem/',file='Tm_CR2082_DEMT-EUVI_behind_H1-L.35.2.3_r3d',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2082 DEMT: Te [K]',minA=[0,0,0,0,0,0]*1.e6,maxA=[2.5,2.5,2.5,2.5,2.5,2.5]*1.e6,clrtbl=5,/mmap_oc,prefijo_mapoc='2082'
+
+;mapas de R
+r0A=[1.025,1.035,1.045,1.055,1.065,1.085,1.105,1.145,1.225]
+xdisplay,dir='/data1/work/dem/',file='R_CR2208_DEMT-AIA_H1_L.5.2.2_r3d',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2208 DEMT: R',maxA=[1,1,1,1,1,1,1,1,1]*0.25,clrtbl=12;,/mmap_oc,prefijo_mapoc='2208'
+
+xdisplay,dir='/data1/work/dem/',file='R_CR2082_DEMT-EUVI_behind_H1-L.35.2.3_r3d',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
+         r0A=r0A,win=0,titulo='CR-2082 DEMT: R',maxA=[1,1,1,1,1,1,1,1,1]*0.25,clrtbl=12;,/mmap_oc,prefijo_mapoc='2082'
+
+
+;---------------------
+r0A=[2.,3.,4.,5.,6.]
+xdisplay,dir='/data1/work/MHD/',file='Vr_awsom_2082_1.85_extend',nr=500,nt=90,rmin=1.,rmax=6.,r0A=r0A,win=0,titulo='Vr [km/s]'
+r0A=[3,4.,5,6]
+xdisplay,dir='/data1/work/MHD/',file='Br_awsom_2082_1.85_extend',nr=500,nt=90,rmin=1.,rmax=6.,r0A=r0A,win=0,titulo='Br [G]',minA=-1*[.2,.1,.05,.03],maxA =[.2,.1,.05,.03]
+
+;---------------------------
 xdisplay,dir='/data1/tomography/bindata/',file='Ne_CR2198_DEMT-AIA_H1-L0.225_r3D',nr= 26,nt=90,rmin=1.00,rmax=1.26,r0A=r0A,win=0,titulo='DEMT-AIA-FD-r3D: Ne [cm!U-3!N]',minA=minima,maxA=maxima,$
          box_lat=[-25.,05.,-30.,30.,70.,80.,-80.,-70.],box_lon=[180.,210.,0.,60.,200.,360.,190.,290.]
 r0A=[1.105,1.155,1.205]
@@ -90,4 +173,30 @@ xdisplay,dir='/data1/work/dem/',file='Er_CR2208_DEMT-EUVI_behind_H1-L.50.20.20_r
 r0A=[1.105]
 xdisplay,dir='/data1/work/MHD/',file='qrad_awsom_2208_1.85',nr= 26,nt=90,rmin=1.0,rmax=1.26,$
          r0A=r0A,win=0,titulo='CR-2028 awsom: Er [erg cm!U-3!N s!U-1!N]',clrtbl=5
+
+;----------------------------------
+;CR2219    CR2223
+r0A=[1.025,1.065,1.105]
+xdisplay,dir='/data1/work/dem/',file='Ne_CR2219_DEMT-AIA_H_L.5.2.2_r3d_multistart',nr= 30,nt=90,rmin=1.0,rmax=1.30,$
+         r0A=r0A,win=0,titulo='CR-2219 DEMT: Ne [cm!U-3!N]',clrtbl=4,minA=[0,0,0],maxA=[2.2,1.6,1]*1.e8
+r0A=[1.025,1.065,1.105]
+xdisplay,dir='/data1/work/dem/',file='Ne_CR2223_DEMT-AIA_H_L.5.2.2_r3d_multistart',nr= 30,nt=90,rmin=1.0,rmax=1.30,$
+         r0A=r0A,win=0,titulo='CR-2223 DEMT: Ne [cm!U-3!N]',minA=[0,0,0],maxA=[2.2,1.6,1]*1.e8,clrtbl=4
+
+
+r0A=[1.025,1.065,1.105]
+xdisplay,dir='/data1/work/dem/',file='Tm_CR2219_DEMT-AIA_H_L.5.2.2_r3d_multistart',nr= 30,nt=90,rmin=1.0,rmax=1.30,$
+         r0A=r0A,win=0,titulo='CR-2219 DEMT: Te [K]',minA=[0,0,0],maxA=[2.5,2.5,2.5]*1.e6,clrtbl=5
+r0A=[1.025,1.065,1.105]
+xdisplay,dir='/data1/work/dem/',file='Tm_CR2223_DEMT-AIA_H_L.5.2.2_r3d_multistart',nr= 30,nt=90,rmin=1.0,rmax=1.30,$
+         r0A=r0A,win=0,titulo='CR-2223 DEMT: Te [K]',minA=[0,0,0],maxA=[2.5,2.5,2.5]*1.e6,clrtbl=5
+
+
+r0A=[1.025,1.065,1.105]
+xdisplay,dir='/data1/work/dem/',file='R_CR2219_DEMT-AIA_H_L.5.2.2_r3d_multistart',nr= 30,nt=90,rmin=1.0,rmax=1.30,$
+         r0A=r0A,win=0,titulo='CR-2219 DEMT: R',maxA=[1,1,1]*0.25,clrtbl=12
+r0A=[1.025,1.065,1.105]
+xdisplay,dir='/data1/work/dem/',file='R_CR2223_DEMT-AIA_H_L.5.2.2_r3d_multistart',nr= 30,nt=90,rmin=1.0,rmax=1.30,$
+         r0A=r0A,win=0,titulo='CR-2223 DEMT: R',maxA=[1,1,1]*0.25,clrtbl=12
+
 

@@ -4,7 +4,7 @@ old_device = !D.NAME
 ; set graph stuff
   device, retain     = 2
   device, true_color = 24
-  device, decomposed = 0
+  device, decomposed = 0;,/helvetica
   
   if not keyword_set(pos) then pos=0
   
@@ -54,6 +54,9 @@ old_device = !D.NAME
   map3=map2
   map2=map2>mini<maxi
   map2(0,0)=mini
+  if keyword_set(treshold) then map2(where(map2 ge treshold and map2 le maxi)) = mini
+;convierte en negro lo que esta entre treshold y maxi.
+;es decir, elimina las regiones activas. 
   map2(0,1)=maxi
   
 ;for R maps
