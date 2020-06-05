@@ -100,7 +100,7 @@ pro xcompare,dirA=dirA,dirB=dirB,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA
 ;la idea es que esto de abajo va a servir si los pasos radiales son
 ;los mismos.
   if radA(1)-radA(0) eq	radB(1)-radB(0) then begin
-     if radA(0) ne radB(0) or radA(nrB-1) ne radB(nrB-1) then begin
+     if radA(0) ne radB(0) or radA(nrA-1) ne radB(nrB-1) then begin
 ;mayor de los minimos
         if min(radA) gt min(radB) then begin
            inferior = min(radA)
@@ -136,7 +136,7 @@ pro xcompare,dirA=dirA,dirB=dirB,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA
      endif
   endif
 
-     if radA(0) eq radB(0) and radA(nrB-1) eq radB(nrB-1) then begin
+     if radA(0) eq radB(0) and radA(nrA-1) eq radB(nrB-1) then begin
         mapA_recort = mapA
         mapB_recort = mapB
         mapA_rad3d_recort = mapA_rad3d
