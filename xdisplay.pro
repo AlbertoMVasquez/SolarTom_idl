@@ -19,6 +19,7 @@ pro xdisplay,dir=dir,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A=r0A,min
   if not keyword_set(ysize_factor) then ysize_factor = 1.
   if not keyword_set (units)       then units        = 1.
   if not keyword_set(prefijo_mapoc)then prefijo_mapoc = strmid(file,5,4)
+stop
   map = map /units
   
   if not keyword_set(radial_grid_file) then begin
@@ -49,22 +50,25 @@ pro xdisplay,dir=dir,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A=r0A,min
      if keyword_set(maxA) then maxi = maxA[i]
    
      if (not keyword_set(log) AND not keyword_set(raiz)) and not keyword_set(mmap_oc) then $
-        xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+1+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon,instrument=instrument,ysize_factor=ysize_factor
+        xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+1+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon,instrument=instrument,$
+               ysize_factor=ysize_factor
 
      if (not keyword_set(log) AND not keyword_set(raiz)) and keyword_set(mmap_oc) then $
-        xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+1+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon,instrument=instrument,ysize_factor=ysize_factor,$
-               prefijo_mapoc=prefijo_mapoc,/mmap_oc
-     if     keyword_set(log) and not keyword_set(map_oc) then $
-        xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+1+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon,instrument=instrument,/log,ysize_factor=ysize_factor
+        xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+1+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon,instrument=instrument,$
+               ysize_factor=ysize_factor,prefijo_mapoc=prefijo_mapoc,/mmap_oc
+     if keyword_set(log) and not keyword_set(map_oc) then $
+        xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+1+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon,instrument=instrument,$
+               /log,ysize_factor=ysize_factor
 ;     if     keyword_set(raiz) and not keyword_set(map_oc) then $
-
 ;stop     
-     if (not keyword_set(log) AND not keyword_set(raiz)) and not keyword_set(mmap_oc) then $
-        xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+1+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon,instrument=instrument,ysize_factor=ysize_factor
+;     if (not keyword_set(log) AND not keyword_set(raiz)) and not keyword_set(mmap_oc) then $
+;        xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+1+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon,instrument=instrument,ysize_factor=ysize_factor
      if     keyword_set(log)  then $
-        xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+1+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon,instrument=instrument,/log,ysize_factor=ysize_factor
+        xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+1+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon,instrument=instrument,$
+               /log,ysize_factor=ysize_factor
      if     keyword_set(raiz) then $
-   xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+1+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon,instrument=instrument,/raiz,ysize_factor=ysize_factor
+        xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+1+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon,instrument=instrument,$
+               /raiz,ysize_factor=ysize_factor
      
 ;     xhisto,map=map,nr=nr,nt=nt,np=np,radii=rad,rad_range=rad_range,lat_range=lat_range,win=win+3,dir=dir,file=file,titulo='Histogram of '+titulo,sufijo=sufijo,mini=mini,maxi=maxi
      ; Store mini and maxi for a final report.

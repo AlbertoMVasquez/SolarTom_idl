@@ -2,11 +2,14 @@ pro xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,m
            box_lat=box_lat,box_lon=box_lon,instrument=instrument,raiz=raiz,ysize_factor=ysize_factor,mmap_oc=mmap_oc,prefijo_mapoc=prefijo_mapoc
 old_device = !D.NAME
 if not keyword_set(ysize_factor) then ysize_factor =1.
+
 ; set graph stuff
   device, retain     = 2
   device, true_color = 24
   device, decomposed = 0
-  
+;  DEVICE, SET_FONT='Helvetica Bold Italic', /TT_FONT
+;  device,/inches,xsize=10,ysize=7, /helvetica,SCALE_FACTOR=1  ;solo
+;  fuciona dentro de eps
   if not keyword_set(pos) then pos=0
   
   nr=fix((size(map))(1))
@@ -15,7 +18,6 @@ if not keyword_set(ysize_factor) then ysize_factor =1.
   
   if keyword_set(interp) then $
      map2=rotate(rebin(reform(map(ir,*,*)),nt*scalefactor,np*scalefactor),4)
-
 
   if keyword_set(mmap_oc) then load_mapoc,'CR'+prefijo_mapoc+'_90X180blines_r_',r0,/mhd,mapoc
 
@@ -120,16 +122,26 @@ if keyword_set(treshold) then map2(where(map2 ge 1.3e8 and map2 lt maxi)) = mini
   DY      = ysimage/1.25
   x0      = DX/2.5
   y0      = (ysimage+DY)*(Npanels-1)
-  window,win,xs=xsimage+DX,ys=(ysimage+DY)*Npanels
-  loadct,27
-  tvscl,fltarr(xsimage+DX,(ysimage+DY)*Npanels)
-
+;   window,win,xs=xsimage+DX,ys=(ysimage+DY)*Npanels
+;  loadct,27
+;  tvscl,fltarr(xsimage+DX,(ysimage+DY)*Npanels)
+x0=80
+y0=60
+DX=x0+90
+DY=y0+40
+;stop
+window,win,xs=750,ys=420;xs=np*scalefactor+DX,ys=nt*scalefactor+DY
+;window,win,xs=750,ys=420
+loadct,27
+;tvscl,fltarr(2*np*scalefactor+DX,nt*scalefactor+DY)
+tvscl,fltarr(2*np*scalefactor+DX,420)
+ 
 ; if clrtbl le 40 then loadct,clrtbl
 ; if clrtbl gt 40 AND instrument ne 'aia' then secchi_colors, 'EUVI', clrtbl, R, G, B,/load
 ; if clrtbl gt 40 AND instrument eq 'aia' then aia_lct,wave=clrtbl,/load
     height_string = strmid(string(r0),6,5)
-    x = x0
-    y = y0+DY/2
+    x = 100;x0
+    y = 90;y0+DY/2
     if keyword_set(mmap_oc) then xcarrmap,map=map2,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,clrtbl=clrtbl,$
                                          xtitle_status=1,ytitle_status=1,titulo_status=1,$
                                          title=titulo+' at '+height_string+' R!DSUN!N',$
