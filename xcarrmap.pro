@@ -32,7 +32,7 @@ pro xcarrmap,map=map,xi=xi,yi=yi,np=np,nt=nt,scalefactor=scalefactor,clrtbl=clrt
         xtitle=xtitle,$
         ytitle=ytitle,$
         title=titulo,$
-        yticklen=.02,xticklen=.03,ythick=2,xthick=2,charthick=2,font=1
+        yticklen=.02,xticklen=.03,ythick=2,xthick=2,charthick=2,Font=1
     if keyword_set(mapoc2) then begin
        contour,mapoc2,lon,lat,/noerase,color=0,pos=[X,Y,X+nlon,Y+nlat],$
                /device,xstyle=1,ystyle=1,yticklen=.02,xticklen=0.03,ythick=2,$

@@ -1,7 +1,9 @@
 pro xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,log=log,interp=interp,win=win,file=file,titulo=titulo,$
            box_lat=box_lat,box_lon=box_lon,instrument=instrument,raiz=raiz,ysize_factor=ysize_factor,mmap_oc=mmap_oc,prefijo_mapoc=prefijo_mapoc
-old_device = !D.NAME
-if not keyword_set(ysize_factor) then ysize_factor =1.
+
+  old_device = !D.NAME
+
+  if not keyword_set(ysize_factor) then ysize_factor=1.
 
 ; set graph stuff
   device, retain     = 2
@@ -59,7 +61,6 @@ if not keyword_set(ysize_factor) then ysize_factor =1.
   ;keyword_set return 1 for nonzero values, for mini=0 doesn't work 
   if not keyword_set(maxi) then maxi = max(map2(ipos))
   
-
 ; Force mini and maxi
   map3=map2
   map2=map2>mini<maxi
@@ -152,11 +153,8 @@ tvscl,fltarr(2*np*scalefactor+DX,420)
                                              /color_scale,DX=DX,DY=DY,mini=mini,maxi=maxi,xsimage=xsimage,ysimage=ysimage,instrument=instrument
 
     str='map_'+file+'_'+height_string+'_Rsun'
-    record_gif,'/data1/tomography/SolarTom_idl/Figures/',(STRJOIN(STRSPLIT(str, /EXTRACT,'.'), ''))+'.gif','X'
-;Le saca los dots separando en substrings y luego los une eliminando
-;los espacios. Esto es utila  al hora de armar .tex ya que no es
-;necesario cambiarle el nombre
-   if keyword_set(log) then begin
+    record_gif,'/data1/tomography/SolarTom_idl/Figures/',(STRJOIN(STRSPLIT(str, /EXTRACT,'.'), '_'))+'.gif','X'
+    if keyword_set(log) then begin
       mini=10.^mini
       maxi=10.^maxi
    endif
