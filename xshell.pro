@@ -70,13 +70,13 @@ if keyword_set(treshold) then map2(where(map2 ge 1.3e8 and map2 lt maxi)) = mini
   map2(0,1)=maxi
   ;para treshold dejar el maxi, pero todo entre trsh y maxi llevarlo a mini.
 ;for R maps
-  if clrtbl eq 12. then begin
-     map2(where(map3 eq -999.)) = 0.
-     low = where(map3 ge 0. and map3 le 0.01)
-     map2(low) =0.01
-     map2(0,0)=0.
+;  if clrtbl eq 12. then begin
+;     map2(where(map3 eq -999.)) = 0.
+;     low = where(map3 ge 0. and map3 le 0.01)
+;     map2(low) =0.01
+;     map2(0,0)=0.
   ;necessary to make zda black voxels in R maps and low valuesof R, dark green
-  endif
+;  endif
  
   if keyword_set(log) then begin
      map2=alog10(map2)
