@@ -56,6 +56,7 @@ pro comp_prep,data_dir=data_dir,file_list=file_list,r0=r0,dynamics=dynamics,mean
      endif
      fits_close, fcb
 
+     stop
      create_output_header
      compute_line_total_intensity_image
 
@@ -95,7 +96,7 @@ pro compute_line_total_intensity_image
   if filetype eq 'dynamics' then begin
      image_w = (image_width*1.e3/c) * output_header.WAVELENG * 10. ; line width in units of [A]
      image_p = image_peak*1.e-6*Bsun ; line peak in units of [Bsun]
-     image_total_intensity = image_peak * sqrt(!pi) * image_w ; total intensity in units of [Bsun*A]
+     image_total_intensity = image_peak * sqrt(!pi) * image_w ; total intensity in units of [1.e-6*Bsun*A]
   endif
   if filetype eq 'meanfits' then begin
      image_total_intensity = image_Imean*1.e-6*Bsun ; In this case this is the intensity at central reference wavelength in units of [Bsun]
@@ -333,8 +334,8 @@ pro process_data,windowlapse=windowlapse,inithour=inithour
   return
 end
 
-; compute_avg_dynamics,data_dir='/data1/tomography/DATA/comp/1074/CR2198/Full_Data/20171203.comp.1074.daily_dynamics/',file_list='list.txt',window_lapse=2.,init_hour=16.,/dynamics
-; compute_avg_dynamics,data_dir='/data1/tomography/DATA/comp/1079/CR2198/Full_Data/20171203.comp.1079.daily_dynamics/',file_list='list.txt',window_lapse=2.,init_hour=16.,/dynamics
+; compute_avg_dynamics,data_dir='/data1/tomography/DATA/comp/1074/CR2198/Full_Data/20171203.comp.1074.daily_dynamics.NEW/',file_list='list.txt',window_lapse=2.,init_hour=17.8,/dynamics
+; compute_avg_dynamics,data_dir='/data1/tomography/DATA/comp/1079/CR2198/Full_Data/20171203.comp.1079.daily_dynamics/',file_list='list.txt',window_lapse=2.,init_hour=17.8,/dynamics
 pro compute_avg_dynamics,data_dir=data_dir,file_list=file_list,window_lapse=window_lapse,dynamics=dynamics,meanfits=meanfits,init_hour=init_hour
   common data,image_peak,image_width,header_peak_struct,output_header,image_total_intensity,image_Imean,header_Imean_struct
   common constants,AU,c
@@ -363,6 +364,7 @@ pro compute_avg_dynamics,data_dir=data_dir,file_list=file_list,window_lapse=wind
 
   filename=''
   for i = 0,N-1 do begin
+     print,'Read Image #',i+1,' of',N
      readf,1,filename
      fits_open,  data_dir+filename, fcb
      fits_read,  fcb, tmp, header_primary, /header_only, exten_no=0 ; reads primary header only
@@ -420,7 +422,7 @@ pro compute_avg_dynamics,data_dir=data_dir,file_list=file_list,window_lapse=wind
      fits_close, fcb
 
      printf,2,filename+'  Date_obs: '+header_primary_struct.date_obs
-     
+
      ;; Create the output header for ith image
      create_output_header
      ;; Compute total_intensity_image for ith image
@@ -452,7 +454,7 @@ pro compute_avg_dynamics,data_dir=data_dir,file_list=file_list,window_lapse=wind
   print,'Averaged file: ',avg_output_filename
   print,'Median   file: ',med_output_filename
 
-  compare_two_images,data_dir=data_dir,imgq_filename=avg_output_filename,img2_filename=med_output_filename,r0=1.06,instrument='comp'
+  compare_two_images,data_dir=data_dir,img1_filename=avg_output_filename,img2_filename=med_output_filename,r0=1.06,instrument='comp'
   record_gif,data_dir,avg_output_filename+'.gif','X'
 
   return
