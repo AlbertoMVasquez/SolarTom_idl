@@ -26,14 +26,12 @@ pro xlam_extract_tom,filename=filename,dir=dir,number=number,$
 
   file = dir+filename
 
-  goto,skip_printout_info
   h5_list,file
   print
   print,'Ne_LAM dataset dimensions:'
   help,Ne_LAM
   print,'where (1st dim: radius 2nd dim: latitude, 3rd dim: longitude, 4th dim : time)'
   print
-  skip_printout_info:
 
   rad    = h5_getdata(file,'/axes/rad')
   lat    = h5_getdata(file,'/axes/latitudes')
@@ -63,6 +61,12 @@ pro xlam_extract_tom,filename=filename,dir=dir,number=number,$
   print
   print,'help,map,nr,nt,np,rmin,rmax'
          help,map,nr,nt,np,rmin,rmax
+  print,'Rad:'
+  print,rad
+  print,'Lat:'
+  print,lat
+  print,'Lon:'
+  print,lon
   
   return
 end
