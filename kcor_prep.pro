@@ -141,7 +141,7 @@ endfor
  !p.charsize=1
  plot,t0a/!dtor,da ,xstyle=1,yr=[mini,maxi],/nodata,$
       xtitle = 'PA [deg]',$
-      title  = 'KCOR pB at '+strmid(string(height),6,4)+' R!DSUN!N'
+      title  = 'KCOR pB ['+string(hdr.bunit)+'] at '+strmid(string(height),6,4)+' R!DSUN!N'
  loadct,12
  blue  = 100
  red   = 200
