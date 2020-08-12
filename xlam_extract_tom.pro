@@ -1,3 +1,23 @@
+;------------------------------------------------------------------------------
+;
+; Este código lee archivos de reconstrucción tomográficas 4D del LAM,
+; en formato HDF5:  https://en.wikipedia.org/wiki/Hierarchical_Data_Format
+;
+; El archivo debe estar ubicado en 'dir'y llamarse 'filename'.
+;
+; Extrae del mismo la reconstrucción número: number, y la graba en el
+; formato esperado por la rutina 'xread.pro', en un archivo
+; nuevo en el mismo dir, con un nombre indicado por esta rutina.
+;
+; INPUTS: dir, filename, number
+;
+; OUTPUTS: map, nr, nt, np, rmin, rmax.
+;
+; REQUIREMENTS: IDL 8.0+ 
+;
+; HISTORY: V1, Alberto M. Vasquez, 30-August-2019, IAFE.
+;
+;------------------------------------------------------------------------------
 pro xlam_extract_tom,filename=filename,dir=dir,number=number,$
                      map=map,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax
 
