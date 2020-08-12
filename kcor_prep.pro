@@ -28,7 +28,7 @@
 ; (albert@iafe.uba.ar) to get an explanation of its use.
 ;
 ; HISTORY:  V1.0, Alberto M. Vasquez, CLaSP, Spring-2018.
-;           V1.1, Alberto M. Vasquez, IAFE,  August-2019.
+;           V1.1, Alberto M. Vasquez, IAFE,  August-2020.
 ;                 Simplified time-tag selection for header.
 ;                 Note it assings the initial time of the
 ;                 averaged images.
