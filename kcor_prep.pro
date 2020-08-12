@@ -2,18 +2,50 @@
 ;
 ; Brief description:
 ;
-; Tool to prepare KCOR images for tomography.
+; kcor_prep.pro allows to prepare KCOR images for tomography and produces GIF
+; images of them, as well as plots of the latitudinal dependence of
+; the intensity at user-provided heliocentric heights.
 ;
-; History:  V1.0, Alberto M. Vasquez, CLaSP, Spring-2018.
+; Note that it uses other routines contained in this same file.
+; Compile '.r kcor_prep' to make all routines user-available.
 ;
-; Calling sequence example:
+; Data must be stored in directory 'data_dir', where the file list
+; 'file_list' contains the number of data files in the first line
+; and their names (one per row). The 1D array 'r0' lists heliocentric
+; distances at which the latitudinal dependence of the intensity will
+; be plotted.
+;
+; As a result, in the same directory where the data is located, the
+; new data (*_prep.fts) list file (*_prep.txt), as well as gif images
+; and eps plots, are generated.
+;
+; The '*_prep.fts' images and the '*_prep.txt' list file are the ones
+; to be used for tomography.
+;
+; The routine 'compute_avg_kcor.pro' at the end of this file allows to
+; make averages of many shots. it is intendeded to be used when HAO
+; will not provide an average. Ask Alberto Vasquez
+; (albert@iafe.uba.ar) to get an explanation of its use.
+;
+; HISTORY:  V1.0, Alberto M. Vasquez, CLaSP, Spring-2018.
+;           V1.1, Alberto M. Vasquez, IAFE,  August-2019.
+;                 Simplified time-tag selection for header.
+;                 Note it assings the initial time of the
+;                 averaged images.
+;
+; Calling sequence examples (Use the first call for experimentation and understanding):
+;
+; kcor_prep,data_dir='/data1/tomography/DATA/kcor/CR2198/10MinAvg/',       file_list='list_test_one.txt',r0=[1.09,1.5,2.0]
+; kcor_prep,data_dir='/data1/tomography/DATA/kcor/CR2198/Original_Images/',file_list='list_test_one.txt',r0=[1.09,1.5,2.0]
+;
+; kcor_prep,data_dir='/media/Data1/data1/tomography/DATA/kcor/CR2198/10MinAvg/',file_list='list_new.txt',r0=[1.09,1.5,2.0]
+; kcor_prep,data_dir='/media/Data1/data1/tomography/DATA/kcor/CR2208/10MinAvg/',file_list='list_new.txt',r0=[1.09,1.5,2.0]
+;
 ; kcor_prep,data_dir='/data1/tomography/DATA/kcor/CR2198/Original_Images/',file_list='list.txt',r0=[1.05,1.5,2.0]
 ; kcor_prep,data_dir='/data1/tomography/DATA/kcor/CR2198/Nooffset_Images/',file_list='list.txt',r0=[1.09,1.5,2.0]
 ; kcor_prep,data_dir='/data1/tomography/DATA/kcor/CR2198/AvgNoOffset_Images/',file_list='list.txt',r0=[1.09,1.5,2.0]
 ; kcor_prep,data_dir='/data1/tomography/DATA/kcor/CR2198/2017/12/03/',file_list='list.txt'
 ;
-; kcor_prep,data_dir='/media/Data1/data1/tomography/DATA/kcor/CR2198/10MinAvg/',file_list='list_new.txt',r0=[1.09,1.5,2.0]
-; kcor_prep,data_dir='/media/Data1/data1/tomography/DATA/kcor/CR2208/10MinAvg/',file_list='list_new.txt',r0=[1.09,1.5,2.0]
 ;---------------------------------------------------------------------
 
 ; Main routine:
@@ -39,6 +71,7 @@ pro kcor_prep,data_dir=data_dir,file_list=file_list,r0=r0
      kcor_inspect,hdr=hdr,img=img,r0=r0,data_dir=data_dir,filename=filename
      print,'Exp Time:',hdr.exptime
      print,'Units:',hdr.bunit
+     print,'Note that KCOR images must be provided to tom codes in units of [Bsun]' 
   endfor
   close,/all
   return
@@ -48,8 +81,9 @@ end
 pro expand_header_kcor,hdr=hdr
 
   AU = 149597870700. ; m
-  geocentric_sun_ephemeris = get_sun(hdr.TIME_OBS+' '+hdr.DATE_OBS)
-  DSUN = geocentric_sun_ephemeris[0] * AU  ; m
+ ;geocentric_sun_ephemeris = get_sun(hdr.TIME_OBS+' '+hdr.DATE_OBS) ; ASK ALBERT!
+  geocentric_sun_ephemeris = get_sun(hdr.date_obs) 
+  DSUN = geocentric_sun_ephemeris[0] * AU ; m
   hdr  = create_struct(hdr        ,      $
                       'DSUN'      ,DSUN ,$ ; m
                       'HAEX_OBS'  ,DSUN ,$ ; m
@@ -164,7 +198,6 @@ pro process_and_average_kcor_data,windowlapse=windowlapse,inithour=inithour
 end
 
 ; 
-
 pro compute_avg_kcor,data_dir=data_dir,file_list=file_list,window_lapse=window_lapse,init_hour=init_hour
 
   common time_parameters,overal_window_lapse,overal_init_hour
