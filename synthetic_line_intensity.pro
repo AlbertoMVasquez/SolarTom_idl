@@ -49,7 +49,7 @@ end
 pro load_G,ion_label=ion_label,line_wavelength=line_wavelength
   common G_table,G,T_e,N_e,r,photT
 
-  data_dir  = '/data1/tomography/SolarTom_idl/DATA/'
+  data_dir  = '/data1/tomography/MITIDL/Emissivity_LookUp_Tables/'
   file_name = 'G_function_'+ion_label+'_'+line_wavelength+'.save'
 
   restore,data_dir+file_name
