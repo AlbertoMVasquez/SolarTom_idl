@@ -32,12 +32,14 @@
 ;
 ; lasco_mars_prep,data_dir='/data1/tomography/DATA/c2/CR2208/',file_list='list_test_one.txt',r0=[3.0,4.0,5.0]
 ;
+; lasco_mars_prep,data_dir='/data1/tomography/DATA/c2/CR2219/',file_list='list.txt',r0=[3.0,4.0,5.0],mini=0.1,maxi=100.
+;
 ; lasco_mars_prep,data_dir='/media/Data1/data1/tomography/DATA/c2/CR2208/',file_list='list.txt',r0=[3.0,4.0,5.0]
 ; lasco_mars_prep,data_dir='/media/Data1/data1/tomography/DATA/c2/CR2209/',file_list='list.txt',r0=[3.0,4.0,5.0]
 ;---------------------------------------------------------------------
 
 ; Main routine:
-pro lasco_mars_prep,data_dir=data_dir,file_list=file_list,r0=r0
+pro lasco_mars_prep,data_dir=data_dir,file_list=file_list,r0=r0,mini=mini,maxi=maxi
   if not keyword_set(r0) then r0 = [1.5]
   N=0
   filename=''
@@ -56,7 +58,8 @@ pro lasco_mars_prep,data_dir=data_dir,file_list=file_list,r0=r0
     ;if izero(0) ne -1. then img(izero) = -666.
      mwritefits,hdr,img,outfile=data_dir+new_filename
      printf,2,new_filename
-     lasco_mars_inspect,hdr=hdr,img=img,r0=r0,data_dir=data_dir,filename=filename
+     if i eq 0 then  window,0,xs=hdr.naxis1,ys=hdr.naxis1
+     lasco_mars_inspect,hdr=hdr,img=img,r0=r0,data_dir=data_dir,filename=filename,mini=mini,maxi=maxi,ii=i
      print,'Note that LASCO-C2 LAM images must be provided to tom codes in units of [1E-10*Bsun]' 
   endfor
   close,/all
@@ -84,7 +87,7 @@ pro expand_header_lasco_mars,hdr=hdr
   return
 end
 
-pro lasco_mars_inspect,hdr=hdr,img=img,r0=r0,data_dir=data_dir,filename=filename
+pro lasco_mars_inspect,hdr=hdr,img=img,r0=r0,data_dir=data_dir,filename=filename,mini=mini,maxi=maxi,ii=ii
   compute_image_grid,hdr=hdr,ra=ra,pa=pa,x=x,y=y,instrument='lascoc2'
 ; Image for display:
   img2  = img
@@ -100,10 +103,11 @@ for ir=0,n_elements(r0)-1 do begin
  display_latitudinal_profiles,height=r0[ir],hdr=hdr,img=img,ra=ra,pa=pa,x=x,y=y
  ps2
 endfor
- window,0,xs=hdr.naxis1,ys=hdr.naxis1
  loadct,39
- i  = where(img gt 0.) & mini  = min(img(i)) 
- tvscl,alog10(img2  > mini ),0
+ ind  = where(img gt 0.)
+ img2(0,0) = mini
+ img2(0.1) = maxi
+ tvscl,alog10(img2  > mini < maxi ),0
  record_gif,data_dir,filename+'_image.gif','X'
  return
 end
