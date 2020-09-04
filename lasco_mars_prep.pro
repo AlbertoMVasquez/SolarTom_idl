@@ -22,8 +22,11 @@
 ; new data (*_prep.fts) list file (*_prep.txt), as well as gif images
 ; and eps plots, are generated.
 ;
-; The '*_prep.fts' images and the '*_prep.txt' list file are the ones
-; to be used for tomography.
+; The '*_prep.fts' images are the ones to be used for tomography.
+; Note that the ORDER of the filenames in the '*_prep.txt' list
+; may not be chronological. The new filenames of the prep files start
+; now with the date, so generate an ordered list is easy with the
+; terminal command line: ls *_prep.fts > list_prep.txt
 ;
 ; HISTORY:  V1.0, Alberto M. Vasquez, IAFE, September-2019.
 ;           V1.1, Alberto M. Vasquez, IAFE, August-2020.
@@ -32,7 +35,7 @@
 ;
 ; lasco_mars_prep,data_dir='/data1/tomography/DATA/c2/CR2208/',file_list='list_test_one.txt',r0=[3.0,4.0,5.0]
 ;
-; lasco_mars_prep,data_dir='/data1/tomography/DATA/c2/CR2219/',file_list='list.txt',r0=[3.0,4.0,5.0],mini=0.1,maxi=100.
+; lasco_mars_prep,data_dir='/data1/tomography/DATA/c2/CR2219/',file_list='list.txt',r0=[2.5,6.0],mini=0.1,maxi=100.
 ;
 ; lasco_mars_prep,data_dir='/media/Data1/data1/tomography/DATA/c2/CR2208/',file_list='list.txt',r0=[3.0,4.0,5.0]
 ; lasco_mars_prep,data_dir='/media/Data1/data1/tomography/DATA/c2/CR2209/',file_list='list.txt',r0=[3.0,4.0,5.0]
@@ -51,7 +54,11 @@ pro lasco_mars_prep,data_dir=data_dir,file_list=file_list,r0=r0,mini=mini,maxi=m
   for i = 0,N-1 do begin
      readf,1,filename
      mreadfits,data_dir+filename,hdr,img
-     new_filename = strmid(filename,0,strlen(filename)-4)+'_prep.fts'
+     new_filename = strmid(hdr.date_obs,0,4)+strmid(hdr.date_obs,5,2)+strmid(hdr.date_obs,8,2)+$
+                    'UT'+$
+                    strmid(hdr.time_obs,0,2)+strmid(hdr.time_obs,3,2)+strmid(hdr.time_obs,6,2)+$
+                    '_'+$
+                    strmid(filename,0,strlen(filename)-4)+'_prep.fts'
      expand_header_lasco_mars,hdr=hdr
     ;Make -666 all null pixels.
     ;izero = where(img eq 0.)
@@ -91,9 +98,9 @@ pro lasco_mars_inspect,hdr=hdr,img=img,r0=r0,data_dir=data_dir,filename=filename
   compute_image_grid,hdr=hdr,ra=ra,pa=pa,x=x,y=y,instrument='lascoc2'
 ; Image for display:
   img2  = img
-  RMIN  = 2.5
-  RMAX  = 6.3
-  block = where(ra lt RMIN or RA gt 6.3)
+  RMIN  = 2.2
+  RMAX  = 6.5
+  block = where(ra lt RMIN or RA gt RMAX)
   img2(block) = 0.
  dr=0.025
 for ir=0,n_elements(r0)-1 do begin
