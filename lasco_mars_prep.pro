@@ -32,6 +32,7 @@
 ;
 ; HISTORY:  V1.0, Alberto M. Vasquez, IAFE, September-2019.
 ;           V1.1, Alberto M. Vasquez, IAFE, August-2020.
+;           V1.2, Alberto M. Vasquez, IAFE, September-2020.
 ;
 ; Calling sequence examples (Use the first call for experimentation and understanding):
 ;
