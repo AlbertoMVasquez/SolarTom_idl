@@ -118,8 +118,10 @@ endfor
  img2(0,0) = mini
  img2(0.1) = maxi
  tvscl,alog10(img2  > mini < maxi ),0
- xyouts,0.1,0.9,filename,charsize=2,/normal
+ xyouts,0.1,0.90,filename,charsize=2,/normal
+ xyouts,0.1,0.85,'CRLN_OBS = '+strmid(string(hdr.crln_obs),5,8),charsize=2,/normal
  record_gif,data_dir,filename+'_image.gif','X'
+
  return
 end
 
