@@ -4,6 +4,9 @@
 ; in 'dir' and listed in 'listfile' into JPG "frames" and then creates
 ; a movie out of them.
 ;
+; Calling sequence example:
+; make_movie_script,dir='/data1/tomography/DATA/c2/CR2219/GIFs/',listfile='list.txt'
+;
 ; HISTORY: V 1.0 Alberto M. Vasquez, IAFE, 07-Sept-2020.
 ;
 ;-----------------------------------------------------------------------------
