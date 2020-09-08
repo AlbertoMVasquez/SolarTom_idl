@@ -24,9 +24,11 @@
 ;
 ; The '*_prep.fts' images are the ones to be used for tomography.
 ; Note that the ORDER of the filenames in the '*_prep.txt' list
-; may not be chronological. The new filenames of the prep files start
-; now with the date, so generate an ordered list is easy with the
-; terminal command line: ls *_prep.fts > list_prep.txt
+; may not be chronological, because their filenames are not.
+; The filenames of the prep files produced by this tool start with
+; DATE+UT. After running this tool, generate an chronologically
+; ordered list with the terminal command line:
+; ls *_prep.fts > list_prep.txt
 ;
 ; HISTORY:  V1.0, Alberto M. Vasquez, IAFE, September-2019.
 ;           V1.1, Alberto M. Vasquez, IAFE, August-2020.
@@ -66,10 +68,11 @@ pro lasco_mars_prep,data_dir=data_dir,file_list=file_list,r0=r0,mini=mini,maxi=m
      mwritefits,hdr,img,outfile=data_dir+new_filename
      printf,2,new_filename
      if i eq 0 then  window,0,xs=hdr.naxis1,ys=hdr.naxis1
-     lasco_mars_inspect,hdr=hdr,img=img,r0=r0,data_dir=data_dir,filename=filename,mini=mini,maxi=maxi,ii=i
-     print,'Note that LASCO-C2 LAM images must be provided to tom codes in units of [1E-10*Bsun]' 
+     lasco_mars_inspect,hdr=hdr,img=img,r0=r0,data_dir=data_dir,filename=new_filename,mini=mini,maxi=maxi,ii=i
+     print,'Note that LASCO-C2 LAM images must be provided to tom codes in units of [1E-10*Bsun]'
   endfor
   close,/all
+  stop
   return
 end
 
@@ -115,6 +118,7 @@ endfor
  img2(0,0) = mini
  img2(0.1) = maxi
  tvscl,alog10(img2  > mini < maxi ),0
+ xyouts,0.1,0.9,filename,charsize=2,/normal
  record_gif,data_dir,filename+'_image.gif','X'
  return
 end
