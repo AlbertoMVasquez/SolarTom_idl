@@ -2,15 +2,13 @@
 ;
 ; Brief description:
 ;
-; lasc to prepare MARSEILLES LASCO-C2 images for tomography.
-
-; lasco_mars_prep.pro allows to prepare MARSEILLES (LAM) LASCO-C2
-; images for tomography and produces GIF images of them, as well
+; This code allows preparation of LAM LASCO-C2
+; images for tomography, producess GIF images of them, as well
 ; as plots of the latitudinal dependence of the intensity at
 ; user-provided heliocentric heights.
 ;
 ; Note that it uses other routines contained in this same file.
-; Compile '.rlasco_mars_prep' to make all routines user-available.
+; Compile '.r lasco_mars_prep' to make all routines user-available.
 ;
 ; Data must be stored in directory 'data_dir', where the file list
 ; 'file_list' contains the number of data files in the first line
@@ -18,13 +16,17 @@
 ; distances at which the latitudinal dependence of the intensity will
 ; be plotted.
 ;
+; Specify suitable MINI and MAXI to be enforced accross all images in
+; the list, so that any given color represents the same value of pB
+; across all images in the list.
+;
 ; As a result, in the same directory where the data is located, the
 ; new data (*_prep.fts) list file (*_prep.txt), as well as gif images
 ; and eps plots, are generated.
 ;
 ; The '*_prep.fts' images are the ones to be used for tomography.
-; Note that the ORDER of the filenames in the '*_prep.txt' list
-; may not be chronological, because their filenames are not.
+; Note that the ORDER of the prepared image filenames in the '*_prep.txt'
+; list may not be chronological, because their filenames are not.
 ; The filenames of the prep files produced by this tool start with
 ; DATE+UT. After running this tool, generate an chronologically
 ; ordered list with the terminal command line:
@@ -34,12 +36,11 @@
 ;           V1.1, Alberto M. Vasquez, IAFE, August-2020.
 ;           V1.2, Alberto M. Vasquez, IAFE, September-2020.
 ;
-; Calling sequence examples (Use the first call for experimentation and understanding):
+; Calling sequence examples (Use the first call for experimentation and learning):
+;
+; lasco_mars_prep,data_dir='/data1/tomography/DATA/c2/CR2219/',file_list='list.txt',r0=[2.3,4.0,6.0],mini=0.1,maxi=100.
 ;
 ; lasco_mars_prep,data_dir='/data1/tomography/DATA/c2/CR2208/',file_list='list_test_one.txt',r0=[3.0,4.0,5.0]
-;
-; lasco_mars_prep,data_dir='/data1/tomography/DATA/c2/CR2219/',file_list='list.txt',r0=[2.5,6.0],mini=0.1,maxi=100.
-;
 ; lasco_mars_prep,data_dir='/media/Data1/data1/tomography/DATA/c2/CR2208/',file_list='list.txt',r0=[3.0,4.0,5.0]
 ; lasco_mars_prep,data_dir='/media/Data1/data1/tomography/DATA/c2/CR2209/',file_list='list.txt',r0=[3.0,4.0,5.0]
 ;---------------------------------------------------------------------
