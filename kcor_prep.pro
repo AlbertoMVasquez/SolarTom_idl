@@ -20,7 +20,7 @@
 ; and eps plots, are generated.
 ;
 ; The '*_prep.fts' images and the '*_prep.txt' list file are the ones
-; to be used for tomography.
+; that can in principle be used for tomography.
 ;
 ; The routine 'compute_avg_kcor.pro' at the end of this file allows to
 ; make averages of many shots. it is intendeded to be used when HAO

@@ -28,9 +28,12 @@
 ; Note that the ORDER of the prepared image filenames in the '*_prep.txt'
 ; list may not be chronological, because their filenames are not.
 ; The filenames of the prep files produced by this tool start with
-; DATE+UT. After running this tool, generate an chronologically
+; DATE+UT. After running this tool, generate a chronologically
 ; ordered list with the terminal command line:
 ; ls *_prep.fts > list_prep.txt
+;
+; The '*_prep.fts' images and the '*_prep.txt' list file are the ones
+; that can in principle be used for tomography.
 ;
 ; HISTORY:  V1.0, Alberto M. Vasquez, IAFE, September-2019.
 ;           V1.1, Alberto M. Vasquez, IAFE, August-2020.
