@@ -9,9 +9,14 @@ pro xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,m
   device, retain     = 2
   device, true_color = 24
   device, decomposed = 0
+  
+; ESTO DE ABAJO NO PUEDE quedar asi, si se precisa a veces, codear los
+; condicionales/flags precisos para que sea una opción. ALBERT.
+  
 ;  DEVICE, SET_FONT='Helvetica Bold Italic', /TT_FONT
 ;  device,/inches,xsize=10,ysize=7, /helvetica,SCALE_FACTOR=1  ;solo
 ;  fuciona dentro de eps
+
   if not keyword_set(pos) then pos=0
   
   nr=fix((size(map))(1))
@@ -57,27 +62,14 @@ pro xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,m
 ; Default mini and maxi
   ipos = where(map2 gt 0.)
   if ipos(0) eq -1 then ipos = where(finite(map2) eq 1)  
-  if n_elements(mini) eq 0 then mini = min(map2(ipos)) 
-  ;keyword_set return 1 for nonzero values, for mini=0 doesn't work 
+  if not keyword_set(mini) then mini = min(map2(ipos)) 
   if not keyword_set(maxi) then maxi = max(map2(ipos))
   
 ; Force mini and maxi
-  map3=map2
-  map2=map2>mini<maxi
   map2(0,0)=mini
-;  stop
-if keyword_set(treshold) then map2(where(map2 ge 1.3e8 and map2 lt maxi)) = mini
   map2(0,1)=maxi
-  ;para treshold dejar el maxi, pero todo entre trsh y maxi llevarlo a mini.
-;for R maps
-;  if clrtbl eq 12. then begin
-;     map2(where(map3 eq -999.)) = 0.
-;     low = where(map3 ge 0. and map3 le 0.01)
-;     map2(low) =0.01
-;     map2(0,0)=0.
-  ;necessary to make zda black voxels in R maps and low valuesof R, dark green
-;  endif
- 
+  map2=map2>mini<maxi
+
   if keyword_set(log) then begin
      map2=alog10(map2)
      mini=alog10(mini)
@@ -158,6 +150,6 @@ tvscl,fltarr(2*np*scalefactor+DX,420)
       mini=10.^mini
       maxi=10.^maxi
    endif
-   SET_PLOT, old_device
+  ;SET_PLOT, old_device
    return
 end
