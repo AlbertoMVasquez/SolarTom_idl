@@ -18,6 +18,8 @@ pro xdisplay,dir=dir,map=map,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A
   if not keyword_set(ysize_factor)  then ysize_factor  = 1.
   if not keyword_set (units)        then units         = 1.
   if not keyword_set(win)           then win           = 0
+
+; Put image in UNITS.
   map = map/units
 
   if not keyword_set(prefijo_mapoc) and keyword_set(file) then prefijo_mapoc = strmid(file,5,4)
@@ -36,8 +38,8 @@ pro xdisplay,dir=dir,map=map,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A
      sufijo = strmid(string(rad_range[0]),6,5)+'_'+strmid(string(rad_range[1]),6,5)+'_Rsun-'+$
               strmid(string(lat_range[0]),5,3)+'_'+strmid(string(lat_range[1]),5,3)+'_deg-'+$
               strmid(string(lon_range[0]),6,3)+'_'+strmid(string(lon_range[1]),6,3)+'_deg'
-     
-     xhisto,map=map,nr=nr,nt=nt,np=np,radii=rad,rad_range=rad_range,lat_range=lat_range,lon_range=lon_range,win=win,dir=dir,file=file,titulo='Frequency histogram of '+titulo,sufijo=sufijo
+
+;xhisto,map=map,nr=nr,nt=nt,np=np,radii=rad,rad_range=rad_range,lat_range=lat_range,lon_range=lon_range,dir=dir,file=file,titulo='Frequency histogram of '+titulo,sufijo=sufijo
   endif
 
   mins = fltarr(n_elements(r0A))
@@ -52,26 +54,26 @@ pro xdisplay,dir=dir,map=map,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A
      if keyword_set(maxA) then maxi = maxA[i]
    
      if (not keyword_set(log) AND not keyword_set(raiz)) and not keyword_set(mmap_oc) then $
-        xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+1+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon,instrument=instrument,$
+        xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon,instrument=instrument,$
                ysize_factor=ysize_factor
-
+     
      if (not keyword_set(log) AND not keyword_set(raiz)) and keyword_set(mmap_oc) then $
-        xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+1+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon,instrument=instrument,$
+        xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon,instrument=instrument,$
                ysize_factor=ysize_factor,prefijo_mapoc=prefijo_mapoc,/mmap_oc
      
      if keyword_set(log) and not keyword_set(map_oc) then $
-        xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+1+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon,instrument=instrument,$
+        xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon,instrument=instrument,$
                /log,ysize_factor=ysize_factor
 
      if     keyword_set(log)  then $
-        xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+1+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon,instrument=instrument,$
+        xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon,instrument=instrument,$
                /log,ysize_factor=ysize_factor
 
      if     keyword_set(raiz) then $
-        xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+1+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon,instrument=instrument,$
+        xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon,instrument=instrument,$
                /raiz,ysize_factor=ysize_factor
      
-;     xhisto,map=map,nr=nr,nt=nt,np=np,radii=rad,rad_range=rad_range,lat_range=lat_range,win=win+3,dir=dir,file=file,titulo='Histogram of '+titulo,sufijo=sufijo,mini=mini,maxi=maxi
+;     xhisto,map=map,nr=nr,nt=nt,np=np,radii=rad,rad_range=rad_range,lat_range=lat_range,dir=dir,file=file,titulo='Histogram of '+titulo,sufijo=sufijo,mini=mini,maxi=maxi
      ; Store mini and maxi for a final report.
      mins[i] = mini
      maxs[i] = maxi
@@ -85,5 +87,8 @@ pro xdisplay,dir=dir,map=map,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A
   print,'maxs = ',maxs
   print,'-----------------------------------------------'
 
+; Put image back into its original units before return.
+  map = map*units
+  
   return
 end
