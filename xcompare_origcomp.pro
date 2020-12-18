@@ -5,7 +5,7 @@
 ; INPUT: Sample images, x-file, others, see wrappers.
 ;
 ; OUTPUT: GIF and EPS files with the comparison for each image,
-;         recorde into the data_dir directory.
+;         recorded into the data_dir directory.
 ;
 ; HISTORY
 ; V1 Alberto M Vasquez, December 2020, IAFE.
