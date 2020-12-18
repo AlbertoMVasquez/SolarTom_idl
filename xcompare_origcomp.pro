@@ -1,3 +1,15 @@
+;
+; This is a code to make orig-versus-comp comparisons, where
+; orig and comp are images produced by compare.c
+;
+; HISTORY
+; V1 Alberto M Vasquez, December 2020, IAFE.
+;    First fully functional version with three wrappers
+;    to serve as examples of use.
+;    This first version works for KCOR, LASCO-C2 and AIA images.
+;
+
+
 pro wrapper_aia
 
   orig_image_array = ['20190626T0900.193.lev1p5.ETN.Norm-Ck0.1024.b.fts',$
