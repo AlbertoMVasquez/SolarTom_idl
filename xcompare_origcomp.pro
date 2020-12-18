@@ -2,6 +2,11 @@
 ; This is a code to make orig-versus-comp comparisons, where
 ; orig and comp are images produced by compare.c
 ;
+; INPUT: Sample images, x-file, others, see wrappers.
+;
+; OUTPUT: GIF and EPS files with the comparison for each image,
+;         recorde into the data_dir directory.
+;
 ; HISTORY
 ; V1 Alberto M Vasquez, December 2020, IAFE.
 ;    First fully functional version with three wrappers
