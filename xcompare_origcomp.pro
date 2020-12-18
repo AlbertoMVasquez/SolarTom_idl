@@ -26,6 +26,7 @@ pro wrapper_aia
 
 
   xfile = 'x_aia.193.cr2219.ri.00-ro1.02_rmax1.3_nrad_30_hollow.diego_l0.3'
+  xmodel_type = 'Tomography'
   
   orig_file_array  = 'orig_'+          strmid(orig_image_array,0,strlen(orig_image_array[0])-3)+'dat'
   comp_file_array  = 'comp_'+xfile+'_'+strmid(orig_image_array,0,strlen(orig_image_array[0])-3)+'dat'
@@ -44,7 +45,7 @@ for i=0,n_images-1 do begin
      orig_image = orig_image_array[i]
      orig_file  = orig_file_array [i]
      comp_file  = comp_file_array [i]
-  xcompare_origcomp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,data_dir=data_dir,factor_image=factor_image,factor_unit=factor_unit,win=win,instrument=instrument,/log,/record,R1=R1,R2=R2
+  xcompare_origcomp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,data_dir=data_dir,factor_image=factor_image,factor_unit=factor_unit,win=win,instrument=instrument,/log,/record,R1=R1,R2=R2,xmodel_type=xmodel_type
   endfor
   return
 end
@@ -59,6 +60,7 @@ pro wrapper_c2
  ;xfile = 'x_LASCOC2pB_CR2219_24hr-Cadence_Rmin2.25_Rmax8.25_IRmin2.5_IRmax6.0_60x60x120_BF4_r3D_l1.e-4'
  ;xfile = 'x_LASCOC2pB_CR2219_24hr-Cadence_Rmin2.5_Rmax8.5_IRmin2.5_IRmax6.0_60x60x120_BF4_r3D_l1.e-5'
  ;xfile = 'x_LASCOC2pB_CR2219_24hr-Cadence_Rmin2.5_Rmax8.5_IRmin2.5_IRmax6.0_60x60x120_BF4_r3D_l1.e-4'
+  xmodel_type = 'Tomography'
   
   orig_file_array  = 'orig_'+          strmid(orig_image_array,0,strlen(orig_image_array[0])-3)+'dat'
   comp_file_array  = 'comp_'+xfile+'_'+strmid(orig_image_array,0,strlen(orig_image_array[0])-4)+'_pB.dat'
@@ -77,7 +79,7 @@ pro wrapper_c2
      orig_image = orig_image_array[i]
      orig_file  = orig_file_array [i]
      comp_file  = comp_file_array [i]
-  xcompare_origcomp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,data_dir=data_dir,factor_image=factor_image,factor_unit=factor_unit,win=win,instrument=instrument,/log,/record,R1=R1,R2=R2
+  xcompare_origcomp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,data_dir=data_dir,factor_image=factor_image,factor_unit=factor_unit,win=win,instrument=instrument,/log,/record,R1=R1,R2=R2,xmodel_type=xmodel_type
   endfor
   return
 end
@@ -88,7 +90,9 @@ pro wrapper_kcor
                       '20171209_182006_kcor_l1.5_extavg_prep.fts',$
                       '20171215_175739_kcor_l1.5_extavg_prep.fts']
 
-  xfile            = 'x_KCOR.CR2198.13imgs-reduced.bf2.ri1.05.ro2.25_Inst_1.09_2.00_120_90_180_dropneg_r3D_l1e-4'
+  xfile       = 'x_KCOR.CR2198.13imgs-reduced.bf2.ri1.05.ro2.25_Inst_1.09_2.00_120_90_180_dropneg_r3D_l1e-4'
+  xmodel_type = 'Tomography'
+  
   orig_file_array  = 'orig_'+          strmid(orig_image_array,0,strlen(orig_image_array[0])-3)+'dat'
   comp_file_array  = 'comp_'+xfile+'_'+strmid(orig_image_array,0,strlen(orig_image_array[0])-3)+'dat'
 
@@ -106,13 +110,13 @@ for i=0,n_images-1 do begin
      orig_image = orig_image_array[i]
      orig_file  = orig_file_array [i]
      comp_file  = comp_file_array [i]
-  xcompare_origcomp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,data_dir=data_dir,factor_image=factor_image,factor_unit=factor_unit,win=win,instrument=instrument,/log,/record,R1=R1,R2=R2
+  xcompare_origcomp,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,data_dir=data_dir,factor_image=factor_image,factor_unit=factor_unit,win=win,instrument=instrument,/log,/record,R1=R1,R2=R2,xmodel_type=xmodel_type
   endfor
   return
 end
 
 pro xcompare_origcomp,tomroot=tomroot,data_dir=data_dir,orig_image=orig_image,orig_file=orig_file,comp_file=comp_file,Nx=Nx,Ny=Ny,instrument=instrument,$
-                     factor_image=factor_image,factor_unit=factor_unit,win=win,log=log,record=record,R1=R1,R2=R2
+                     factor_image=factor_image,factor_unit=factor_unit,win=win,log=log,record=record,R1=R1,R2=R2,xmodel_type=xmodel_type
 
   if not keyword_set(R1) or not keyword_set(R2) then begin
      print,'Please specify occulters radii R1 and R2'
@@ -257,7 +261,7 @@ pro xcompare_origcomp,tomroot=tomroot,data_dir=data_dir,orig_image=orig_image,or
 ; Place information around images
 if instrument eq 'kcor' then begin
   xyouts,x0+[0,deltaX],(y0+ysimage+DY/5)*[1,1],$
-         ['KCOR Image','Synthetic Tomography Image'],$
+         ['KCOR Image','Synthetic '+xmodel_type+' Image'],$
          color=0,charsize=4,charthick=4,font=1,/device
 
   xyouts,[x0],[y0-DY/3],['DATE_OBS: '+hdr.DATE_OBS],$
@@ -266,7 +270,7 @@ endif
 
 if instrument eq 'lascoc2' then begin
   xyouts,x0+[0,deltaX],(y0+ysimage+DY/5)*[1,1],$
-         ['LASCO-C2 Image','Synthetic Tomography Image'],$
+         ['LASCO-C2 Image','Synthetic '+xmodel_type+' Image'],$
          color=0,charsize=4,charthick=4,font=1,/device
 
   xyouts,[x0],[y0-DY/3],['DATE_OBS: '+hdr.DATE_OBS+'UT'+hdr.TIME_OBS],$
@@ -275,7 +279,7 @@ endif
 
 if instrument eq 'aia' then begin
   xyouts,x0+[0,deltaX],(y0+ysimage+DY/5)*[1,1],$
-         ['AIA-'+strmid(string(hdr.wavelnth),9,3)+' Image','Synthetic Tomography Image'],$
+         ['AIA-'+strmid(string(hdr.wavelnth),9,3)+' Image','Synthetic '+xmodel_type+' Image'],$
          color=0,charsize=4,charthick=4,font=1,/device
 
   xyouts,[x0],[y0-DY/3],['DATE_OBS: '+hdr.T_OBS],$
