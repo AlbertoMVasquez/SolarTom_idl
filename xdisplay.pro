@@ -16,7 +16,7 @@ pro xdisplay,dir=dir,map=map,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A
   if not keyword_set(box_lon )      then box_lon       = 0.
   if not keyword_set(instrument)    then instrument    = 'aia'
   if not keyword_set(ysize_factor)  then ysize_factor  = 1.
-  if not keyword_set (units)        then units         = 1.
+  if not keyword_set(units)         then units         = 1.
   if not keyword_set(win)           then win           = 0
 
 ; Put image in UNITS.

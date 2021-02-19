@@ -8,7 +8,7 @@
 ; INPUTS:
 ; header:     header structure of the image
 ; instrument: string specifying the instrument, valid values are:
-;             'comp', 'kcor', 'cor1', 'lascoc2', 'euvi', 'aia'.
+;             'comp', 'kcor', 'cor1', 'lascoc2', 'euvi', 'aia', 'metis'
 ;             TBI: 'eit'.
 ;
 ; OUTPUTS:
@@ -18,7 +18,7 @@
 ; origin in the disk center.
 ;
 ; History:  V1.0, Alberto M. Vasquez, CLaSP, Spring-2018.
-;
+;           V1.1, Alberto M. Vasquez, IAFE,  Dec-04-2020. Added METIS.
 ;;
 
 pro compute_image_grid,hdr=hdr,ra=ra,pa=pa,x=x,y=y,instrument=instrument
@@ -38,11 +38,19 @@ pro compute_image_grid,hdr=hdr,ra=ra,pa=pa,x=x,y=y,instrument=instrument
   endif
   
   if instrument eq 'lascoc2' then begin
-       instrument_detected_flag = 1     
+     instrument_detected_flag = 1
        Rs  = hdr.rsun_pix         ; Sun radius in pixels
        px  = 1./Rs                ; Pixel size in Rsun units
        ix0 = hdr.xsun-1           ; Disk center x-pixel, changed to IDL convention
        iy0 = hdr.ysun-1           ; Disk center y-pixel, changed to IDL convention
+  endif
+
+  if instrument eq 'metis' then begin
+     instrument_detected_flag = 1
+       Rs  = hdr.rsun_px          ; Sun radius in pixels
+       px  = 1./Rs                ; Pixel size in Rsun units
+       ix0 = hdr.crpix1-1         ; Disk center x-pixel, changed to IDL convention
+       iy0 = hdr.crpix2-1         ; Disk center y-pixel, changed to IDL convention
   endif
 
   if instrument_detected_flag eq 0 then begin

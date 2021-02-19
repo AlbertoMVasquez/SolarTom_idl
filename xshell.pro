@@ -64,6 +64,10 @@ pro xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,m
   if ipos(0) eq -1 then ipos = where(finite(map2) eq 1)  
   if not keyword_set(mini) then mini = min(map2(ipos)) 
   if not keyword_set(maxi) then maxi = max(map2(ipos))
+
+; Set to maximum value ZDAs:
+  p  = where(map2 le 0.)
+; if p(0) ne -1 then map2(p) = maxi
   
 ; Force mini and maxi
   map2(0,0)=mini
@@ -106,35 +110,37 @@ pro xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,m
      endfor
   endif
 
-
  ;---create over-sized window with white background----------------
   Npanels = 1*ysize_factor
   xsimage = np*scalefactor
   ysimage = nt*scalefactor
-  DX      = xsimage/1.25
-  DY      = ysimage/1.25
+  DX      = xsimage/2.0
+  DY      = ysimage/1.5
   x0      = DX/2.5
   y0      = (ysimage+DY)*(Npanels-1)
-;   window,win,xs=xsimage+DX,ys=(ysimage+DY)*Npanels
-;  loadct,27
-;  tvscl,fltarr(xsimage+DX,(ysimage+DY)*Npanels)
-x0=80
-y0=60
-DX=x0+90
-DY=y0+40
-;stop
-window,win,xs=750,ys=420;xs=np*scalefactor+DX,ys=nt*scalefactor+DY
+; window,win,xs=xsimage+DX,ys=(ysimage+DY)*Npanels
+; loadct,27
+; tvscl,fltarr(xsimage+DX,(ysimage+DY)*Npanels)
+; x0=80
+; y0=60
+; DX=x0+90
+; DY=y0+40
+; stop
+
+window,win,xs=np*scalefactor+DX,ys=nt*scalefactor+DY
 ;window,win,xs=750,ys=420
 loadct,27
-;tvscl,fltarr(2*np*scalefactor+DX,nt*scalefactor+DY)
-tvscl,fltarr(2*np*scalefactor+DX,420)
+tvscl,fltarr(2*np*scalefactor+DX,nt*scalefactor+DY)
+;tvscl,fltarr(2*np*scalefactor+DX,420)
  
 ; if clrtbl le 40 then loadct,clrtbl
 ; if clrtbl gt 40 AND instrument ne 'aia' then secchi_colors, 'EUVI', clrtbl, R, G, B,/load
 ; if clrtbl gt 40 AND instrument eq 'aia' then aia_lct,wave=clrtbl,/load
     height_string = strmid(string(r0),6,5)
-    x = 100;x0
-    y = 90;y0+DY/2
+   ;x = 100
+   ;y = 90
+    x = x0
+    y = y0+DY/2
     if keyword_set(mmap_oc) then xcarrmap,map=map2,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,clrtbl=clrtbl,$
                                          xtitle_status=1,ytitle_status=1,titulo_status=1,$
                                          title=titulo+' at '+height_string+' R!DSUN!N',$

@@ -1,4 +1,4 @@
-; metis_prep,data_dir='/data1/tomography/DATA/metis/Perihelion_04-2023/',file_list='list.txt',r0=[3.0]
+; metis_prep,data_dir='/data1/tomography/DATA/metis/Perihelion_04-2023_B/',file_list='list_12degstep.txt',r0=[2.4,3.2]
 
 ; metis_prep,data_dir='/data1/tomography/DATA/metis/Synthetic/',file_list='list.txt',r0=[1.93,3.5,4.11]
 pro metis_prep,data_dir=data_dir,file_list=file_list,r0=r0,win=win
@@ -7,6 +7,7 @@ common constants,c,rsun,au
   loadconstants
 
   if not keyword_set(r0) then r0 = [3.0]
+  if NOT keyword_set(win) then win=0
   N=0
   filename=''
   openr,1,data_dir+file_list
@@ -21,24 +22,28 @@ common constants,c,rsun,au
      expand_header_metis,hdr=hdr,img=img
      p = where(img le 0.)
      if p(0) ne -1 then img(p) = -666.
+     img=float(img)
      mwritefits,hdr,img,outfile=data_dir+new_filename
      printf,2,new_filename
+     if i eq 0 then window,win,xs=hdr.naxis1,ys=hdr.naxis1
      metis_inspect,hdr=hdr,img=img,r0=r0,data_dir=data_dir,filename=filename,win=win
     ;print,'Exp Time:',hdr.exptime
     ;print,'Units:',hdr.bunit
     ;print,'Note that KCOR images must be provided to tom codes in units of [Bsun]' 
   endfor
   close,/all
-  stop
+; stop
   return
 end
 
 pro metis_inspect,hdr=hdr,img=img,r0=r0,data_dir=data_dir,filename=filename,win=win
+common constants,c,rsun,au
+
   compute_image_grid,hdr=hdr,ra=ra,pa=pa,x=x,y=y,instrument='metis'
 
 ; Image for display:
  img2  = img
- dr=0.01
+ dr=0.05
 for ir=0,n_elements(r0)-1 do begin
  ring = where(ra ge r0[ir]-dr/2. and ra le r0[ir]+dr/2.)
  img2(ring) = max(img)
@@ -46,11 +51,11 @@ for ir=0,n_elements(r0)-1 do begin
  display_latitudinal_profiles,height=r0[ir],hdr=hdr,img=img,ra=ra,pa=pa,x=x,y=y
  ps2
 endfor
- if NOT keyword_set(win) then win=0
- window,win,xs=hdr.naxis1,ys=hdr.naxis1
  loadct,39
  i  = where(img gt 0.) & mini  = min(img(i)) 
  tvscl,alog10(img2  > mini ),0
+ loadct,0
+ xyouts,[0.01],[0.01],[hdr.date_obs+'      Dsun = '+strmid(string(hdr.dsun/au),6,4)+' au'],charsize=3,/normal,charthick=2,font=1
  record_gif,data_dir,filename+'_image.gif','X'
  return
 end
