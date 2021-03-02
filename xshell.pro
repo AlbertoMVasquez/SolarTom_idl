@@ -67,7 +67,7 @@ pro xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,m
 
 ; Set to maximum value ZDAs:
   p  = where(map2 le 0.)
-; if p(0) ne -1 then map2(p) = maxi
+ if p(0) ne -1 then map2(p) = maxi
   
 ; Force mini and maxi
   map2(0,0)=mini
@@ -148,9 +148,11 @@ tvscl,fltarr(2*np*scalefactor+DX,nt*scalefactor+DY)
     if not keyword_set(mmap_oc) then xcarrmap,map=map2,xi=x,yi=y,np=np,nt=nt,scalefactor=scalefactor,clrtbl=clrtbl,$
                                              xtitle_status=1,ytitle_status=1,titulo_status=1,$
                                              title=titulo+' at '+height_string+' R!DSUN!N',$
-                                             /color_scale,DX=DX,DY=DY,mini=mini,maxi=maxi,xsimage=xsimage,ysimage=ysimage,instrument=instrument
+                                              /color_scale,DX=DX,DY=DY,mini=mini,maxi=maxi,xsimage=xsimage,ysimage=ysimage,instrument=instrument
 
-    str='map_'+file+'_'+height_string+'_Rsun'
+    if not keyword_set(prefijo_mapoc) then prefijo_mapoc=file
+    ;str='map_'+file+'_'+height_string+'_Rsun'
+    str='map_'+prefijo_mapoc+'_'+height_string+'_Rsun'
     record_gif,'/data1/tomography/SolarTom_idl/Figures/',(STRJOIN(STRSPLIT(str, /EXTRACT,'.'), '_'))+'.gif','X'
     if keyword_set(log) then begin
       mini=10.^mini

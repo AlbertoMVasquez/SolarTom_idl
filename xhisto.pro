@@ -44,6 +44,8 @@ pro xhisto,map=map,nr=nr,nt=nt,np=np,radii=radii,rad_range=rad_range,lat_range=l
    med = median(x_data(ind))
    ; descomentar esta linea si quiero la mediana de toda la muestra
    ;med = median(x_data     ) 
+   print,'median value:',med
+   print
 
      ps1,'/data1/tomography/SolarTom_idl/Figures/'+'histo_'+file+'_'+sufijo+'.eps',0
      plot,xval,histo_x_data,title=titulo,font=0,charsize=1,psym=10
