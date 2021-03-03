@@ -12,8 +12,8 @@ pro xcompare,dirA=dirA,dirB=dirB,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA
 ;para que todo funciones bien filA=awsom, fileb=demt, fileC=r_demt
   EPS=1.e-4                     ; fractional tolerance to evaluate if same height is being compared.
   
-  if not keyword_set(dirA)        then dirA         = '/data1/work/MHD/'
-  if not keyword_set(dirB)        then dirB         = '/data1/DATA/ldem_files/'
+  if not keyword_set(dirA)        then dirA         = '/data1/tomography/bindata/'
+  if not keyword_set(dirB)        then dirB         = dirA
   if not keyword_set(comp_suffix) then comp_suffix = 'A_vs_B'
 ; if not keyword_set(tit)         then tit         = 'Scatter Plot'
   if not keyword_set(xtit)        then xtit        = 'A'
@@ -28,10 +28,10 @@ pro xcompare,dirA=dirA,dirB=dirB,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA
   if not keyword_set(scalefactor) then scalefactor = 3
   if not keyword_set(lat_range)   then lat_range   = [-90., +90.]
   if not keyword_set(lon_range)   then lon_range   = [  0., 360.]
-  if not keyword_set(rad_range)   then rad_range   = [1.02 , 1.255]
+  if not keyword_set(radd_range)  then rad_range   = [1.02 , 1.26]
   if not keyword_set(r0A      )   then r0A         = [1.10,1.15,1.20]
-;  if not keyword_set(min_ratio)   then min_ratio   = 0.
-;  if not keyword_set(max_ratio)   then max_ratio   = 5.
+; if not keyword_set(min_ratio)   then min_ratio   = 0.
+; if not keyword_set(max_ratio)   then max_ratio   = 5.
   if not keyword_set(nvals)       then Nvals       = 50.
   if not keyword_set(LabelA)      then LabelA      = 'Map-A'
   if not keyword_set(LabelB)      then LabelB      = 'Map-B'
@@ -171,7 +171,7 @@ pro xcompare,dirA=dirA,dirB=dirB,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA
      tit1='Lat=['+strmid(string(lat_range(0)),5,5)+','+strmid(string(lat_range(1)),5,5)+'] '+strmid(fileB,0,2)+' ratio at r = '+strmid(sufijo,0,5)+' R!DSUN!N'
      PRINT, CORRELATE(values_A, values_B)
      if not keyword_set(histo_x_tit) then histo_x_tit=strmid(fileB,0,2)+' (awsom) /'+strmid(fileB,0,2)+'  (demt)'
-;     xhisto2,ratio,comp_suffix='ratio_'+comp_suffix,sufijo=sufijo,tit=tit1,histo_x_tit=histo_x_tit,Nvals=Nvals
+     xhisto2,ratio,comp_suffix='ratio_'+comp_suffix,sufijo=sufijo,tit=tit1,histo_x_tit=histo_x_tit,Nvals=Nvals
 
      if keyword_set(diff) then begin
         diff_rel_corte = ( values_A - values_B ) /values_B ;( values_B - values_A ) /values_A
@@ -194,7 +194,6 @@ pro xcompare,dirA=dirA,dirB=dirB,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA
   endif
 
 
-
   if keyword_set(diff) then begin
      diff_rel = (mapA - mapB )/mapB ;(mapB - mapA )/mapA 
      name_file = 'relative_difference_'+fileA+'-'+fileB
@@ -204,7 +203,6 @@ pro xcompare,dirA=dirA,dirB=dirB,fileA=fileA,fileB=fileB,nrA=nrA,ntA=ntA,npA=npA
      maxA = max_diff ;fltarr(n_elements(r0A))+10
      xdisplay,map=diff_rel,file=name_file,nr=26,nt=90,rmin=1.0,rmax=1.26,r0A=r0A,win=0,titulo='Rel diff '+strmid(fileB,0,2)+' (awsom-demt)/demt',clrtb=39 ,minA=minA,maxA=maxA,scalefactor=scalefactor
   endif
-
 
 pA_B = where(mapA_rad3d_recort ge rad_range[0] and mapA_rad3d_recort le rad_range[1] and mapA_lat3d_recort ge lat_range[0] and mapA_lat3d_recort le lat_range[1] and mapA_lon3d_recort ge lon_range[0] and mapA_lon3d_recort le lon_range[1] and mapA_recort gt 0. and mapB_rad3d_recort ge rad_range[0] and mapB_rad3d_recort le rad_range[1] and mapB_lat3d_recort ge lat_range[0] and mapB_lat3d_recort le lat_range[1] and mapB_lon3d_recort ge lon_range[0] and mapB_lon3d_recort le lon_range[1] and mapB_recort gt 0.)
 ;los nombres quedaron largos pero son explicitos, y son todos los
@@ -218,7 +216,7 @@ pA_B = where(mapA_rad3d_recort ge rad_range[0] and mapA_rad3d_recort le rad_rang
   xhisto2,ratio,comp_suffix=comp_suffix,sufijo=sss,tit=histotit,histo_x_tit=histo_x_tit,Nvals=Nvals
 
 
-;Compute average radial profile of x_A(r) in selected lat/lon range.
+;Compute average radial profile of x_A(r) in selected lat/lon/rad range.
   x_A_avg = fltarr(NrA)
   for irA=0,nrA-1 do begin
      map_A = reform(mapA(irA,*,*))
