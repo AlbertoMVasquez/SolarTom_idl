@@ -1,5 +1,6 @@
 pro xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,log=log,interp=interp,win=win,file=file,titulo=titulo,$
-           box_lat=box_lat,box_lon=box_lon,instrument=instrument,raiz=raiz,ysize_factor=ysize_factor,mmap_oc=mmap_oc,prefijo_mapoc=prefijo_mapoc
+           box_lat=box_lat,box_lon=box_lon,instrument=instrument,raiz=raiz,ysize_factor=ysize_factor,mmap_oc=mmap_oc,prefijo_mapoc=prefijo_mapoc,$
+           str_map_name=str_map_name
 
   old_device = !D.NAME
 
@@ -150,9 +151,8 @@ tvscl,fltarr(2*np*scalefactor+DX,nt*scalefactor+DY)
                                              title=titulo+' at '+height_string+' R!DSUN!N',$
                                               /color_scale,DX=DX,DY=DY,mini=mini,maxi=maxi,xsimage=xsimage,ysimage=ysimage,instrument=instrument
 
-    if not keyword_set(prefijo_mapoc) then prefijo_mapoc=file
-    ;str='map_'+file+'_'+height_string+'_Rsun'
-    str='map_'+prefijo_mapoc+'_'+height_string+'_Rsun'
+    
+    str='map_'+file+'_'+height_string+'_Rsun'
     record_gif,'/data1/tomography/SolarTom_idl/Figures/',(STRJOIN(STRSPLIT(str, /EXTRACT,'.'), '_'))+'.gif','X'
     if keyword_set(log) then begin
       mini=10.^mini
