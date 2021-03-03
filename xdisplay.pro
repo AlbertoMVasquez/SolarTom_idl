@@ -55,7 +55,7 @@ pro xdisplay,dir=dir,map=map,file=file,nr=nr,nt=nt,np=np,rmin=rmin,rmax=rmax,r0A
    
      if (not keyword_set(log) AND not keyword_set(raiz)) and not keyword_set(mmap_oc) then $
         xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon,instrument=instrument,$
-               ysize_factor=ysize_factor
+               ysize_factor=ysize_factor,prefijo_mapoc=prefijo_mapoc
      
      if (not keyword_set(log) AND not keyword_set(raiz)) and keyword_set(mmap_oc) then $
         xshell,map=map,r0=r0,ir=ir,scalefactor=scalefactor,clrtbl=clrtbl,mini=mini,maxi=maxi,win=win+i,file=file,titulo=titulo,box_lat=box_lat,box_lon=box_lon,instrument=instrument,$
